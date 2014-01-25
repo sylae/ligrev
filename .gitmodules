@@ -1,0 +1,3 @@
+[submodule "lib/JAXL"]
+	path = lib/JAXL
+	url = https://github.com/abhinavsingh/JAXL.git
