@@ -95,7 +95,6 @@ $client->add_cb('on_auth_success', function() {
   
   foreach ($config['rooms'] as $id => $jid) {
     $rooms[$id] = new XMPPJid($jid.'/'.$config['botname']);
-    var_dump($rooms[$id]);
     l("[JAXL] Joining room ".$rooms[$id]->to_string());
     $client->xeps['0045']->join_room($rooms[$id]);
     l("[JAXL] Joined room ".$rooms[$id]->to_string());
