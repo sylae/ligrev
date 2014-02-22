@@ -119,16 +119,7 @@ $client->add_cb('on_groupchat_message', function($stanza) {
       l("[JAXL] Rec'd from ".$from->resource." in room ".$from->node.": ".$stanza->body);
       $text = $stanza->body;
       $room = $from->bare;
-      $html = '';
       $author = $from->resource;
-      
-      $is_html = false;
-      if (array_key_exists(1, $stanza->childrens)) {
-        $is_html = ($stanza->childrens[1]->name == "html");
-      }
-      if ($is_html)
-        $html = $stanza->childrens[1]->to_string();
-      
       
       // Is this something ligrev wants to parse?
       if(strpos($text, '/') === 0 || strpos($text, '!') === 0 || strpos($text, ':') === 0) {
