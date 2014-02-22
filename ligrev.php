@@ -88,7 +88,6 @@ $client->require_xep(array(
 ));
 
 $rooms = array();
-$users = array();
 
 $client->add_cb('on_auth_success', function() {
 	global $client, $config, $rooms;
@@ -141,50 +140,5 @@ $client->add_cb('on_groupchat_message', function($stanza) {
     }
 	}
 });
-$client->add_cb('on_presence_stanza', function($stanza) {
-	global $client, $users;
-	
-	$from = new XMPPJid($stanza->from);
-	if($from->resource) {
-    $room = $from->bare;
-    $author = $from->resource;
-    
-    // Get x->item
-    if($x = $stanza->exists("x", "http://jabber.org/protocol/muc#user")) {
-      if($item = $x->exists("item"));
-    } else {
-      return false;
-    }
-    
-    $ident_jid = $item->attrs['jid'];
-    
-    if(!array_key_exists($room, $users)) {
-      // add the room to the users array
-      $users[$room] = array();
-    }
-    if(array_key_exists($ident_jid, $users[$room])) {
-      $users[$room][$ident_jid]['pdn'] = $author;
-    } else {
-      $users[$room][$ident_jid] = array(
-        'pdn' => $author
-      );
-    }
-    
-    // If it's a logout, remove the entry from the users table and l(logout)
-    $logout = false;
-    if(array_key_exists("type", $stanza->attrs)) {
-      if($stanza->attrs["type"] == "unavailable") {
-        $logout = true;
-      }
-    }
-    if(!$logout) {  
-      l("User ".$from->to_string()." has jid ".$ident_jid);
-    } else {
-      unset($users[$room][$ident_jid]);
-      l("User ".$from->to_string()." has logged out.");
-    }
-	}
-});
-
 $client->start();
 $db->disconnect();
