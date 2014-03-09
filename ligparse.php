@@ -75,7 +75,7 @@ function parseCustomCommands($text, $textParts, $room, $res) {
           $s
         );
         $sa = bcFilter($sa);
-        $cmd = 'echo '.escapeshellarg($sa).' | bc';
+        $cmd = 'echo '.escapeshellarg($sa).' | bc -l';
         l($cmd);
         $sa =  trim(shell_exec($cmd));
         
