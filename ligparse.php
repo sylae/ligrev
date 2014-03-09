@@ -1,8 +1,8 @@
 <?php
 
-// Some code mercilessly copied/edited from AJAX Chat
+// Some code mercilessly copied/edited from AJAX Chat and donjon
 // https://github.com/Frug/AJAX-Chat
-
+// http://donjon.bin.sh/
 
 function send($room, $text) {
   global $client;
@@ -11,6 +11,21 @@ function send($room, $text) {
 
 function rollDice($sides) {
   return crypto_rand_secure(1, $sides);
+}
+
+function rd_dice ($n,$d) {
+  $n = (int)$n;
+    if (!is_int($n) || $n < 1) $n = 1;
+  $d = (int)$d;
+    if (!is_int($d) || $d < 0) return 0;
+
+  $die = array();
+
+  for ($i = 0; $i < $n; $i++) {
+    $die[] = rollDice($d);
+  }
+  
+  return array_sum($die);
 }
 
 // http://us3.php.net/manual/en/function.openssl-random-pseudo-bytes.php#104322
@@ -40,34 +55,21 @@ function parseCustomCommands($text, $textParts, $room, $res) {
     case '/roll':
     case '!roll':
     case ':roll':
-      if(count($textParts) == 1) {
-        // default is one d6:
-        $text = $res.' rolls 1d6: '.rollDice(6);
-      } else {
-        $diceParts = explode('d', $textParts[1]);
-        if(count($diceParts) == 2) {
-          $number = (int)$diceParts[0];
-          $sides = (int)$diceParts[1];
-          
-          // Dice number must be an integer between 1 and 100, else roll only one:
-          $number = ($number > 0 && $number <= 100) ?  $number : 1;
-          
-          // Sides must be an integer between 1 and 100, else take 6:
-          $sides = ($sides > 0 && $sides <= 100) ?  $sides : 6;
-          
-          $text = $res.' rolls '.$number.'d'.$sides.': ';
-          for($i=0; $i<$number; $i++) {
-            if($i != 0)
-              $text .= ',';
-            $text .= rollDice($sides);
-          }
-        } else {
-          // if dice syntax is invalid, roll one d6:
-          $text = $res.' rolls 1d6: '.rollDice(6);
-        }
+      $text = str_replace($textParts[0], "", $text);
+      $strings = explode(",", $text);
+      $dice = "/(\d*)d(\d+)/";
+      $st = array();
+      foreach ($strings as $i => $s) {
+        $st[] = preg_replace_callback($dice,
+          function ($m) {
+            return "(".rd_dice($m[1], $m[2]).")";
+          },
+          $s
+        );
       }
-      send($room, $text);
-      return $text;
+      $res = implode(", ", $st);
+      send($room, $res);
+      return $res;
     default:  
       return false;  
   }

@@ -73,7 +73,6 @@ l("Loading libraries...");
 require_once 'JAXL/jaxl.php';
 require_once 'ligparse.php';
 
-
 l("[JAXL] Loading JAXL and connecting...");
 $client = new JAXL($config['jaxl']);
 
@@ -127,4 +126,3 @@ $client->add_cb('on_groupchat_message', function($stanza) {
 	}
 });
 $client->start();
-$db->disconnect();
