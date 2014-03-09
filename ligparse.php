@@ -44,7 +44,10 @@ function crypto_rand_secure($min, $max) {
 }
 
 function bcFilter($cmd) {
-  // TODO: we'll put some str_replace here once I determine what to str_replace
+  $remove = array(
+    'read',
+  );
+  $cmd = str_replace($remove, '', $cmd);
   return $cmd;
 }
 
