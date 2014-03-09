@@ -71,11 +71,7 @@ require_once 'config.php';
 
 l("Loading libraries...");
 require_once 'JAXL/jaxl.php';
-require_once 'MDB2.php';
 require_once 'ligparse.php';
-l("[MDB2] Connecting to database server...");
-$db =& MDB2::connect($config['db']);
-l("[MDB2] Connected to database type ".$db->connected_dsn['phptype']." ".$db->connected_server_info);
 
 
 l("[JAXL] Loading JAXL and connecting...");
