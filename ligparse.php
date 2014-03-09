@@ -70,6 +70,8 @@ function parseCustomCommands($text, $textParts, $room, $res) {
       foreach ($strings as $i => $s) {
         $sa = preg_replace_callback($dice,
           function ($m) {
+            $m[2] = (($m[2] == 0) ? 1 : $m[2]);
+            $m[1] = (($m[1] == 0) ? 1 : $m[1]);
             return "(".rd_dice($m[1], $m[2]).")";
           },
           $s
