@@ -43,6 +43,11 @@ function crypto_rand_secure($min, $max) {
   return $min + $rnd;
 }
 
+function bcFilter($cmd) {
+  // TODO: we'll put some str_replace here once I determine what to str_replace
+  return $cmd;
+}
+
 function parseCustomCommands($text, $textParts, $room, $res) { 
   switch($textParts[0]) {
     case '/slap':
@@ -60,12 +65,18 @@ function parseCustomCommands($text, $textParts, $room, $res) {
       $dice = "/(\d*)d(\d+)/";
       $st = array();
       foreach ($strings as $i => $s) {
-        $st[] = preg_replace_callback($dice,
+        $sa = preg_replace_callback($dice,
           function ($m) {
             return "(".rd_dice($m[1], $m[2]).")";
           },
           $s
         );
+        $sa = bcFilter($sa);
+        $cmd = 'echo '.escapeshellarg($sa).' | bc';
+        l($cmd);
+        $sa =  trim(shell_exec($cmd));
+        
+        $st[] = $sa;
       }
       $res = implode(", ", $st);
       send($room, $res);
