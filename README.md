@@ -10,4 +10,4 @@ Requirements
 
 * PHP 5
 * JAXL (Included as submodule)
-* PEAR/MDB2
+* GNU bc
