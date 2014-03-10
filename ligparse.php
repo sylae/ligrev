@@ -62,6 +62,7 @@ function bcFilter($cmd) {
     'read',
   );
   $cmd = str_replace($remove, '', $cmd);
+  $cmd = "scale=3; ".$cmd;
   return $cmd;
 }
 
@@ -92,7 +93,7 @@ function parseCustomCommands($text, $textParts, $room, $res) {
         );
         $sa = bcFilter($sa);
         $cmd = 'echo '.escapeshellarg($sa).' | bc';
-        l($cmd);
+        l("Piping in shell: $cmd", L_DEBUG);
         $sa =  trim(shell_exec($cmd));
         
         $st[] = $sa;
