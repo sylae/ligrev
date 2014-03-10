@@ -33,6 +33,21 @@ function rd_dice ($n,$d) {
   return array_sum($die);
 }
 
+function rd_dice_array ($n,$d) {
+  $n = (int)$n;
+    if (!is_int($n) || $n < 1) $n = 1;
+  $d = (int)$d;
+    if (!is_int($d) || $d < 0) return 0;
+
+  $die = array();
+
+  for ($i = 0; $i < $n; $i++) {
+    $die[] = rollDice($d);
+  }
+  
+  return implode(", ", $die);
+}
+
 function dice_prng($min, $max) {
   // put in right order
   $m = min($min, $max);
@@ -82,6 +97,7 @@ function parseCustomCommands($text, $textParts, $room, $res) {
       $text = str_replace($textParts[0], "", $text);
       $strings = explode(":", $text);
       $dice = "/(\d*)d(\d+)/";
+      $dice = "/(\d*)a(\d+)/";
       $st = array();
       foreach ($strings as $i => $s) {
         $sa = preg_replace_callback($dice,
@@ -92,16 +108,24 @@ function parseCustomCommands($text, $textParts, $room, $res) {
           },
           $s
         );
+        $sa = preg_replace_callback($dice,
+          function ($m) {
+            $m[2] = (($m[2] == 0) ? 1 : $m[2]);
+            $m[1] = (($m[1] == 0) ? 1 : $m[1]);
+            return "(".rd_dice_array($m[1], $m[2]).")";
+          },
+          $sa
+        );
         $sa = bcFilter($sa);
         $cmd = 'echo '.escapeshellarg($sa).' | bc -l '.$config['bclibs'];
         l("Piping in shell: $cmd", L_DEBUG);
-        $sa =  trim(shell_exec($cmd));
+        $sa = trim(shell_exec($cmd));
         
         $st[] = $sa;
       }
-      $res = implode(", ", $st);
-      send($room, $res);
-      return $res;
+      $snd = $res.' rolls '.implode(", ", $st);
+      send($room, $snd);
+      return $snd;
     default:  
       return false;  
   }
