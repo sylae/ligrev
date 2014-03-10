@@ -6,7 +6,7 @@ define("L_WARN", 3);
 define("L_AAAA", 4);
 
 // Default error reporting level
-define("L_REPORT", L_INFO);
+define("L_REPORT", L_DEBUG);
 
 
 // Take over PHP's error handling, since it's a picky whore sometimes.
