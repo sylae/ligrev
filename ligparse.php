@@ -66,7 +66,8 @@ function bcFilter($cmd) {
   return $cmd;
 }
 
-function parseCustomCommands($text, $textParts, $room, $res) { 
+function parseCustomCommands($text, $textParts, $room, $res) {
+  global $config;
   switch($textParts[0]) {
     case '/slap':
     case '!slap':
@@ -92,7 +93,7 @@ function parseCustomCommands($text, $textParts, $room, $res) {
           $s
         );
         $sa = bcFilter($sa);
-        $cmd = 'echo '.escapeshellarg($sa).' | bc';
+        $cmd = 'echo '.escapeshellarg($sa).' | bc -l '.$config['bclibs'];
         l("Piping in shell: $cmd", L_DEBUG);
         $sa =  trim(shell_exec($cmd));
         
