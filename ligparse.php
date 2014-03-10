@@ -10,7 +10,12 @@ function send($room, $text) {
 }
 
 function rollDice($sides) {
-  return crypto_rand_secure(1, $sides);
+  global $config;
+  if ($config['diceSecure']) {
+    return dice_secure(1, $sides);
+  } else {
+    return dice_prng(1, $sides);
+  }
 }
 
 function rd_dice ($n,$d) {
@@ -28,8 +33,17 @@ function rd_dice ($n,$d) {
   return array_sum($die);
 }
 
+function dice_prng($min, $max) {
+  // put in right order
+  $m = min($min, $max);
+  $x = max($min, $max);
+  mt_srand((double)microtime()*1000000);
+  
+  return mt_rand($m, $x);
+}
+
 // http://us3.php.net/manual/en/function.openssl-random-pseudo-bytes.php#104322
-function crypto_rand_secure($min, $max) {
+function dice_secure($min, $max) {
   $range = $max - $min;
   if ($range == 0) return $min; // not so random...
   $log = log($range, 2);

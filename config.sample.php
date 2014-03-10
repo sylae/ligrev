@@ -12,4 +12,6 @@ $config['rooms'] = array(
   'test'   => 'test@conference.example.org',
 );
 
+$config['diceSecure'] = false;
+
 $config['botname'] = "Ligrev";
