@@ -97,7 +97,7 @@ function parseCustomCommands($text, $textParts, $room, $res) {
       $text = str_replace($textParts[0], "", $text);
       $strings = explode(":", $text);
       $dice = "/(\d*)d(\d+)/";
-      $dice = "/(\d*)a(\d+)/";
+      $dlist = "/(\d*)a(\d+)/";
       $st = array();
       foreach ($strings as $i => $s) {
         $sa = preg_replace_callback($dice,
@@ -108,7 +108,7 @@ function parseCustomCommands($text, $textParts, $room, $res) {
           },
           $s
         );
-        $sa = preg_replace_callback($dice,
+        $sa = preg_replace_callback($dlist,
           function ($m) {
             $m[2] = (($m[2] == 0) ? 1 : $m[2]);
             $m[1] = (($m[1] == 0) ? 1 : $m[1]);
