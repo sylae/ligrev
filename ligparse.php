@@ -79,7 +79,7 @@ function parseCustomCommands($text, $textParts, $room, $res) {
     case '!roll':
     case ':roll':
       $text = str_replace($textParts[0], "", $text);
-      $strings = explode(",", $text);
+      $strings = explode(";", $text);
       $dice = "/(\d*)d(\d+)/";
       $st = array();
       foreach ($strings as $i => $s) {
