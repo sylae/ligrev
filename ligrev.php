@@ -110,7 +110,7 @@ $client->add_cb('on_groupchat_message', function($stanza) {
 	$from = new XMPPJid($stanza->from);
 	if($from->resource) {
     if(!$stanza->exists('delay', NS_DELAYED_DELIVERY)) {
-      l("[JAXL] Rec'd from ".$from->resource." in room ".$from->node.": ".$stanza->body);
+      l("[MUC] ".$from->resource."@".$from->node.": ".$stanza->body);
       $text = $stanza->body;
       $room = $from->bare;
       $author = $from->resource;
