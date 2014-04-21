@@ -128,21 +128,29 @@ function handleMUC($stanza) {
 }
 
 function handleDM($stanza) {
-	global $client, $message_type;
+	global $client, $message_type, $rooms;
 	$message_type = "dm";
 	$from = new XMPPJid($stanza->from);
-	if($from->resource) {
-    l("[DM] ".$stanza->from.": ".trim($stanza->body));
-    $text = trim($stanza->body);
-    $room = $stanza->from;
-    $author = $from->resource;
-    
-    // Is this something ligrev wants to parse?
-    if(strpos($text, '/') === 0 || strpos($text, '!') === 0 || strpos($text, ':') === 0) {
-      $textParts = explode(' ', $text);
-      parseCustomCommands($text, $textParts, $room, $from->bare);
-    }
-	}
+  l("[DM] ".$stanza->from.": ".trim($stanza->body));
+  $text = trim($stanza->body);
+  $room = $stanza->from;
+  $author = $from->resource;
+  
+  // let's see if this is a MUC PM or from "The Real World"
+  $isPM = false;
+  foreach ($rooms as $id -> $jid) {
+    if ($jid->bare == $from->bare)
+      $isPM = true;
+  }
+  
+  // Is this something ligrev wants to parse?
+  if(strpos($text, '/') === 0 || strpos($text, '!') === 0 || strpos($text, ':') === 0) {
+    $textParts = explode(' ', $text);
+    if ($isPM)
+      parseCustomCommands($text, $textParts, $room, $from->resource);
+    else
+      parseCustomCommands($text, $textParts, $room, $from->bare);  
+  }
 }
 
 // Where the magic happens. "Magic" "Happens". I dunno why I type this either.
