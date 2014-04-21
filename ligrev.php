@@ -132,7 +132,7 @@ $client->add_cb('on_chat_message', function($stanza) {
 	if($from->resource) {
     l("[DM] ".$stanza->from.": ".trim($stanza->body));
     $text = trim($stanza->body);
-    $room = $from->bare;
+    $room = $stanza->from;
     $author = $from->resource;
     
     // Is this something ligrev wants to parse?
