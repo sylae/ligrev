@@ -103,9 +103,9 @@ function pipeToBc($cmd) {
     fclose($pipes[1]);
     l("[DICE] STDOUT: $stdout", L_DEBUG);
 
-    $stdin = trim(stream_get_contents($pipes[2]));
+    $stderr = trim(stream_get_contents($pipes[2]));
     fclose($pipes[2]);
-    l("[DICE] STDIN: $stdin", L_DEBUG);
+    l("[DICE] STDERR: $stderr", L_DEBUG);
 
     proc_close($process);
     
