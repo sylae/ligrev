@@ -13,7 +13,7 @@ function send($room, $text) {
     $msg->to = $room;
     $msg->from = $client->full_jid->to_string();
     $client->send($msg);
-    var_dump($msg->xml->to_string());
+    var_dump($msg->to_string());
   } else {
     // you suck
     l("Message send failed: message_type invalid?", L_WARN);
