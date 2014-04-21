@@ -78,7 +78,46 @@ function bcFilter($cmd) {
   );
   $cmd = str_replace($remove, '', $cmd);
   $cmd = "scale=3; ".$cmd;
-  return $cmd;
+  return trim($cmd);
+}
+
+function pipeToBc($cmd) {
+  global $config;
+
+  $expr = bcFilter($cmd);
+  
+  $run = 'echo '.escapeshellarg($sa).' | bc -l '.$config['bclibs'];
+  l("[DICE] Piping in shell: $cmd", L_DEBUG);
+  $descriptorspec = array(
+    0 => array("pipe", "r"),
+    1 => array("pipe", "w"),
+    2 => array("pipe", "w")
+  );
+
+  $process = proc_open('echo 1+1e | bc', $descriptorspec, $pipes);
+
+  if (is_resource($process)) {
+    fclose($pipes[0]);
+
+    $stdour = trim(stream_get_contents($pipes[1]));
+    fclose($pipes[1]);
+    l("[DICE] STDOUT: $stdout", L_DEBUG);
+
+    $stdin = trim(stream_get_contents($pipes[2]));
+    fclose($pipes[2]);
+    l("[DICE] STDIN: $stdin", L_DEBUG);
+
+    proc_close($process);
+    
+    if (strlen($stderr) > 0) {
+      return $stderr;
+    } else {
+      return $stdout;
+    }
+  } else {
+    l("[DICE] Could not create dice roll process!", L_WARN);
+    return "Ligrev Error in bc Parsing module: PROC NOT CREATED";
+  }
 }
 
 function parseCustomCommands($text, $textParts, $room, $res) {
@@ -116,10 +155,7 @@ function parseCustomCommands($text, $textParts, $room, $res) {
           },
           $sa
         );
-        $sa = bcFilter($sa);
-        $cmd = 'echo '.escapeshellarg($sa).' | bc -l '.$config['bclibs'];
-        l("Piping in shell: $cmd", L_DEBUG);
-        $sa = trim(shell_exec($cmd));
+        $sa = pipeToBc($cmd);
         
         $st[] = $sa;
       }
