@@ -175,7 +175,7 @@ function parseCustomCommands($text, $textParts, $room, $res) {
       $string = 'Ligrev Diagnostic Information'.PHP_EOL.
                 'Ligrev Version: '.`git rev-parse HEAD`.PHP_EOL.
                 'PHP Version: '.phpversion().PHP_EOL.
-                'JAXL Version: '.$client->version.PHP_EOL.
+                'JAXL Version: '.`cd lib/JAXL && git rev-parse HEAD`.PHP_EOL.
                 'Process ID '.getmypid().' as '.get_current_user().PHP_EOL.
                 'System: '.php_uname();
       send($room, $string);
