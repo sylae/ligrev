@@ -173,9 +173,9 @@ function parseCustomCommands($text, $textParts, $room, $res) {
     case '!diag':
     case ':diag':
       $string = 'Ligrev Diagnostic Information'.PHP_EOL.
-                'Ligrev Version: '.`git rev-parse HEAD`.PHP_EOL.
+                'Ligrev Version: '.trim(`git rev-parse HEAD`).PHP_EOL.
                 'PHP Version: '.phpversion().PHP_EOL.
-                'JAXL Version: '.`cd lib/JAXL && git rev-parse HEAD`.PHP_EOL.
+                'JAXL Version: '.trim(`cd lib/JAXL && git rev-parse HEAD`).PHP_EOL.
                 'Process ID '.getmypid().' as '.get_current_user().PHP_EOL.
                 'System: '.php_uname();
       send($room, $string);
