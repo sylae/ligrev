@@ -131,14 +131,14 @@ $client->add_cb('on_chat_message', function($stanza) {
 	$from = new XMPPJid($stanza->from);
 	if($from->resource) {
     l("[DM] ".$stanza->from.": ".$stanza->body);
-    $text = $stanza->body;
+    $text = trim($stanza->body);
     $room = $from->bare;
     $author = $from->resource;
     
     // Is this something ligrev wants to parse?
     if(strpos($text, '/') === 0 || strpos($text, '!') === 0 || strpos($text, ':') === 0) {
       $textParts = explode(' ', $text);
-      parseCustomCommands(trim($text), $textParts, $room, $from->resource);
+      parseCustomCommands($text, $textParts, $room, $from->resource);
     }
 	}
 	var_dump($stanza);
