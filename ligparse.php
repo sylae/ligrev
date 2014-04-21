@@ -85,18 +85,17 @@ function pipeToBc($cmd) {
   global $config;
 
   $expr = bcFilter($cmd);
-  
-  $run = 'echo '.escapeshellarg($expr).' | bc -l '.$config['bclibs'];
-  l("[DICE] Piping in shell: $expr", L_DEBUG);
+
   $descriptorspec = array(
     0 => array("pipe", "r"),
     1 => array("pipe", "w"),
     2 => array("pipe", "w")
   );
 
-  $process = proc_open('echo 1+1e | bc', $descriptorspec, $pipes);
+  $process = proc_open('bc -l '.$config['bclibs'], $descriptorspec, $pipes);
 
   if (is_resource($process)) {
+    fwrite($pipes[0], escapeshellarg($expr).PHP_EOL);
     fclose($pipes[0]);
 
     $stdout = trim(stream_get_contents($pipes[1]));
