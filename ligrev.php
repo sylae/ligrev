@@ -121,7 +121,7 @@ $client->add_cb('on_groupchat_message', function($stanza) {
         parseCustomCommands($text, $textParts, $room, $from->resource);
       }
     } else {
-      l("[JAXL] Rec'd message (delayed)");
+      l("[MUC] Rec'd message (delayed)");
     }
 	}
 });
