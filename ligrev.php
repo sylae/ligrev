@@ -130,7 +130,7 @@ $client->add_cb('on_chat_message', function($stanza) {
 	$message_type = "muc";
 	$from = new XMPPJid($stanza->from);
 	if($from->resource) {
-    l("[MUC] ".$from->resource."@".$from->node.": ".$stanza->body);
+    l("[DM] ".$from.": ".$stanza->body);
     $text = $stanza->body;
     $room = $from->bare;
     $author = $from->resource;
@@ -138,7 +138,7 @@ $client->add_cb('on_chat_message', function($stanza) {
     // Is this something ligrev wants to parse?
     if(strpos($text, '/') === 0 || strpos($text, '!') === 0 || strpos($text, ':') === 0) {
       $textParts = explode(' ', $text);
-      parseCustomCommands($text, $textParts, $room, $from->resource);
+      parseCustomCommands(trim($text), $textParts, $room, $from->resource);
     }
 	}
 	var_dump($stanza);
