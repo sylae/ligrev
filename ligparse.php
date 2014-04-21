@@ -86,8 +86,8 @@ function pipeToBc($cmd) {
 
   $expr = bcFilter($cmd);
   
-  $run = 'echo '.escapeshellarg($sa).' | bc -l '.$config['bclibs'];
-  l("[DICE] Piping in shell: $cmd", L_DEBUG);
+  $run = 'echo '.escapeshellarg($expr).' | bc -l '.$config['bclibs'];
+  l("[DICE] Piping in shell: $expr", L_DEBUG);
   $descriptorspec = array(
     0 => array("pipe", "r"),
     1 => array("pipe", "w"),
@@ -155,7 +155,7 @@ function parseCustomCommands($text, $textParts, $room, $res) {
           },
           $sa
         );
-        $sa = pipeToBc($cmd);
+        $sa = pipeToBc($sa);
         
         $st[] = $sa;
       }
