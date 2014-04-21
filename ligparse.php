@@ -99,7 +99,7 @@ function pipeToBc($cmd) {
   if (is_resource($process)) {
     fclose($pipes[0]);
 
-    $stdour = trim(stream_get_contents($pipes[1]));
+    $stdout = trim(stream_get_contents($pipes[1]));
     fclose($pipes[1]);
     l("[DICE] STDOUT: $stdout", L_DEBUG);
 
