@@ -130,7 +130,7 @@ $client->add_cb('on_chat_message', function($stanza) {
 	$message_type = "muc";
 	$from = new XMPPJid($stanza->from);
 	if($from->resource) {
-    l("[DM] ".$from.": ".$stanza->body);
+    l("[DM] ".$stanza->from.": ".$stanza->body);
     $text = $stanza->body;
     $room = $from->bare;
     $author = $from->resource;
