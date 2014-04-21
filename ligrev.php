@@ -87,6 +87,8 @@ $rooms = array();
 $client->add_cb('on_auth_success', function() {
 	global $client, $config, $rooms;
 	l("[JAXL] Connected with jid ".$client->full_jid->to_string());
+  $client->get_vcard();
+  $client->get_roster();
   
   foreach ($config['rooms'] as $id => $jid) {
     $rooms[$id] = new XMPPJid($jid.'/'.$config['botname']);
