@@ -105,8 +105,8 @@ $client->add_cb('on_auth_failure', function($reason) {
 
 // Where the magic happens. "Magic" "Happens". I dunno why I type this either.
 $client->add_cb('on_groupchat_message', function($stanza) {
-	global $client;
-	
+	global $client, $message_type;
+	$message_type = "muc";
 	$from = new XMPPJid($stanza->from);
 	if($from->resource) {
     if(!$stanza->exists('delay', NS_DELAYED_DELIVERY)) {
@@ -125,4 +125,11 @@ $client->add_cb('on_groupchat_message', function($stanza) {
     }
 	}
 });
+$client->add_cb('on_chat_message', function($stanza) {
+	global $client, $message_type;
+	
+	var_dump($stanza);
+});
+
+$message_type = null();
 $client->start();

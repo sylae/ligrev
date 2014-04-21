@@ -5,8 +5,11 @@
 // http://donjon.bin.sh/
 
 function send($room, $text) {
-  global $client;
-  return $client->xeps['0045']->send_groupchat($room, $text);
+  global $client, $message_type;
+  if ($message_type == "muc") {
+    return $client->xeps['0045']->send_groupchat($room, $text);
+  } else {
+  }
 }
 
 function rollDice($sides) {
