@@ -127,7 +127,7 @@ $client->add_cb('on_groupchat_message', function($stanza) {
 });
 $client->add_cb('on_chat_message', function($stanza) {
 	global $client, $message_type;
-	$message_type = "muc";
+	$message_type = "dm";
 	$from = new XMPPJid($stanza->from);
 	if($from->resource) {
     l("[DM] ".$stanza->from.": ".trim($stanza->body));
@@ -141,7 +141,6 @@ $client->add_cb('on_chat_message', function($stanza) {
       parseCustomCommands($text, $textParts, $room, $from->resource);
     }
 	}
-	var_dump($stanza);
 });
 
 $message_type = null;

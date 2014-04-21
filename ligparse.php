@@ -8,7 +8,16 @@ function send($room, $text) {
   global $client, $message_type;
   if ($message_type == "muc") {
     return $client->xeps['0045']->send_groupchat($room, $text);
+  } elseif ($message_type == "dm") {
+    $msg = new XMPPMsg(array(), $text);
+    $msg->to = $room;
+    $msg->from = $client->full_jid->to_string();
+    $client->send($msg);
+    var_dump($msg);
   } else {
+    // you suck
+    l("Message send failed: message_type invalid?", L_WARN);
+    return false;
   }
 }
 
