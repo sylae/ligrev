@@ -140,7 +140,7 @@ function handleDM($stanza) {
     // Is this something ligrev wants to parse?
     if(strpos($text, '/') === 0 || strpos($text, '!') === 0 || strpos($text, ':') === 0) {
       $textParts = explode(' ', $text);
-      parseCustomCommands($text, $textParts, $room, $from->resource);
+      parseCustomCommands($text, $textParts, $room, $from->bare);
     }
 	}
 }
