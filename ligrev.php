@@ -131,5 +131,5 @@ $client->add_cb('on_chat_message', function($stanza) {
 	var_dump($stanza);
 });
 
-$message_type = null();
+$message_type = null;
 $client->start();
