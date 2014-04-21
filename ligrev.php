@@ -138,7 +138,7 @@ function handleDM($stanza) {
   
   // let's see if this is a MUC PM or from "The Real World"
   $isPM = false;
-  foreach ($rooms as $id -> $jid) {
+  foreach ($rooms as $id => $jid) {
     if ($jid->bare == $from->bare)
       $isPM = true;
   }
