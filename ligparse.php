@@ -11,9 +11,9 @@ function send($room, $text) {
   } elseif ($message_type == "dm") {
     $msg = new XMPPMsg(array(), $text);
     $msg->to = $room;
+    $msg->type = 'chat';
     $msg->from = $client->full_jid->to_string();
     $client->send($msg);
-    var_dump($msg->to_string());
   } else {
     // you suck
     l("Message send failed: message_type invalid?", L_WARN);
