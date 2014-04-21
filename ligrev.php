@@ -89,6 +89,7 @@ $client->add_cb('on_auth_success', function() {
 	l("[JAXL] Connected with jid ".$client->full_jid->to_string());
   $client->get_vcard();
   $client->get_roster();
+  $client->set_status("", "chat", 10);
   
   foreach ($config['rooms'] as $id => $jid) {
     $rooms[$id] = new XMPPJid($jid.'/'.$config['botname']);
