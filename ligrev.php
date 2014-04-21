@@ -102,9 +102,7 @@ $client->add_cb('on_auth_failure', function($reason) {
 	l("[JAXL] Auth failure: ".$reason, L_WARN);
 });
 
-
-// Where the magic happens. "Magic" "Happens". I dunno why I type this either.
-$client->add_cb('on_groupchat_message', function($stanza) {
+function handleMUC($stanza) {
 	global $client, $message_type;
 	$message_type = "muc";
 	$from = new XMPPJid($stanza->from);
@@ -124,8 +122,9 @@ $client->add_cb('on_groupchat_message', function($stanza) {
       l("[MUC] Rec'd message (delayed)");
     }
 	}
-});
-$client->add_cb('on_chat_message', function($stanza) {
+}
+
+function handleDM($stanza) {
 	global $client, $message_type;
 	$message_type = "dm";
 	$from = new XMPPJid($stanza->from);
@@ -141,7 +140,12 @@ $client->add_cb('on_chat_message', function($stanza) {
       parseCustomCommands($text, $textParts, $room, $from->resource);
     }
 	}
-});
+}
+
+// Where the magic happens. "Magic" "Happens". I dunno why I type this either.
+$client->add_cb('on_groupchat_message', handleMUC($stanza));
+$client->add_cb('on_chat_message', handleDM($stanza));
+$client->add_cb('on_normal_message', handleDM($stanza));
 
 $message_type = null;
 $client->start();
