@@ -143,9 +143,9 @@ function handleDM($stanza) {
 }
 
 // Where the magic happens. "Magic" "Happens". I dunno why I type this either.
-$client->add_cb('on_groupchat_message', handleMUC($stanza));
-$client->add_cb('on_chat_message', handleDM($stanza));
-$client->add_cb('on_normal_message', handleDM($stanza));
+$client->add_cb('on_groupchat_message', handleMUC());
+$client->add_cb('on_chat_message', handleDM());
+$client->add_cb('on_normal_message', handleDM());
 
 $message_type = null;
 $client->start();
