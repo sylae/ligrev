@@ -128,7 +128,7 @@ function pipeToBc($cmd) {
 }
 
 function parseCustomCommands($text, $textParts, $room, $res) {
-  global $config;
+  global $config, $client;
   switch($textParts[0]) {
     case '/slap':
     case '!slap':
@@ -169,6 +169,17 @@ function parseCustomCommands($text, $textParts, $room, $res) {
       $snd = $res.' rolls '.implode(", ", $st);
       send($room, $snd);
       return $snd;
+    case '/diag':
+    case '!diag':
+    case ':diag':
+      $string = 'Ligrev Diagnostic Information'.PHP_EOL.
+                'Ligrev Version: '.`git rev-parse HEAD`.PHP_EOL.
+                'PHP Version: '.phpversion().PHP_EOL.
+                'JAXL Version: '.$client->version.PHP_EOL.
+                'Process ID '.getmypid().' as '.get_current_user().PHP_EOL.
+                'System: '.php_uname();
+      send($room, $string);
+      return $text;
     default:  
       return false;  
   }
