@@ -95,7 +95,7 @@ function pipeToBc($cmd) {
   $process = proc_open('bc -l '.$config['bclibs'], $descriptorspec, $pipes);
 
   if (is_resource($process)) {
-    fwrite($pipes[0], escapeshellarg($expr).PHP_EOL);
+    fwrite($pipes[0], $expr.PHP_EOL);
     fclose($pipes[0]);
 
     $stdout = trim(stream_get_contents($pipes[1]));
