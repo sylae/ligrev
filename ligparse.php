@@ -29,6 +29,7 @@ function rollDice($sides) {
 function rd_dice ($n,$d) {
   $n = (int)$n;
     if (!is_int($n) || $n < 1) $n = 1;
+    if ($n > 128) $n = 1;
   $d = (int)$d;
     if (!is_int($d) || $d < 0) return 0;
 
