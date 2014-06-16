@@ -121,9 +121,11 @@ function pipeToBc($cmd) {
 
     proc_close($process);
     
-    l("[DICE] Exited with statud code ".$pinfo['exitcode'], L_DEBUG);
+    l("[DICE] Exited with status code ".$pinfo['exitcode'], L_DEBUG);
     
-    if (strlen($stderr) > 0) {
+    if ($pinfo['exitcode'] == 124) {
+      return "Roll timed out after five seconds of execution";
+    } elseif (strlen($stderr) > 0) {
       return $stderr;
     } else {
       return $stdout;
