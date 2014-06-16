@@ -101,7 +101,7 @@ function pipeToBc($cmd) {
     2 => array("pipe", "w")
   );
 
-  $process = proc_open('bc -l '.$config['bclibs'], $descriptorspec, $pipes);
+  $process = proc_open('timeout 5 bc -l '.$config['bclibs'], $descriptorspec, $pipes);
 
   if (is_resource($process)) {
     fwrite($pipes[0], $expr.PHP_EOL);
