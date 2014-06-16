@@ -116,8 +116,12 @@ function pipeToBc($cmd) {
     $stderr = trim(stream_get_contents($pipes[2]));
     fclose($pipes[2]);
     l("[DICE] STDERR: $stderr", L_DEBUG);
+    
+    $pinfo = proc_get_status();
 
     proc_close($process);
+    
+    l("[DICE] Exited with statud code ".$pinfo['exitcode'], L_DEBUG);
     
     if (strlen($stderr) > 0) {
       return $stderr;
