@@ -109,7 +109,7 @@ function pipeToBc($cmd) {
 
     $stdout = trim(stream_get_contents($pipes[1]));
     fclose($pipes[1]);
-    $stdout = (float)str_replace('\\'.PHP_EOL, '', $stdout);
+    $stdout = str_replace('\\'.PHP_EOL, '', $stdout);
     l("[DICE] STDOUT: $stdout", L_DEBUG);
 
     $stderr = trim(stream_get_contents($pipes[2]));
