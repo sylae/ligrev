@@ -110,11 +110,15 @@ function pipeToBc($cmd) {
     $stdout = stream_get_contents($pipes[1]);
     fclose($pipes[1]);
     $stdout = trim(str_replace('\\'.PHP_EOL, '', $stdout));
-    $stdout = (strlen($stdout)>80) ? substr($stdout, 0, 77).'...' : $stdout; 
+    $stdout = (strlen($stdout)>80) ? substr($stdout, 0, 77).'...' : $stdout;
     l("[DICE] STDOUT: $stdout", L_DEBUG);
 
-    $stderr = trim(stream_get_contents($pipes[2]));
+    $stderr = stream_get_contents($pipes[2]);
     fclose($pipes[2]);
+    $stderr = trim(str_replace('\\'.PHP_EOL, '', $stderr));
+    $stderr = (strlen($stderr)>80) ? substr($stderr, 0, 77).'...' : $stderr;
+    
+    $stderr = preg_replace('/\\(standard_in\\) \\d+: /', '', $stderr);
     l("[DICE] STDERR: $stderr", L_DEBUG);
     
     $pinfo = proc_get_status($process);
@@ -124,7 +128,7 @@ function pipeToBc($cmd) {
     l("[DICE] Exited with status code ".$pinfo['exitcode'], L_DEBUG);
     
     if ($pinfo['exitcode'] == 124) {
-      return "Roll timed out after five seconds of execution";
+      return "timeout";
     } elseif (strlen($stderr) > 0) {
       return $stderr;
     } else {
