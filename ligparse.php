@@ -110,6 +110,7 @@ function pipeToBc($cmd) {
     $stdout = stream_get_contents($pipes[1]);
     fclose($pipes[1]);
     $stdout = trim(str_replace('\\'.PHP_EOL, '', $stdout));
+    $stdout = (strlen($stdout)>80) ? substr($stdout, 0, 77).'...' : $stdout; 
     l("[DICE] STDOUT: $stdout", L_DEBUG);
 
     $stderr = trim(stream_get_contents($pipes[2]));
