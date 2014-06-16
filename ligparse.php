@@ -117,7 +117,7 @@ function pipeToBc($cmd) {
     fclose($pipes[2]);
     l("[DICE] STDERR: $stderr", L_DEBUG);
     
-    $pinfo = proc_get_status();
+    $pinfo = proc_get_status($process);
 
     proc_close($process);
     
