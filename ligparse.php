@@ -115,8 +115,7 @@ function pipeToBc($cmd) {
 
     $stderr = stream_get_contents($pipes[2]);
     fclose($pipes[2]);
-    $stderr = trim(str_replace('\\'.PHP_EOL, '', $stderr));
-    $stderr = (strlen($stderr)>80) ? substr($stderr, 0, 77).'...' : $stderr;
+    $stderr = trim(str_replace('\\'.PHP_EOL, PHP_EOL, $stderr));
     
     $stderr = preg_replace('/\\(standard_in\\) \\d+: /', '', $stderr);
     l("[DICE] STDERR: $stderr", L_DEBUG);
