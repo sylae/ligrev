@@ -116,9 +116,9 @@ function pipeToBc($cmd) {
     $stderr = stream_get_contents($pipes[2]);
     fclose($pipes[2]);
     $stderr = trim(str_replace('\\'.PHP_EOL, PHP_EOL, $stderr));
+    l("[DICE] STDERR: $stderr", L_DEBUG);
     
     $stderr = preg_replace('/\\(standard_in\\) \\d+: /', '', $stderr);
-    l("[DICE] STDERR: $stderr", L_DEBUG);
     
     $pinfo = proc_get_status($process);
 
