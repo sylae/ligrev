@@ -181,6 +181,41 @@ function parseCustomCommands($text, $textParts, $room, $res) {
       $snd = $res.' rolls '.implode(", ", $st);
       send($room, $snd);
       return $snd;
+    case '/card':
+    case '!card':
+    case ':card':
+      $c = rollDice(54);
+      $suits = array(
+        'Hearts',
+        'Diamonds',
+        'Clubs',
+        'Spades',
+      );
+      $nums = array(
+        'Ace',
+        '2',
+        '3',
+        '4',
+        '5',
+        '6',
+        '7',
+        '8',
+        '9',
+        '10',
+        'Jack',
+        'Queen',
+        'King',
+      );
+      if ($c > 52) {
+        $card = "Joker";
+      } else {
+        echo $c;
+        $card = $nums[($c-1) % 13]." of ".$suits[($c-1) % 4];
+      }
+      l("[CARD] Dice rolled a ".$c, L_DEBUG);
+      $snd = $res.' draws a '.$card;
+      send($room, $snd);
+      return $snd;
     case '/diag':
     case '!diag':
     case ':diag':
