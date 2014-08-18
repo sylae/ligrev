@@ -209,7 +209,6 @@ function parseCustomCommands($text, $textParts, $room, $res) {
       if ($c > 52) {
         $card = "Joker";
       } else {
-        echo $c;
         $card = $nums[($c-1) % 13]." of ".$suits[($c-1) % 4];
       }
       l("[CARD] Dice rolled a ".$c, L_DEBUG);
