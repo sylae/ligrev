@@ -107,6 +107,7 @@ function pipeToBc($cmd) {
   if (is_resource($process)) {
     fwrite($pipes[0], $expr.PHP_EOL);
     fclose($pipes[0]);
+    l("[DICE] STDIN:  $expr", L_DEBUG);
 
     $stdout = stream_get_contents($pipes[1]);
     fclose($pipes[1]);
