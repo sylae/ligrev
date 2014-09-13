@@ -155,7 +155,7 @@ function parseCustomCommands($text, $textParts, $room, $res) {
     case '!roll':
     case ':roll':
       $text = str_replace($textParts[0], "", $text);
-      $strings = explode(":", $text);
+      $strings = explode(":", $text, 5);
       $dice = "/(\d*)d(\d+)/";
       $dlist = "/(\d*)a(\d+)/";
       $st = array();
