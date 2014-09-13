@@ -82,6 +82,7 @@ function dice_secure($min, $max) {
 }
 
 function bcFilter($cmd) {
+  $cmd = html_entity_decode($cmd);
   $remove = array(
     'read',
   );
