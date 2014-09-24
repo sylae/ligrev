@@ -58,7 +58,7 @@ function l($text, $level = L_INFO) {
       $tag = "[\033[41mAAAA\033[0m]";
       break;
   }
-  if ($level >= L_REPORT) echo "[".$time."] ".$tag." ".$text.PHP_EOL;
+  if ($level >= L_REPORT) echo "[".$time."] ".$tag." ".html_entity_decode($text).PHP_EOL;
 }
 
 set_error_handler("php_error_handler");
