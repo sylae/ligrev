@@ -78,6 +78,7 @@ function _sav_dice_recurse($die, $nest=0) {
   $roll = rollDice($die);
   if ($roll == $die) {
     // Ace
+    l("[DICE] Savage dice aced", L_DEBUG);
     return _sav_dice_recurse($die, $roll);
   } else {
     return $nest + $roll;
