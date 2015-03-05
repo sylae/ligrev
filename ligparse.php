@@ -57,8 +57,29 @@ function rd_dice_array ($n,$d) {
   return implode(", ", $die);
 }
 
-function savdice($die, $result) {
+function sav_dice($n, $d) {
+  $n = (int)$n;
+    if (!is_int($n) || $n < 1) $n = 1;
+    if ($n > 128) $n = 1;
+  $d = (int)$d;
+    if (!is_int($d) || $d < 0) return 0;
 
+  $die = array();
+
+  for ($i = 0; $i < $n; $i++) {
+    $die[] = _sav_dice_recurse($d);
+  }
+  
+  return array_sum($die);
+}
+
+function _sav_dice_recurse($die, $nest=0) {
+  $roll = rollDice($die);
+  if ($roll == $die) {
+    // Ace
+    return _sav_dice_recurse($die, $roll);
+  } else {
+    return $nest + $roll;
 }
 
 function dice_prng($min, $max) {
@@ -169,10 +190,7 @@ function parseCustomCommands($text, $textParts, $room, $res) {
           function ($m) {
             $m[2] = (($m[2] == 0) ? 1 : $m[2]);
             $m[1] = (($m[1] == 0) ? 1 : $m[1]);
-            l("[DICE] Dumping DOLLAR SIGNm", L_WARN);
-            var_dump($m);
-            // $roll = savdice($m[1], rd_dice($m[1], $m[2]));
-            return "(".$roll.")";
+            return "(".sav_dice($m[1], $m[2]).")";
           },
           $s
         );
