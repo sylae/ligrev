@@ -80,6 +80,7 @@ function _sav_dice_recurse($die, $nest=0) {
     return _sav_dice_recurse($die, $roll);
   } else {
     return $nest + $roll;
+  }
 }
 
 function dice_prng($min, $max) {
