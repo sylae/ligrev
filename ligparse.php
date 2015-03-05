@@ -74,6 +74,7 @@ function sav_dice($n, $d) {
 }
 
 function _sav_dice_recurse($die, $nest=0) {
+  if ($die == 1) return 1;
   $roll = rollDice($die);
   if ($roll == $die) {
     // Ace
