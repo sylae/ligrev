@@ -169,7 +169,7 @@ function parseCustomCommands($text, $textParts, $room, $res) {
           function ($m) {
             $m[2] = (($m[2] == 0) ? 1 : $m[2]);
             $m[1] = (($m[1] == 0) ? 1 : $m[1]);
-            l("[DICE] Dumping $m", L_WARN);
+            l("[DICE] Dumping DOLLAR SIGNm", L_WARN);
             var_dump($m);
             // $roll = savdice($m[1], rd_dice($m[1], $m[2]));
             return "(".$roll.")";
