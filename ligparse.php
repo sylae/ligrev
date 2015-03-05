@@ -57,6 +57,10 @@ function rd_dice_array ($n,$d) {
   return implode(", ", $die);
 }
 
+function savdice($die, $result) {
+
+}
+
 function dice_prng($min, $max) {
   // put in right order
   $m = min($min, $max);
@@ -157,6 +161,7 @@ function parseCustomCommands($text, $textParts, $room, $res) {
       $text = str_replace($textParts[0], "", $text);
       $strings = explode(":", $text, 5);
       $dice = "/(\d*)d(\d+)/";
+      $savdice = "/(\d*)d(\d+)e/";
       $dlist = "/(\d*)a(\d+)/";
       $st = array();
       foreach ($strings as $i => $s) {
@@ -167,6 +172,17 @@ function parseCustomCommands($text, $textParts, $room, $res) {
             return "(".rd_dice($m[1], $m[2]).")";
           },
           $s
+        );
+        $sa = preg_replace_callback($savdice,
+          function ($m) {
+            $m[2] = (($m[2] == 0) ? 1 : $m[2]);
+            $m[1] = (($m[1] == 0) ? 1 : $m[1]);
+            l("[DICE] Dumping $m", L_WARN);
+            var_dump($m);
+            // $roll = savdice($m[1], rd_dice($m[1], $m[2]));
+            return "(".$roll.")";
+          },
+          $sa
         );
         $sa = preg_replace_callback($dlist,
           function ($m) {
