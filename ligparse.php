@@ -174,7 +174,7 @@ function parseCustomCommands($text, $textParts, $room, $res) {
             // $roll = savdice($m[1], rd_dice($m[1], $m[2]));
             return "(".$roll.")";
           },
-          $sa
+          $s
         );
         $sa = preg_replace_callback($dice,
           function ($m) {
@@ -182,7 +182,7 @@ function parseCustomCommands($text, $textParts, $room, $res) {
             $m[1] = (($m[1] == 0) ? 1 : $m[1]);
             return "(".rd_dice($m[1], $m[2]).")";
           },
-          $s
+          $sa
         );
         $sa = preg_replace_callback($dlist,
           function ($m) {
