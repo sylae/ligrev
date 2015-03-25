@@ -169,7 +169,7 @@ function pipeToBc($cmd) {
   }
 }
 
-function parseCustomCommands($text, $textParts, $room, $res) {
+function parseCustomCommands($text, $textParts, $room, $res, $jid) {
   global $config, $client;
   switch($textParts[0]) {
     case '/slap':
@@ -268,9 +268,11 @@ function parseCustomCommands($text, $textParts, $room, $res) {
     case '/sybeam':
     case '!sybeam':
     case ':sybeam':
-      $num = max(1, min(100, (int)pipeToBc((array_key_exists(1, $textParts) ? $textParts[1] : 1))));
-      $string = str_repeat(':sybeam:',$num);
-      send($room, "Fuck off trenton."/*$string*/);
+      if ($jid->to_string() == "lounge@conference.calref.net/sylae") {
+        $num = max(1, min(100, (int)pipeToBc((array_key_exists(1, $textParts) ? $textParts[1] : 1))));
+        $string = str_repeat(':sybeam:',$num);
+        send($room, $string);
+      }
       return $text;
     default:  
       return false;  

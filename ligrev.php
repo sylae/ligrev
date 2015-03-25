@@ -119,7 +119,7 @@ function handleMUC($stanza) {
       // Is this something ligrev wants to parse?
       if(strpos($text, '/') === 0 || strpos($text, '!') === 0 || strpos($text, ':') === 0) {
         $textParts = explode(' ', $text);
-        parseCustomCommands($text, $textParts, $room, $from->resource);
+        parseCustomCommands($text, $textParts, $room, $from->resource, $from);
       }
     } else {
       l("[MUC] Rec'd message (delayed)");
@@ -147,9 +147,9 @@ function handleDM($stanza) {
   if(strpos($text, '/') === 0 || strpos($text, '!') === 0 || strpos($text, ':') === 0) {
     $textParts = explode(' ', $text);
     if ($isPM)
-      parseCustomCommands($text, $textParts, $room, $from->resource);
+      parseCustomCommands($text, $textParts, $room, $from->resource, $from);
     else
-      parseCustomCommands($text, $textParts, $room, $from->bare);  
+      parseCustomCommands($text, $textParts, $room, $from->bare, $from);  
   }
 }
 
