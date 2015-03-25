@@ -265,6 +265,13 @@ function parseCustomCommands($text, $textParts, $room, $res) {
                 'System: '.php_uname();
       send($room, $string);
       return $text;
+    case '/sybeam':
+    case '!sybeam':
+    case ':sybeam':
+      $num = (int)(array_key_exists(1, $textParts) ? $textParts[1] : 1);
+      $string = str_repeat(':sybeam:',$num);
+      send($room, $string);
+      return $text;
     default:  
       return false;  
   }
