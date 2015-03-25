@@ -270,7 +270,7 @@ function parseCustomCommands($text, $textParts, $room, $res) {
     case ':sybeam':
       $num = max(1, min(100, (int)pipeToBc((array_key_exists(1, $textParts) ? $textParts[1] : 1))));
       $string = str_repeat(':sybeam:',$num);
-      send($room, $string);
+      send($room, "Fuck off trenton."/*$string*/);
       return $text;
     default:  
       return false;  
