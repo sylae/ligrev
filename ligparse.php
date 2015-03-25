@@ -268,7 +268,7 @@ function parseCustomCommands($text, $textParts, $room, $res) {
     case '/sybeam':
     case '!sybeam':
     case ':sybeam':
-      $num = min(100, (int)pipeToBc((array_key_exists(1, $textParts) ? $textParts[1] : 1)));
+      $num = max(1, min(100, (int)pipeToBc((array_key_exists(1, $textParts) ? $textParts[1] : 1))));
       $string = str_repeat(':sybeam:',$num);
       send($room, $string);
       return $text;
