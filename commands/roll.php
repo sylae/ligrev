@@ -41,6 +41,7 @@ class roll extends command {
         return "(" . $d->result . ")";
       }, $sa
       );
+      var_dump($sa);
       $bc = new bc($sa);
       $sa = $bc->result;
 
