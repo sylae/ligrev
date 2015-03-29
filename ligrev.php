@@ -81,6 +81,8 @@ require_once 'classes/command.php';
 
 require_once 'commands/roll.php';
 require_once 'commands/slap.php';
+require_once 'commands/diag.php';
+require_once 'commands/card.php';
 
 l("[JAXL] Loading JAXL and connecting...");
 $client = new \JAXL($config['jaxl']);
