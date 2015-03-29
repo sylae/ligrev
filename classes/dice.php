@@ -6,11 +6,13 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.txt GNU General Public License 3
  * @author Sylae Jiendra Corell <sylae@calref.net>
  */
+
 namespace Ligrev;
+
 class dice {
-  
+
   public $result;
-  
+
   /**
    * Constructor function. Handles the entire dice roll and returns the result
    * @param int $n Number of dice
@@ -42,32 +44,39 @@ class dice {
     } elseif ($method == "array") {
       $result = implode(", ", $die);
     } else {
-      return 0;
+      $result = 0;
     }
+    $this->result = $result;
   }
 
   /**
    * Uses OpenSSL to get a securely random dice roll. Overkill as fuck for our purposes
+   * If the function doesn't exist (thanks windows?), use regular rand() to bullshit a number
    * @link http://us3.php.net/manual/en/function.openssl-random-pseudo-bytes.php#104322
    * @param int $min Smallest allowed value
    * @param int $max Largest allowed value
    * @return int Result of die roll
    */
   private function _dice($min, $max) {
-    $range = $max - $min;
-    if ($range == 0) {
-      return $min;
-    } // not so random...
-    $log = log($range, 2);
-    $bytes = (int) ($log / 8) + 1; // length in bytes
-    $bits = (int) $log + 1; // length in bits
-    $filter = (int) (1 << $bits) - 1; // set all lower bits to 1
-    do {
-      $rnd = hexdec(bin2hex(openssl_random_pseudo_bytes($bytes, $s))) & $filter;
-    } while ($rnd >= $range);
-    return $min + $rnd;
+    if (function_exists("openssl_random_pseudo_bytes")) {
+      $range = $max - $min;
+      if ($range == 0) {
+        return $min;
+      } // not so random...
+      $log = log($range, 2);
+      $bytes = (int) ($log / 8) + 1; // length in bytes
+      $bits = (int) $log + 1; // length in bits
+      $filter = (int) (1 << $bits) - 1; // set all lower bits to 1
+      do {
+        $rnd = hexdec(bin2hex(openssl_random_pseudo_bytes($bytes, $s))) & $filter;
+      } while ($rnd >= $range);
+      return $min + $rnd;
+    } else {
+      l("[DICE] Warning: openssl not used!");
+      return rand($min, $max);
+    }
   }
-  
+
   /**
    * Roll a savage die. If result==maximum, roll again and add them together. This is recursive
    * @param int $die Sides
