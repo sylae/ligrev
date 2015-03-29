@@ -18,9 +18,9 @@ class command {
 
   function __construct(\XMPPStanza $stanza, $origin) {
     $this->text = $stanza->body;
-    $from = new \XMPPJid($stanza->from);
-    $this->room = $from->bare;
-    $this->author = $from->resource;
+    $this->from = new \XMPPJid($stanza->from);
+    $this->room = $this->from->bare;
+    $this->author = $this->from->resource;
     $this->origin = $origin;
   }
 
