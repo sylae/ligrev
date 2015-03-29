@@ -1,4 +1,5 @@
 <?php
+namespace Ligrev;
 define("L_DEBUG", 0);
 define("L_INFO", 1);
 define("L_CAUT", 2);
@@ -58,10 +59,12 @@ function l($text, $level = L_INFO) {
       $tag = "[\033[41mAAAA\033[0m]";
       break;
   }
-  if ($level >= L_REPORT) echo "[".$time."] ".$tag." ".html_entity_decode($text).PHP_EOL;
+  if ($level >= L_REPORT) {
+    echo "[" . $time . "] " . $tag . " " . html_entity_decode($text) . PHP_EOL;
+  }
 }
 
-set_error_handler("php_error_handler");
+set_error_handler("Ligrev\\php_error_handler");
 
 set_include_path(get_include_path().PATH_SEPARATOR.__DIR__.DIRECTORY_SEPARATOR.'lib');
 
@@ -71,10 +74,16 @@ require_once 'config.php';
 
 l("Loading libraries...");
 require_once 'JAXL/jaxl.php';
-require_once 'ligparse.php';
+require_once 'classes/ligrevCommand.php';
+require_once 'classes/bc.php';
+require_once 'classes/dice.php';
+require_once 'classes/command.php';
+
+require_once 'commands/roll.php';
+require_once 'commands/slap.php';
 
 l("[JAXL] Loading JAXL and connecting...");
-$client = new JAXL($config['jaxl']);
+$client = new \JAXL($config['jaxl']);
 
 $client->require_xep(array(
 	'0045',	// MUC
@@ -92,7 +101,7 @@ $client->add_cb('on_auth_success', function() {
   $client->set_status("", "chat", 10);
   
   foreach ($config['rooms'] as $id => $jid) {
-    $rooms[$id] = new XMPPJid($jid.'/'.$config['botname']);
+    $rooms[$id] = new \XMPPJid($jid.'/'.$config['botname']);
     l("[JAXL] Joining room ".$rooms[$id]->to_string());
     $client->xeps['0045']->join_room($rooms[$id]);
     l("[JAXL] Joined room ".$rooms[$id]->to_string());
@@ -105,58 +114,9 @@ $client->add_cb('on_auth_failure', function($reason) {
 	l("[JAXL] Auth failure: ".$reason, L_WARN);
 });
 
-function handleMUC($stanza) {
-	global $client, $message_type;
-	$message_type = "muc";
-	$from = new XMPPJid($stanza->from);
-	if($from->resource) {
-    if(!$stanza->exists('delay', NS_DELAYED_DELIVERY)) {
-      l("[MUC] ".$from->resource."@".$from->node.": ".$stanza->body);
-      $text = $stanza->body;
-      $room = $from->bare;
-      $author = $from->resource;
-      
-      // Is this something ligrev wants to parse?
-      if(strpos($text, '/') === 0 || strpos($text, '!') === 0 || strpos($text, ':') === 0) {
-        $textParts = explode(' ', $text);
-        parseCustomCommands($text, $textParts, $room, $from->resource, $from);
-      }
-    } else {
-      l("[MUC] Rec'd message (delayed)");
-    }
-	}
-}
-
-function handleDM($stanza) {
-	global $client, $message_type, $rooms;
-	$message_type = "dm";
-	$from = new XMPPJid($stanza->from);
-  l("[DM] ".$stanza->from.": ".trim($stanza->body));
-  $text = trim($stanza->body);
-  $room = $stanza->from;
-  $author = $from->resource;
-  
-  // let's see if this is a MUC PM or from "The Real World"
-  $isPM = false;
-  foreach ($rooms as $id => $jid) {
-    if ($jid->bare == $from->bare)
-      $isPM = true;
-  }
-  
-  // Is this something ligrev wants to parse?
-  if(strpos($text, '/') === 0 || strpos($text, '!') === 0 || strpos($text, ':') === 0) {
-    $textParts = explode(' ', $text);
-    if ($isPM)
-      parseCustomCommands($text, $textParts, $room, $from->resource, $from);
-    else
-      parseCustomCommands($text, $textParts, $room, $from->bare, $from);  
-  }
-}
-
 // Where the magic happens. "Magic" "Happens". I dunno why I type this either.
-$client->add_cb('on_groupchat_message', function($stanza){return handleMUC($stanza);});
-$client->add_cb('on_chat_message', function($stanza){return handleDM($stanza);});
-$client->add_cb('on_normal_message', function($stanza){return handleDM($stanza);});
+$client->add_cb('on_groupchat_message', function($stanza){new ligrevCommand($stanza, "groupchat");});
+$client->add_cb('on_chat_message', function($stanza){new ligrevCommand($stanza, "chat");});
 
 $message_type = null;
 $client->start();
