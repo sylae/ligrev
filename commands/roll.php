@@ -14,7 +14,7 @@ class roll extends command {
   function process() {
     $textParts = $this->_split($this->text);
     $text = str_replace($textParts[0], "", $this->text);
-    $strings = explode(":", $this->text, 5);
+    $strings = explode(":", $text, 5);
     $dice = "/(\d*)d(\d+)/";
     $savdice = "/(\d*)d(\d+)e/";
     $dlist = "/(\d*)a(\d+)/";
