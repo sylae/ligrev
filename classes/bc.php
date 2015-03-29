@@ -48,15 +48,15 @@ class bc {
       l("[DICE] Exited with status code " . $pinfo['exitcode'], L_DEBUG);
 
       if ($pinfo['exitcode'] == 124) {
-        $result = "timeout";
+        $this->result = "timeout";
       } elseif (strlen($stderr) > 0) {
-        $result = $stderr;
+        $this->result = $stderr;
       } else {
-        $result = $stdout;
+        $this->result = $stdout;
       }
     } else {
       l("[DICE] Could not create dice roll process!", L_WARN);
-      $result = "Ligrev Error in bc Parsing module: PROC NOT CREATED";
+      $this->result = "Ligrev Error in bc Parsing module: PROC NOT CREATED";
     }
   }
 }
