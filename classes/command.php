@@ -10,16 +10,17 @@
 namespace Ligrev;
 
 class command {
-  
+
   protected $text;
   protected $author;
   protected $room;
   protected $origin;
 
-  function __construct($text, $author, $room, $origin) {
-    $this->text = $text;
-    $this->author = $author;
-    $this->room = $room;
+  function __construct(\XMPPStanza $stanza, $origin) {
+    $this->text = $stanza->body;
+    $from = new \XMPPJid($stanza->from);
+    $this->room = $from->bare;
+    $this->author = $from->resource;
     $this->origin = $origin;
   }
 

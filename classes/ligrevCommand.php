@@ -39,7 +39,7 @@ class ligrevCommand {
       $preg = "/^[\/:!](\w+)(\s|$)/";
       if (preg_match($preg, $this->text, $match) && class_exists("Ligrev\\".$match[1])) {
         $class = "Ligrev\\".$match[1];
-        $command = new $class($this->text, $this->author, $this->room, $this->origin);
+        $command = new $class($stanza, $this->origin);
         $command->process();
       }
     }
