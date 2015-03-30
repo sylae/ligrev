@@ -54,7 +54,6 @@ class roster {
     } else {
       $this->eventPresenceDefault($room, $nick, $item, $xml);
     }
-    var_dump($this->roster);
     return true;
   }
 
