@@ -73,11 +73,13 @@ l("Reading config.php...");
 require_once 'config.php';
 
 l("Loading libraries...");
+require 'qp.php'; // don't fall for that 2.x crap.
 require_once 'JAXL/jaxl.php';
 require_once 'classes/ligrevCommand.php';
 require_once 'classes/bc.php';
 require_once 'classes/dice.php';
 require_once 'classes/command.php';
+require_once 'classes/roster.php';
 
 require_once 'commands/roll.php';
 require_once 'commands/slap.php';
@@ -111,6 +113,8 @@ $client->add_cb('on_auth_success', function() {
   }
 });
 
+$roster = new roster();
+
 $client->add_cb('on_auth_failure', function($reason) {
   global $client;
   $client->send_end_stream();
@@ -124,6 +128,9 @@ $client->add_cb('on_groupchat_message', function($stanza) {
 $client->add_cb('on_chat_message', function($stanza) {
   new ligrevCommand($stanza, "chat");
 });
+$client->add_cb('on_presence_stanza', function($stanza) {
+  global $roster;
+  $roster->ingest($stanza);
+});
 
-$message_type = null;
 $client->start();
