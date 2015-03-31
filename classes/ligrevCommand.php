@@ -6,7 +6,9 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.txt GNU General Public License 3
  * @author Sylae Jiendra Corell <sylae@calref.net>
  */
+
 namespace Ligrev;
+
 class ligrevCommand {
 
   protected $client;
@@ -37,8 +39,8 @@ class ligrevCommand {
         l("[MUC] Rec'd message (delayed)");
       }
       $preg = "/^[\/:!](\w+)(\s|$)/";
-      if (preg_match($preg, $this->text, $match) && class_exists("Ligrev\\".$match[1])) {
-        $class = "Ligrev\\".$match[1];
+      if (preg_match($preg, $this->text, $match) && class_exists("Ligrev\\" . $match[1])) {
+        $class = "Ligrev\\" . $match[1];
         $command = new $class($stanza, $this->origin);
         $command->process();
       }

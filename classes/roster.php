@@ -19,17 +19,17 @@ class roster {
 
   function ingest(\XMPPStanza $stanza) {
     global $config;
-    
-    $xml = '<?xml version="1.0"?>'.$stanza->to_string();
-    
+
+    $xml = '<?xml version="1.0"?>' . $stanza->to_string();
+
 
     $from = new \XMPPJid($stanza->from);
     $room = $from->bare;
     $nick = $from->resource;
     $type = \qp($xml)->attr('type');
-    if ($room == $config['jaxl']['jid']) return true;
-
-// Initialize the room roster if it doesn't exist yet.
+    if ($room == $config['jaxl']['jid'])
+      return true;
+    // Initialize the room roster if it doesn't exist yet.
     if (!array_key_exists($room, $this->roster)) {
       $this->roster[$room] = array();
     }
@@ -38,14 +38,16 @@ class roster {
       return true;
     }
 
-// Find the status codes.
+    // Find the status codes.
     $item = \qp($xml)->find('item');
     global $codes;
     $codes = array();
     \qp($xml, 'status')->map(function($index, $item) {
       global $codes;
       $c = (int) qp($item)->attr('code');
-      if(!array_key_exists($c, $codes)) { $codes[$c] = 0; }
+      if (!array_key_exists($c, $codes)) {
+        $codes[$c] = 0;
+      }
       $codes[(int) qp($item)->attr('code')] ++;
     });
 
