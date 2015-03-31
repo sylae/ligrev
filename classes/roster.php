@@ -65,14 +65,14 @@ class roster {
       // Move the roster entry to the new nick, so the new presence
       // won't trigger a notification.
       $this->roster[$room][$newNick] = $this->roster[$room][$nick];
-      l($nick . " is now " . $newNick);
+      l("[" . $room . "] " . $nick . " is now " . $newNick);
     } elseif ((array_key_exists(301, $codes) && $codes[301] >= 0) || (array_key_exists(307, $codes) && $codes[307] >= 0)) { // An `unavailable` 301 is a ban; a 307 is a kick.
       $type = (array_key_exists(301, $codes) && $codes[301] >= 0) ? 'banned' : 'kicked';
       $actor = \qp($item, 'actor')->attr('nick');
       $reason = \qp($item, 'reason')->text();
-      l($nick . " ".$type." by " . $actor . " (" . $reason . ")");
+      l("[" . $room . "] " . $nick . " " . $type . " by " . $actor . (strlen($reason) > 0 ? " (" . $reason . ")" : ""));
     } else { // Any other `unavailable` presence indicates a logout.
-      l($nick . " logged out.");
+      l("[" . $room . "] " . $nick . " left room");
     }
 // In either case, the old nick must be removed and destroyed.
     unset($this->roster[$room][$nick]);
@@ -93,7 +93,7 @@ class roster {
       'status' => $status,
     );
     $this->roster[$room][$nick] = $user;
-    l($user['nick']. " has logged in");
+    l("[" . $room . "] " . $user['nick'] . " joined room");
   }
 
 }
