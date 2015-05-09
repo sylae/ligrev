@@ -15,7 +15,7 @@ namespace Ligrev;
 
 class roster {
 
-  protected $roster = array();
+  public $roster = array();
 
   function ingest(\XMPPStanza $stanza) {
     global $config;
@@ -76,7 +76,7 @@ class roster {
     } else { // Any other `unavailable` presence indicates a logout.
       l("[" . $room . "] " . $nick . " left room");
     }
-// In either case, the old nick must be removed and destroyed.
+    // In either case, the old nick must be removed and destroyed.
     unset($this->roster[$room][$nick]);
   }
 
@@ -87,8 +87,7 @@ class roster {
 
     // Create the user object.
     $user = array(
-      'nick' => $nick,
-      'jid' => $item->attr('jid'), // if not anonymous.
+      'jid' => new \XMPPJid($item->attr('jid')), // if not anonymous.
       'role' => $item->attr('role'),
       'affiliation' => $item->attr('affiliation'),
       'show' => $show,
@@ -98,4 +97,17 @@ class roster {
     l("[" . $room . "] " . $user['nick'] . " joined room");
   }
 
+  function onlineByJID($id) {
+    global $config;
+    foreach ($this->roster as $room) {
+      foreach ($room as $nick => $info) {
+        if ($info['jid']->bare == $id && $config['tellCaseSensitive']) {
+          return true;
+        } elseif (strtolower($info['jid']->bare) == strtolower($id) && !$config['tellCaseSensitive']) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
 }
