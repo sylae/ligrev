@@ -11,6 +11,10 @@ namespace Ligrev;
 
 class dice {
 
+  /**
+   * Result of the dice roll.
+   * @var int 
+   */
   public $result;
 
   /**
