@@ -85,6 +85,7 @@ require_once 'commands/roll.php';
 require_once 'commands/slap.php';
 require_once 'commands/diag.php';
 require_once 'commands/card.php';
+require_once 'commands/shuffle.php';
 require_once 'commands/sybeam.php';
 
 l("[JAXL] Loading JAXL and connecting...");
@@ -114,6 +115,7 @@ $client->add_cb('on_auth_success', function() {
 });
 
 $roster = new roster();
+$decks = array();
 
 $client->add_cb('on_auth_failure', function($reason) {
   global $client;
