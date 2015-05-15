@@ -78,7 +78,7 @@ class dice {
     if ($roll == $die) {
       // Ace
       l("[DICE] Savage dice aced", L_DEBUG);
-      return $this->_rollSavageDice($die, $roll);
+      return $this->_rollSavageDice($die, $roll+$nest);
     } else {
       return $nest + $roll;
     }
