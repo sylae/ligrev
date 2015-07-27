@@ -31,7 +31,7 @@ class ligrevCommand {
     $this->from = new \XMPPJid($stanza->from);
     if ($this->from->resource) {
       if (!$this->stanza->exists('delay', NS_DELAYED_DELIVERY)) {
-        l("[" . $this->from->node . "] " . $this->from->resource . (($this->origin == "chat") ? " (PM)" : "") . ": " . $this->stanza->body, true);
+        l("[" . $this->from->node . "] " . $this->from->resource . (($this->origin == "chat") ? " (PM)" : "") . ": " . $this->stanza->body);
         $this->text = $this->stanza->body;
         $this->room = $this->from->bare;
         $this->author = $this->from->resource;
