@@ -38,7 +38,7 @@ function php_error_handler($no, $str, $file, $line) {
 }
 
 // Function to log/echo to the console. Includes timestamp and what-not
-function l($text, $level = L_INFO) {
+function l($text, $level = L_INFO, $short = false) {
   // get current log time
   $time = date("H:i:s");
   switch ($level) {
@@ -60,7 +60,8 @@ function l($text, $level = L_INFO) {
       break;
   }
   if ($level >= L_REPORT) {
-    echo "[" . $time . "] " . $tag . " " . html_entity_decode($text) . PHP_EOL;
+    $stag = ($short ? $tag . " " : "");
+    echo "[" . $time . "] " . $stag . html_entity_decode($text) . PHP_EOL;
   }
 }
 
