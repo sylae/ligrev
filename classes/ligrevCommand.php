@@ -47,4 +47,16 @@ class ligrevCommand {
     }
   }
 
+  function kickOccupant($nick, $roomJid, $reason = false, $callback = false) {
+    global $client;
+    $payload = "<iq from='" . $client->jid->to_string() . "'id='ligrev_" . time() . "'to='" . $roomJid . "'type='set'>
+  <query xmlns='http://jabber.org/protocol/muc#admin'>
+    <item nick='" . $nick . "' role='none'>
+      <reason>" . $reason . "</reason>
+    </item>
+  </query>
+</iq>";
+    $client->send_raw($payload);
+  }
+
 }
