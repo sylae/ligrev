@@ -97,5 +97,9 @@ class roster {
     $this->roster[$room][$nick] = $user;
     l("[" . $room . "] " . $user['nick'] . " joined room");
   }
+  
+  function nickToJid($room, $nick) {
+    return $this->roster[$room][$nick]['jid'];
+  }
 
 }

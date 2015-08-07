@@ -3,6 +3,7 @@ $config = array();
 
 // DSN sent to MDB2
 $config['db'] = 'mysqli://user:password@localhost/database';
+$config['log'] = false;
 
 $config['jaxl'] = array(
 	'jid' => 'ligrev@example.net',
