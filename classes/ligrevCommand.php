@@ -21,7 +21,7 @@ class ligrevCommand {
   protected $room;
 
   function __construct(\XMPPStanza $stanza, $origin) {
-    global $client, $rooms, $roster, $db;
+    global $client, $rooms, $roster, $db, $config;
     $this->client = $client;
     $this->rooms = $rooms;
 
