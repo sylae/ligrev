@@ -73,8 +73,10 @@ l("Reading config.php...");
 require_once 'config.php';
 
 l("Loading libraries...");
-require 'qp.php'; // don't fall for that 2.x crap.
+require_once 'qp.php'; // don't fall for that 2.x crap.
 require_once 'JAXL/jaxl.php';
+require_once 'MDB2.php';
+
 require_once 'classes/ligrevCommand.php';
 require_once 'classes/bc.php';
 require_once 'classes/dice.php';
@@ -87,6 +89,13 @@ require_once 'commands/diag.php';
 require_once 'commands/card.php';
 require_once 'commands/shuffle.php';
 require_once 'commands/sybeam.php';
+
+l("[DB] Connecting to database...");
+$db = & \MDB2::singleton($config['db']);
+if (\PEAR::isError($db)) {
+  die($db->getMessage());
+}
+$db->loadModule('Extended', null, false);
 
 l("[JAXL] Loading JAXL and connecting...");
 $client = new \JAXL($config['jaxl']);
