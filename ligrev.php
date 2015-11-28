@@ -73,7 +73,7 @@ l("Reading config.php...");
 require_once 'config.php';
 
 l("Loading libraries...");
-require_once 'qp.php'; // don't fall for that 2.x crap.
+require __DIR__ . '/vendor/autoload.php';
 require_once 'JAXL/jaxl.php';
 require_once 'MDB2.php';
 
