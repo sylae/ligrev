@@ -21,7 +21,7 @@ class ligrevCommand {
   protected $room;
 
   function __construct(\XMPPStanza $stanza, $origin) {
-    global $client, $rooms, $roster, $db, $config;
+    global $client, $rooms, $roster, $config;
     $this->client = $client;
     $this->rooms = $rooms;
 
@@ -35,16 +35,6 @@ class ligrevCommand {
         $this->text = $this->stanza->body;
         $this->room = $this->from->bare;
         $this->author = $this->from->resource;
-
-        // log it. for 'science'
-        if ($config['log']) {
-          $jid = new \XMPPJid($roster->nickToJid($this->room, $this->author));
-          $jid = $jid->bare;
-          $query = 'INSERT INTO markov (user, text) VALUES ('
-            . $db->quote($jid, 'text') . ', '
-            . $db->quote($this->text, 'text') . ')';
-          $db->exec($query);
-        }
       } else {
         l("[MUC] Rec'd message (delayed)");
       }
