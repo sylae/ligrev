@@ -1,0 +1,5 @@
+{
+    "require": {
+        "querypath/querypath": "^3.04"
+    }
+}
