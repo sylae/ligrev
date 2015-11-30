@@ -8,9 +8,9 @@
  * @author Sylae Jiendra Corell <sylae@calref.net>
  */
 
-namespace Ligrev;
+namespace Ligrev\Command;
 
-class card extends command {
+class card extends \Ligrev\command {
 
   function process() {
     global $decks;

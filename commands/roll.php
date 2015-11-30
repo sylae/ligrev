@@ -7,9 +7,9 @@
  * @author Sylae Jiendra Corell <sylae@calref.net>
  */
 
-namespace Ligrev;
+namespace Ligrev\Command;
 
-class roll extends command {
+class roll extends \Ligrev\command {
 
   function process() {
     $textParts = $this->_split($this->text);
@@ -23,25 +23,25 @@ class roll extends command {
       $sa = preg_replace_callback($savdice, function ($m) {
         $m[2] = (($m[2] == 0) ? 1 : $m[2]);
         $m[1] = (($m[1] == 0) ? 1 : $m[1]);
-        $d = new dice($m[1], $m[2], "savage");
+        $d = new \Ligrev\dice($m[1], $m[2], "savage");
         return "(" . $d->result . ")";
       }, $s
       );
       $sa = preg_replace_callback($dice, function ($m) {
         $m[2] = (($m[2] == 0) ? 1 : $m[2]);
         $m[1] = (($m[1] == 0) ? 1 : $m[1]);
-        $d = new dice($m[1], $m[2], "sum");
+        $d = new \Ligrev\dice($m[1], $m[2], "sum");
         return "(" . $d->result . ")";
       }, $sa
       );
       $sa = preg_replace_callback($dlist, function ($m) {
         $m[2] = (($m[2] == 0) ? 1 : $m[2]);
         $m[1] = (($m[1] == 0) ? 1 : $m[1]);
-        $d = new dice($m[1], $m[2], "array");
+        $d = new \Ligrev\dice($m[1], $m[2], "array");
         return "(" . $d->result . ")";
       }, $sa
       );
-      $bc = new bc($sa);
+      $bc = new \Ligrev\bc($sa);
       $sa = $bc->result;
 
       $st[] = $sa;

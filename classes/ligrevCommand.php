@@ -39,8 +39,8 @@ class ligrevCommand {
         l("[MUC] Rec'd message (delayed)");
       }
       $preg = "/^[\/:!](\w+)(\s|$)/";
-      if (preg_match($preg, $this->text, $match) && class_exists("Ligrev\\" . $match[1])) {
-        $class = "Ligrev\\" . $match[1];
+      if (preg_match($preg, $this->text, $match) && class_exists("Ligrev\\Command\\" . $match[1])) {
+        $class = "Ligrev\\Command\\" . $match[1];
         $command = new $class($stanza, $this->origin);
         $command->process();
       }

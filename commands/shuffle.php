@@ -7,9 +7,9 @@
  * @author Sylae Jiendra Corell <sylae@calref.net>
  */
 
-namespace Ligrev;
+namespace Ligrev\Command;
 
-class shuffle extends command {
+class shuffle extends \Ligrev\command {
 
   function process() {
     global $decks;
