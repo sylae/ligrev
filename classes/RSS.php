@@ -19,7 +19,7 @@ class RSS {
     $this->rooms = $rooms;
     $sql = $db->executeQuery('SELECT request, latest FROM rss WHERE url=? ORDER BY request DESC LIMIT 1;', array($url));
     $result = $sql->fetchAll();
-    $this->last = $result ? $result : [0, 0];
+    $this->last = array_key_exists(0, $result) ? $result[0] : array("request"=>0, "latest"=>0);
     $this->updateLast = $db->prepare('
          INSERT INTO rss (url, request, latest) VALUES(?, ?, ?)
          ON DUPLICATE KEY UPDATE request=VALUES(request), latest=VALUES(latest);', array('string', 'integer', 'integer'));
@@ -32,13 +32,14 @@ class RSS {
 
   function update() {
     global $client;
-    $this->last[0] = time();
+    $this->last['request'] = time();
     $data = \qp(file_get_contents($this->url));
     $items = $data->find('item');
-    $newest = $this->last[1];
+    $newest = $this->last['latest'];
+    $newItems = array();
     foreach ($items as $item) {
       $published = strtotime($item->find('pubDate')->text());
-      if ($published <= $this->last[1])
+      if ($published <= $this->last['latest'])
         continue;
       $newest = max($newest, $published);
       $newItems[] = (object) [
@@ -51,8 +52,9 @@ class RSS {
       ];
     }
     $this->updateLast->bindValue(1, $this->url, "string");
-    $this->updateLast->bindValue(2, $this->last[0], "integer");
-    $this->updateLast->bindValue(3, $newest, "integer");
+    $this->updateLast->bindValue(2, $this->last['request'], "integer");
+    $this->last['latest'] = $newest;
+    $this->updateLast->bindValue(3, $this->last['latest'], "integer");
     $this->updateLast->execute();
     foreach ($newItems as $item) {
       /**
