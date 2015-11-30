@@ -20,6 +20,7 @@ require_once 'classes/bc.php';
 require_once 'classes/dice.php';
 require_once 'classes/command.php';
 require_once 'classes/roster.php';
+require_once 'classes/RSS.php';
 
 require_once 'commands/roll.php';
 require_once 'commands/slap.php';
@@ -57,6 +58,7 @@ $client->add_cb('on_auth_success', function() {
     $client->xeps['0045']->join_room($rooms[$id]);
     l("[JAXL] Joined room " . $rooms[$id]->to_string());
   }
+  rss_init();
 });
 
 $roster = new roster();

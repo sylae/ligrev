@@ -71,6 +71,15 @@ namespace Ligrev {
     }
   }
 
+  function rss_init() {
+    global $conf;
+    $rss = $conf['rss'];
+    $feeds = array();
+    foreach ($rss as $feed) {
+      $feeds[] = new RSS($feed['url'], $feed['rooms'], $feed['ttl']);
+    }
+  }
+
 }
 
 namespace Ligrev\Command {
