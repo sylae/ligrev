@@ -89,6 +89,11 @@ require_once 'commands/card.php';
 require_once 'commands/shuffle.php';
 require_once 'commands/sybeam.php';
 
+l("[DBAL] Initializing database");
+$db = \Doctrine\DBAL\DriverManager::getConnection(array('url' => $config['db']), new \Doctrine\DBAL\Configuration());
+
+// TODO: Schema validation/installation/update
+
 l("[JAXL] Loading JAXL and connecting...");
 $client = new \JAXL($config['jaxl']);
 

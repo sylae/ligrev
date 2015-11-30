@@ -1,6 +1,9 @@
 <?php
 $config = array();
 
+// DSN sent to DBAL
+$config['db'] = 'mysqli://user:password@localhost/database';
+
 $config['jaxl'] = array(
 	'jid' => 'ligrev@example.net',
 	'pass' => 'rainbowdashisactuallybestpony',

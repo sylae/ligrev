@@ -1,5 +1,6 @@
 {
     "require": {
-        "querypath/querypath": "^3.04"
+        "querypath/querypath": "^3.04",
+        "doctrine/dbal": "2.5.2"
     }
 }
