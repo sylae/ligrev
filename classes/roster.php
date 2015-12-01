@@ -95,6 +95,7 @@ class roster {
     );
     $this->roster[$room][$nick] = $user;
     l("[" . $room . "] " . $nick . " joined room");
+    $this->processTells($user['jid']->bare, $room);
   }
   
   function nickToJid($room, $nick) {
@@ -113,5 +114,24 @@ class roster {
       }
     }
     return false;
+  }
+  
+  function processTells($user, $room) {
+    global $db, $client;
+    $sql = $db->prepare('SELECT * FROM tell WHERE recipient = ?', array("string"));
+    $sql->bindValue(1, $user, "string");
+    $sql->execute();
+    $tells = $sql->fetchAll();
+    var_dump($tells);
+    foreach($tells as $tell) {
+      $time = ($tell['sent'] > time()-(60*60*24)) ? strftime('%X', $tell['sent']) : strftime('%c', $tell['sent']);
+      $message = "Message from {$tell['sender']} for {$tell['recipient']} at $time:".PHP_EOL.$tell['message'];
+      if ($tell['private']) {
+        $client->send_chat_msg($user, $message);
+      } else {
+        $client->xeps['0045']->send_groupchat($room, $message);
+      }
+      $db->delete('tell', array('id' => $tell['id']));
+    }
   }
 }
