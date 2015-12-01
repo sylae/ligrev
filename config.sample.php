@@ -15,6 +15,8 @@ $config['rooms'] = array(
   'test'   => 'test@conference.example.org',
 );
 
+$config['defaultTellDomain'] = 'example.net';
+$config['tellCaseSensitive'] = true;
 
 $config['botname'] = "Ligrev";
 

@@ -15,7 +15,7 @@ namespace Ligrev;
 
 class roster {
 
-  protected $roster = array();
+  public $roster = array();
 
   function ingest(\XMPPStanza $stanza) {
     global $config;
@@ -76,7 +76,7 @@ class roster {
     } else { // Any other `unavailable` presence indicates a logout.
       l("[" . $room . "] " . $nick . " left room");
     }
-// In either case, the old nick must be removed and destroyed.
+    // In either case, the old nick must be removed and destroyed.
     unset($this->roster[$room][$nick]);
   }
 
@@ -87,19 +87,51 @@ class roster {
 
     // Create the user object.
     $user = array(
-      'nick' => $nick,
-      'jid' => $item->attr('jid'), // if not anonymous.
+      'jid' => new \XMPPJid($item->attr('jid')), // if not anonymous.
       'role' => $item->attr('role'),
       'affiliation' => $item->attr('affiliation'),
       'show' => $show,
       'status' => $status,
     );
     $this->roster[$room][$nick] = $user;
-    l("[" . $room . "] " . $user['nick'] . " joined room");
+    l("[" . $room . "] " . $nick . " joined room");
+    $this->processTells($user['jid']->bare, $room);
   }
   
   function nickToJid($room, $nick) {
     return $this->roster[$room][$nick]['jid'];
   }
 
+  function onlineByJID($id) {
+    global $config;
+    foreach ($this->roster as $room) {
+      foreach ($room as $nick => $info) {
+        if ($info['jid']->bare == $id && $config['tellCaseSensitive']) {
+          return true;
+        } elseif (strtolower($info['jid']->bare) == strtolower($id) && !$config['tellCaseSensitive']) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+  
+  function processTells($user, $room) {
+    global $db, $client;
+    $sql = $db->prepare('SELECT * FROM tell WHERE recipient = ?', array("string"));
+    $sql->bindValue(1, $user, "string");
+    $sql->execute();
+    $tells = $sql->fetchAll();
+    var_dump($tells);
+    foreach($tells as $tell) {
+      $time = ($tell['sent'] > time()-(60*60*24)) ? strftime('%X', $tell['sent']) : strftime('%c', $tell['sent']);
+      $message = "Message from {$tell['sender']} for {$tell['recipient']} at $time:".PHP_EOL.$tell['message'];
+      if ($tell['private']) {
+        $client->send_chat_msg($user, $message);
+      } else {
+        $client->xeps['0045']->send_groupchat($room, $message);
+      }
+      $db->delete('tell', array('id' => $tell['id']));
+    }
+  }
 }

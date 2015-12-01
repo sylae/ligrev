@@ -28,6 +28,7 @@ require_once 'commands/diag.php';
 require_once 'commands/card.php';
 require_once 'commands/shuffle.php';
 require_once 'commands/sybeam.php';
+require_once 'commands/tell.php';
 
 l("[DBAL] Initializing database");
 $db = \Doctrine\DBAL\DriverManager::getConnection(array('url' => $config['db']), new \Doctrine\DBAL\Configuration());
