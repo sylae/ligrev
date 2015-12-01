@@ -34,7 +34,6 @@ class tell extends \Ligrev\command {
       $this->_send($this->room, "Error: $recipient already online. Contact user directly.");
       return false;
     }
-    var_dump($message, $recipient, $private);
     $sql = $db->prepare('INSERT INTO tell (sender, recipient, sent, private, message) VALUES(?, ?, ?, ?, ?);', array('string', 'string', 'integer', 'boolean', 'string'));
     $sql->bindValue(1, $this->from->to_string(), "string");
     $sql->bindValue(2, $recipient, "string");
