@@ -7,15 +7,14 @@
  * @author Sylae Jiendra Corell <sylae@calref.net>
  */
 
-namespace Ligrev;
+namespace Ligrev\Command;
 
-class sybeam extends command {
+class sybeam extends \Ligrev\command {
 
   function process() {
-    var_dump($this->from->to_string());
     if ($this->from->to_string() == "lounge@conference.calref.net/sylae") {
       $textParts = $this->_split($this->text);
-      $sybeams = new bc((array_key_exists(1, $textParts) ? $textParts[1] : 1));
+      $sybeams = new \Ligrev\bc((array_key_exists(1, $textParts) ? $textParts[1] : 1));
       $num = max(1, min(100, $sybeams->result));
       $string = str_repeat(':sybeam:', $num);
       $this->_send($this->room, $string);

@@ -21,7 +21,7 @@ class ligrevCommand {
   protected $room;
 
   function __construct(\XMPPStanza $stanza, $origin) {
-    global $client, $rooms;
+    global $client, $rooms, $roster, $config;
     $this->client = $client;
     $this->rooms = $rooms;
 
@@ -31,7 +31,7 @@ class ligrevCommand {
     $this->from = new \XMPPJid($stanza->from);
     if ($this->from->resource) {
       if (!$this->stanza->exists('delay', NS_DELAYED_DELIVERY)) {
-        l("[" . $this->from->bare . "] " . $this->from->resource . (($this->origin == "chat") ? " (PM)" : "") . ": " . $this->stanza->body);
+        l("[" . $this->from->node . "] " . $this->from->resource . (($this->origin == "chat") ? " (PM)" : "") . ": " . $this->stanza->body);
         $this->text = $this->stanza->body;
         $this->room = $this->from->bare;
         $this->author = $this->from->resource;
@@ -39,12 +39,24 @@ class ligrevCommand {
         l("[MUC] Rec'd message (delayed)");
       }
       $preg = "/^[\/:!](\w+)(\s|$)/";
-      if (preg_match($preg, $this->text, $match) && class_exists("Ligrev\\" . $match[1])) {
-        $class = "Ligrev\\" . $match[1];
+      if (preg_match($preg, $this->text, $match) && class_exists("Ligrev\\Command\\" . $match[1])) {
+        $class = "Ligrev\\Command\\" . $match[1];
         $command = new $class($stanza, $this->origin);
         $command->process();
       }
     }
+  }
+
+  function kickOccupant($nick, $roomJid, $reason = false, $callback = false) {
+    global $client;
+    $payload = "<iq from='" . $client->jid->to_string() . "'id='ligrev_" . time() . "'to='" . $roomJid . "'type='set'>
+  <query xmlns='http://jabber.org/protocol/muc#admin'>
+    <item nick='" . $nick . "' role='none'>
+      <reason>" . $reason . "</reason>
+    </item>
+  </query>
+</iq>";
+    $client->send_raw($payload);
   }
 
 }

@@ -7,9 +7,9 @@
  * @author Sylae Jiendra Corell <sylae@calref.net>
  */
 
-namespace Ligrev;
+namespace Ligrev\Command;
 
-class slap extends command {
+class slap extends \Ligrev\command {
 
   function process() {
     $textParts = $this->_split($this->text);

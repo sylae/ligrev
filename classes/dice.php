@@ -11,6 +11,10 @@ namespace Ligrev;
 
 class dice {
 
+  /**
+   * Result of the dice roll.
+   * @var int 
+   */
   public $result;
 
   /**
@@ -50,31 +54,14 @@ class dice {
   }
 
   /**
-   * Uses OpenSSL to get a securely random dice roll. Overkill as fuck for our purposes
-   * If the function doesn't exist (thanks windows?), use regular rand() to bullshit a number
-   * @link http://us3.php.net/manual/en/function.openssl-random-pseudo-bytes.php#104322
+   * get a random dice roll.
+   * @todo figure out why the openssl code sucks.
    * @param int $min Smallest allowed value
    * @param int $max Largest allowed value
    * @return int Result of die roll
    */
   private function _dice($min, $max) {
-    if (function_exists("openssl_random_pseudo_bytes")) {
-      $range = $max - $min;
-      if ($range == 0) {
-        return $min;
-      } // not so random...
-      $log = log($range, 2);
-      $bytes = (int) ($log / 8) + 1; // length in bytes
-      $bits = (int) $log + 1; // length in bits
-      $filter = (int) (1 << $bits) - 1; // set all lower bits to 1
-      do {
-        $rnd = hexdec(bin2hex(openssl_random_pseudo_bytes($bytes, $s))) & $filter;
-      } while ($rnd >= $range);
-      return $min + $rnd;
-    } else {
-      l("[DICE] Warning: openssl not used!");
-      return rand($min, $max);
-    }
+    return rand($min, $max);
   }
 
   /**
@@ -91,7 +78,7 @@ class dice {
     if ($roll == $die) {
       // Ace
       l("[DICE] Savage dice aced", L_DEBUG);
-      return $this->_rollSavageDice($die, $roll);
+      return $this->_rollSavageDice($die, $roll+$nest);
     } else {
       return $nest + $roll;
     }

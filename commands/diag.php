@@ -7,9 +7,9 @@
  * @author Sylae Jiendra Corell <sylae@calref.net>
  */
 
-namespace Ligrev;
+namespace Ligrev\Command;
 
-class diag extends command {
+class diag extends \Ligrev\command {
 
   function process() {
     $string = 'Ligrev Diagnostic Information' . PHP_EOL .

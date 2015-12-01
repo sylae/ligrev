@@ -11,9 +11,29 @@ namespace Ligrev;
 
 class command {
 
+  /**
+   * Body of the message. Probably want to explode() this.
+   * @var string 
+   */
   protected $text;
+
+  /**
+   * Who sent the message.
+   * @var string 
+   */
   protected $author;
+
+  /**
+   * MUC room this message originated from
+   * @var string 
+   */
   protected $room;
+
+  /**
+   * Where the message came from (will be used to differentiate non-MUC messages)
+   * Currently not used
+   * @var string 
+   */
   protected $origin;
 
   function __construct(\XMPPStanza $stanza, $origin) {

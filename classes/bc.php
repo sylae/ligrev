@@ -6,9 +6,17 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.txt GNU General Public License 3
  * @author Sylae Jiendra Corell <sylae@calref.net>
  */
+
 namespace Ligrev;
+
 class bc {
+
+  /**
+   * Result from bc--if you want to risk it you can probably soft-cast this as a number.
+   * @var string 
+   */
   public $result;
+
   function __construct($math) {
     global $config;
 
@@ -59,4 +67,5 @@ class bc {
       $this->result = "Ligrev Error in bc Parsing module: PROC NOT CREATED";
     }
   }
+
 }

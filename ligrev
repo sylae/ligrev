@@ -1,0 +1,10 @@
+#!/bin/sh
+git pull
+composer install
+until php ligrev.php; do
+    echo "Ligrev crashed with exit code $?. Restarting in 10 seconds..."
+    sleep 10
+    git pull
+    composer install
+done
+
