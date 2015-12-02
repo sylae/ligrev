@@ -28,24 +28,24 @@ namespace Ligrev {
         break;
       case E_WARNING:
       case E_PARSE:
-        l("[PHP] " . $str . " at " . $file . ":" . $line, L_WARN);
+        l("$str at $file: $line", "PHP", L_WARN);
         break;
       case E_NOTICE:
-        l("[PHP] " . $str . " at " . $file . ":" . $line, L_CAUT);
+        l("$str at $file: $line", "PHP", L_CAUT);
         break;
       case E_DEPRECATED:
       case E_STRICT:
-        l("[PHP] " . $str . " at " . $file . ":" . $line, L_DEBUG);
+        l("$str at $file: $line", "PHP", L_DEBUG);
         break;
       default:
-        l("[PHP] " . $str . " at " . $file . ":" . $line, L_INFO);
+        l("$str at $file: $line", "PHP", L_INFO);
         break;
     }
     return true;
   }
 
 // Function to log/echo to the console. Includes timestamp and what-not
-  function l($text, $level = L_INFO) {
+  function l($text, $prefix = "", $level = L_INFO) {
     // get current log time
     $time = date("H:i:s");
     switch ($level) {
@@ -66,14 +66,15 @@ namespace Ligrev {
         $tag = "[\033[41mAAAA\033[0m]";
         break;
     }
+    $prefix = (strlen($prefix) > 0) ? "[$prefix]" : "";
     if ($level >= L_REPORT) {
-      echo "[" . $time . "] " . $tag . " " . html_entity_decode($text) . PHP_EOL;
+      echo "[$time]$tag$prefix " . html_entity_decode($text) . PHP_EOL;
     }
   }
 
   function rss_init() {
-    global $conf;
-    $rss = $conf['rss'];
+    global $config;
+    $rss = $config['rss'];
     $feeds = array();
     foreach ($rss as $feed) {
       $feeds[] = new RSS($feed['url'], $feed['rooms'], $feed['ttl']);
