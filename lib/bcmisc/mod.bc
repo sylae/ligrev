@@ -1,6 +1,6 @@
 define mod(x,y) {
   return remainder(x,y)
 }
-define mudulo(x,y) {
+define modulo(x,y) {
   return remainder(x,y)
 }
