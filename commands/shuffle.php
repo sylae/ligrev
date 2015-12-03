@@ -16,38 +16,38 @@ class shuffle extends \Ligrev\command {
 
     $decks[$this->room] = array();
     $suits = array(
-      'Hearts',
-      'Diamonds',
-      'Clubs',
-      'Spades',
+      _('Hearts'),
+      _('Diamonds'),
+      _('Clubs'),
+      _('Spades'),
     );
     $nums = array(
-      'Ace',
-      '2',
-      '3',
-      '4',
-      '5',
-      '6',
-      '7',
-      '8',
-      '9',
-      '10',
-      'Jack',
-      'Queen',
-      'King',
+      _('Ace'),
+      _('Two'),
+      _('Three'),
+      _('Four'),
+      _('Five'),
+      _('Six'),
+      _('Seven'),
+      _('Eight'),
+      _('Nine'),
+      _('Ten'),
+      _('Jack'),
+      _('Queen'),
+      _('King'),
     );
     $c = 1;
     while ($c <= 54) {
       if ($c >= 53) {
-        $decks[$this->room][] = "Joker";
+        $decks[$this->room][] = _("Joker");
       } else {
-        $decks[$this->room][] = $nums[($c - 1) % 13] . " of " . $suits[($c - 1) % 4];
+        $decks[$this->room][] = sprintf(_("%s of %s"), $nums[($c - 1) % 13], $suits[($c - 1) % 4]);
       }
       $c++;
     }
     shuffle($decks[$this->room]);
-    l("[CARD] Reset " . $this->room, L_DEBUG);
-    $this->_send($this->room, "Deck shuffled.");
+    l(sprintf(_("Reset %s"), $this->room), "CARD", L_DEBUG);
+    $this->_send($this->room, _("Deck shuffled."));
   }
 
 }

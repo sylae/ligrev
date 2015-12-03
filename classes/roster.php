@@ -67,14 +67,14 @@ class roster {
       // Move the roster entry to the new nick, so the new presence
       // won't trigger a notification.
       $this->roster[$room][$newNick] = $this->roster[$room][$nick];
-      l("[" . $room . "] " . $nick . " is now " . $newNick);
+      l("[" . $room . "] " . sprintf(_("%s is now %s"), $nick, $newNick));
     } elseif ((array_key_exists(301, $codes) && $codes[301] >= 0) || (array_key_exists(307, $codes) && $codes[307] >= 0)) { // An `unavailable` 301 is a ban; a 307 is a kick.
       $type = (array_key_exists(301, $codes) && $codes[301] >= 0) ? 'banned' : 'kicked';
       $actor = \qp($item, 'actor')->attr('nick');
       $reason = \qp($item, 'reason')->text();
-      l("[" . $room . "] " . $nick . " " . $type . " by " . $actor . (strlen($reason) > 0 ? " (" . $reason . ")" : ""));
+      l("[" . $room . "] " . sprintf(_("%s %s by %s"), $nick,  $type,  $actor));
     } else { // Any other `unavailable` presence indicates a logout.
-      l("[" . $room . "] " . $nick . " left room");
+      l("[" . $room . "] " . sprintf(_("%s left room"), $nick));
     }
     // In either case, the old nick must be removed and destroyed.
     unset($this->roster[$room][$nick]);
@@ -94,7 +94,7 @@ class roster {
       'status' => $status,
     );
     $this->roster[$room][$nick] = $user;
-    l("[" . $room . "] " . $nick . " joined room");
+    l("[" . $room . "] " . sprintf(_("%s joined room"), $nick));
     $this->processTells($user['jid']->bare, $room);
   }
   
@@ -125,6 +125,7 @@ class roster {
     foreach($tells as $tell) {
       $time = ($tell['sent'] > time()-(60*60*24)) ? strftime('%X', $tell['sent']) : strftime('%c', $tell['sent']);
       $message = "Message from {$tell['sender']} for {$tell['recipient']} at $time:".PHP_EOL.$tell['message'];
+      $message = sprintf(_("Message from %s for %s at %s:").PHP_EOL.$message, $tell['senter'], $tell['recipient'], $time);
       if ($tell['private']) {
         $client->send_chat_msg($user, $message);
       } else {

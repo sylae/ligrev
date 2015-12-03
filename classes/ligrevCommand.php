@@ -31,12 +31,10 @@ class ligrevCommand {
     $this->from = new \XMPPJid($stanza->from);
     if ($this->from->resource) {
       if (!$this->stanza->exists('delay', NS_DELAYED_DELIVERY)) {
-        l("[" . $this->from->node . "] " . $this->from->resource . (($this->origin == "chat") ? " (PM)" : "") . ": " . $this->stanza->body);
+        l("[" . $this->from->node . "] " . $this->from->resource . (($this->origin == "chat") ? " (" . _("PM") . ")" : "") . ": " . $this->stanza->body);
         $this->text = $this->stanza->body;
         $this->room = $this->from->bare;
         $this->author = $this->from->resource;
-      } else {
-        l("[MUC] Rec'd message (delayed)");
       }
       $preg = "/^[\/:!](\w+)(\s|$)/";
       if (!in_array($this->author[0], array(':', '!', '/')) && preg_match($preg, $this->text, $match) && class_exists("Ligrev\\Command\\" . $match[1])) {

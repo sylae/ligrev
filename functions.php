@@ -20,25 +20,26 @@ namespace Ligrev {
 
   // Take over PHP's error handling, since it's a picky whore sometimes.
   function php_error_handler($no, $str, $file, $line) {
+    $message = sprintf(_("%s at %s: %s"), $str, $file, $line);
     switch ($no) {
       case E_ERROR:
       case E_RECOVERABLE_ERROR:
-        l("[PHP] " . $str . " at " . $file . ":" . $line, L_AAAA);
+        l($message, "PHP", L_AAAA);
         die();
         break;
       case E_WARNING:
       case E_PARSE:
-        l("$str at $file: $line", "PHP", L_WARN);
+        l($message, "PHP", L_WARN);
         break;
       case E_NOTICE:
-        l("$str at $file: $line", "PHP", L_CAUT);
+        l($message, "PHP", L_CAUT);
         break;
       case E_DEPRECATED:
       case E_STRICT:
-        l("$str at $file: $line", "PHP", L_DEBUG);
+        l($message, "PHP", L_DEBUG);
         break;
       default:
-        l("$str at $file: $line", "PHP", L_INFO);
+        l($message, "PHP", L_INFO);
         break;
     }
     return true;
@@ -85,8 +86,8 @@ namespace Ligrev {
 
 namespace Ligrev\Command {
 
-  function l($text, $level = L_INFO) {
-    return \Ligrev\l($text, $level);
+  function l($text, $tag = "", $level = L_INFO) {
+    return \Ligrev\l($text, $tag, $level);
   }
 
 }

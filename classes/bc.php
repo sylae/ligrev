@@ -37,15 +37,15 @@ class bc {
     if (is_resource($process)) {
       fwrite($pipes[0], $expr . PHP_EOL);
       fclose($pipes[0]);
-      l("[DICE] STDIN:  $expr", L_DEBUG);
+      l("STDIN:  $expr", "DICE", L_DEBUG);
 
       $pipeout = trim(str_replace('\\' . PHP_EOL, '', stream_get_contents($pipes[1])));
 
       $stdout = (strlen($pipeout) > 80) ? substr($pipeout, 0, 77) . '...' : $pipeout;
-      l("[DICE] STDOUT: $stdout", L_DEBUG);
+      l("STDOUT: $stdout", "DICE", L_DEBUG);
 
       $stderr = trim(str_replace('\\' . PHP_EOL, PHP_EOL, stream_get_contents($pipes[2])));
-      l("[DICE] STDERR: $stderr", L_DEBUG);
+      l("STDERR: $stderr", "DICE", L_DEBUG);
 
       $stderr = preg_replace('/\\(standard_in\\) \\d+: /', '', $stderr);
       $pinfo = proc_get_status($process);
@@ -53,7 +53,7 @@ class bc {
       fclose($pipes[2]);
       proc_close($process);
 
-      l("[DICE] Exited with status code " . $pinfo['exitcode'], L_DEBUG);
+      l(sprintf(_("Exited with status code %s"), $pinfo['exitcode']), "DICE", L_DEBUG);
 
       if ($pinfo['exitcode'] == 124) {
         $this->result = "timeout";
@@ -63,8 +63,8 @@ class bc {
         $this->result = $stdout;
       }
     } else {
-      l("[DICE] Could not create dice roll process!", L_WARN);
-      $this->result = "Ligrev Error in bc Parsing module: PROC NOT CREATED";
+      l(_("Could not create dice roll process!"), "DICE", L_WARN);
+      $this->result = sprintf(_("Ligrev error in bc parsing module: %s"), _("Process not created"));
     }
   }
 

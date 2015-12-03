@@ -12,12 +12,11 @@ namespace Ligrev\Command;
 class diag extends \Ligrev\command {
 
   function process() {
-    $string = 'Ligrev Diagnostic Information' . PHP_EOL .
-      'Ligrev Version: ' . trim(`git rev-parse HEAD`) . PHP_EOL .
-      'PHP Version: ' . phpversion() . PHP_EOL .
-      'JAXL Version: ' . trim(`cd lib/JAXL && git rev-parse HEAD`) . PHP_EOL .
-      'Process ID ' . getmypid() . ' as ' . get_current_user() . PHP_EOL .
-      'System: ' . php_uname();
+    $string = _('Ligrev Diagnostic Information') . PHP_EOL .
+      sprintf(_('Ligrev Version: %s'), trim(`git rev-parse HEAD`)) . PHP_EOL .
+      sprintf(_('PHP Version: %s'), phpversion()) . PHP_EOL .
+      sprintf(_('Process ID %s as %s'), getmypid(), get_current_user()) . PHP_EOL .
+      sprintf(_('System: %s'), php_uname());
     $this->_send($this->room, $string);
   }
 

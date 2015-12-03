@@ -8,10 +8,10 @@ set_error_handler("Ligrev\\php_error_handler");
 set_include_path(get_include_path() . PATH_SEPARATOR . __DIR__ . DIRECTORY_SEPARATOR . 'lib');
 
 // Hey, let's load some things
-l("Reading config.php...");
+l(_("Reading config.php..."));
 require_once 'config.php';
 
-l("Loading libraries...");
+l(_("Loading libraries..."));
 require __DIR__ . '/vendor/autoload.php';
 require_once 'JAXL/jaxl.php';
 
@@ -30,12 +30,12 @@ require_once 'commands/shuffle.php';
 require_once 'commands/sybeam.php';
 require_once 'commands/tell.php';
 
-l("Initializing database", "DBAL");
+l(_("Initializing database..."), "DBAL");
 $db = \Doctrine\DBAL\DriverManager::getConnection(array('url' => $config['db']), new \Doctrine\DBAL\Configuration());
 
 // TODO: Schema validation/installation/update
 
-l("Loading JAXL and connecting...", "JAXL");
+l(_("Loading JAXL and connecting..."), "JAXL");
 $client = new \JAXL($config['jaxl']);
 
 $client->require_xep(array(
@@ -48,16 +48,16 @@ $rooms = array();
 
 $client->add_cb('on_auth_success', function() {
   global $client, $config, $rooms;
-  l("Connected with jid " . $client->full_jid->to_string(), "JAXL");
+  l(sprintf(_("Connected with jid %s"), $client->full_jid->to_string()), "JAXL");
   $client->get_vcard();
   $client->get_roster();
   $client->set_status("", "chat", 10);
 
   foreach ($config['rooms'] as $id => $jid) {
     $rooms[$id] = new \XMPPJid($jid . '/' . $config['botname']);
-    l("Joining room " . $rooms[$id]->to_string(), "JAXL");
+    l(sprintf(_("Joining room %s"), $rooms[$id]->to_string()), "JAXL");
     $client->xeps['0045']->join_room($rooms[$id]);
-    l("Joined room " . $rooms[$id]->to_string(), "JAXL");
+    l(sprintf(_("Joined room %s"),$rooms[$id]->to_string()), "JAXL");
   }
   rss_init();
 });
@@ -68,7 +68,7 @@ $decks = array();
 $client->add_cb('on_auth_failure', function($reason) {
   global $client;
   $client->send_end_stream();
-  l("Auth failure: " . $reason, "JAXL", L_WARN);
+  l(sprintf(_("Auth failure: %s"), $reason), "JAXL", L_WARN);
 });
 
 // Where the magic happens. "Magic" "Happens". I dunno why I type this either.

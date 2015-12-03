@@ -60,7 +60,7 @@ class RSS {
       /**
        * @todo Send this as HTML.
        */
-      $message = "New post in {$item->channel} / {$item->category}: {$item->title}: {$item->link}";
+      $message = sprintf(_("New post in %s / %s: %s: %s"), $item->channel, $item->category, $item->title, $item->link);
       foreach ($this->rooms as $room) {
         $client->xeps['0045']->send_groupchat($room, $message);
       }
