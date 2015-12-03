@@ -125,7 +125,7 @@ class roster {
     foreach($tells as $tell) {
       $time = ($tell['sent'] > time()-(60*60*24)) ? strftime('%X', $tell['sent']) : strftime('%c', $tell['sent']);
       $message = "Message from {$tell['sender']} for {$tell['recipient']} at $time:".PHP_EOL.$tell['message'];
-      $message = sprintf(_("Message from %s for %s at %s:").PHP_EOL.$message, $tell['senter'], $tell['recipient'], $time);
+      $message = sprintf(_("Message from %s for %s at %s:").PHP_EOL.$message, $tell['sender'], $tell['recipient'], $time);
       if ($tell['private']) {
         $client->send_chat_msg($user, $message);
       } else {
