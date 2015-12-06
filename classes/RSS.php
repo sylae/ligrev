@@ -33,7 +33,13 @@ class RSS {
   function update() {
     global $client;
     $this->last['request'] = time();
-    $data = \qp(file_get_contents($this->url));
+    $curl = new \Curl\Curl();
+    $curl->get($this->url);
+    if ($curl->error) {
+      l($curl->errorCode . ': ' . $curl->errorMessage, "CURL", L_WARN);
+      return false;
+    }
+    $data = \qp($curl->response);
     $items = $data->find('item');
     $newest = $this->last['latest'];
     $newItems = array();
@@ -57,9 +63,6 @@ class RSS {
     $this->updateLast->bindValue(3, $this->last['latest'], "integer");
     $this->updateLast->execute();
     foreach ($newItems as $item) {
-      /**
-       * @todo Send this as HTML.
-       */
       $message = sprintf(_("New post in %s / %s: %s: %s"), $item->channel, $item->category, $item->title, $item->link);
       foreach ($this->rooms as $room) {
         $client->xeps['0045']->send_groupchat($room, $message);
