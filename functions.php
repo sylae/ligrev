@@ -82,6 +82,28 @@ namespace Ligrev {
     }
   }
 
+  function _send($to, $text, $isMarkdown = true, $origin = "groupchat") {
+    global $client;
+    if ($isMarkdown) {
+      // TODO: fuck all this, do it properly
+      $html = trim(\Michelf\Markdown::defaultTransform($text));
+      $md = htmlspecialchars($text);
+      $qp = "<body>$md</body><html xmlns=\"http://jabber.org/protocol/xhtml-im\"><body xmlns=\"http://www.w3.org/1999/xhtml\">$html</body></html>";
+    } else {
+      $qp = '<body>' . htmlspecialchars($text) . '</body>';
+    }
+    $body = new rawXML($qp);
+    $msg = new \XMPPMsg(
+      array(
+      'type' => (($origin == "groupchat") ? "groupchat" : "chat"),
+      'to' => (($to instanceof \XMPPJid) ? $to->to_string() : $to),
+      'from' => $client->full_jid->to_string(),
+      )
+    );
+    $msg->cnode($body);
+    $client->send($msg);
+  }
+
 }
 
 namespace Ligrev\Command {

@@ -126,9 +126,9 @@ class roster {
       $time = ($tell['sent'] > time()-(60*60*24)) ? strftime('%X', $tell['sent']) : strftime('%c', $tell['sent']);
       $message = sprintf(_("Message from %s for %s at %s:").PHP_EOL.$tell['message'], $tell['sender'], $tell['recipient'], $time);
       if ($tell['private']) {
-        $client->send_chat_msg($user, $message);
+        \Ligrev\_send($user, $message, true, "chat");
       } else {
-        $client->xeps['0045']->send_groupchat($room, $message);
+        \Ligrev\_send($room, $message, true, "groupchat");
       }
       $db->delete('tell', array('id' => $tell['id']));
     }
