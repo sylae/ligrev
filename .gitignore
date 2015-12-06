@@ -4,3 +4,4 @@ composer.lock
 /nbproject/private/
 /vendor/
 
+/.jaxl/
