@@ -21,6 +21,7 @@ require_once 'classes/dice.php';
 require_once 'classes/command.php';
 require_once 'classes/roster.php';
 require_once 'classes/RSS.php';
+require_once 'classes/rawXML.php';
 
 require_once 'commands/roll.php';
 require_once 'commands/slap.php';

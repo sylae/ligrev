@@ -44,13 +44,26 @@ class command {
     $this->origin = $origin;
   }
 
-  function _send($to, $text) {
+  function _send($to, $text, $isMarkdown = false) {
     global $client;
-    if ($this->origin == "groupchat") {
-      return $client->xeps['0045']->send_groupchat($to, $text);
+    if ($isMarkdown) {
+      // TODO: fuck all this, do it properly
+      $html = trim(\Michelf\Markdown::defaultTransform($text));
+      $md = htmlspecialchars($text);
+      $qp = "<body>$md</body><html xmlns=\"http://jabber.org/protocol/xhtml-im\"><body xmlns=\"http://www.w3.org/1999/xhtml\">$html</body></html>";
     } else {
-      return $client->send_chat_msg($to, $text);
+      $qp = '<body>' . htmlspecialchars($text) . '</body>';
     }
+    $body = new rawXML($qp);
+    $msg = new \XMPPMsg(
+      array(
+        'type'=>(($this->origin == "groupchat") ? "groupchat" : "chat"),
+        'to'=>(($to instanceof \XMPPJid) ? $to->to_string() : $to),
+        'from'=>$client->full_jid->to_string(),
+      )
+    );
+    $msg->cnode($body);
+    $client->send($msg);
   }
 
   function _split($string) {

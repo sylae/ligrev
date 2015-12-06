@@ -1,6 +1,7 @@
 {
     "require": {
         "querypath/querypath": "^3.04",
-        "doctrine/dbal": "2.5.2"
+        "doctrine/dbal": "2.5.2",
+        "michelf/php-markdown": "^1.5"
     }
 }
