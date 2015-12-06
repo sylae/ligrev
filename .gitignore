@@ -1,7 +1,5 @@
 config.php
 screenlog.0
-composer.lock
 /nbproject/private/
 /vendor/
-
 /.jaxl/
