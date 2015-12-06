@@ -35,7 +35,7 @@ class tell extends \Ligrev\command {
       return false;
     }
     $sql = $db->prepare('INSERT INTO tell (sender, recipient, sent, private, message) VALUES(?, ?, ?, ?, ?);', array('string', 'string', 'integer', 'boolean', 'string'));
-    $sql->bindValue(1, $this->from->to_string(), "string");
+    $sql->bindValue(1, $roster->nickToJID($this->room, $this->author)->bare, "string");
     $sql->bindValue(2, $recipient, "string");
     $sql->bindValue(3, time(), "integer");
     $sql->bindValue(4, $private, "boolean");
