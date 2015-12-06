@@ -67,7 +67,12 @@ class command {
   }
 
   function _split($string) {
-    return explode(" ", $string);
+    $regex='/(.*?[^\\\\](\\\\\\\\)*?)\\s/';
+    preg_match_all($regex, $string.' ', $matches);
+    $m = array_map(function($s) {
+      return str_replace("\\ ", " ", $s);
+    }, $matches[1]);
+    return $m;
   }
 
 }
