@@ -87,10 +87,10 @@ namespace Ligrev {
     if ($isMarkdown) {
       // TODO: fuck all this, do it properly
       $html = trim(\Michelf\Markdown::defaultTransform($text));
-      $md = htmlspecialchars($text);
+      $md = $text;
       $qp = "<body>$md</body><html xmlns=\"http://jabber.org/protocol/xhtml-im\"><body xmlns=\"http://www.w3.org/1999/xhtml\">$html</body></html>";
     } else {
-      $qp = '<body>' . htmlspecialchars($text) . '</body>';
+      $qp = '<body>' . $text . '</body>';
     }
     $body = new rawXML($qp);
     $msg = new \XMPPMsg(
