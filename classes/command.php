@@ -44,7 +44,7 @@ class command {
     $this->origin = $origin;
   }
 
-  function _send($to, $text, $isMarkdown = true) {
+  function _send($to, $text, $isMarkdown = false) {
     \Ligrev\_send($to, $text, $isMarkdown, $this->origin);
   }
 
