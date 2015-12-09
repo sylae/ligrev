@@ -15,7 +15,7 @@ class tell extends \Ligrev\command {
     global $config, $roster, $db;
     $textParts = $this->_split($this->text);
     $r = (array_key_exists(1, $textParts) ? $textParts[1] : null);
-    $message = trim(str_replace($textParts[0] . " " . $textParts[1], "", $this->text));
+    $message = trim(implode(" ", array_slice($textParts, 2)));
     if ($r) {
       $recipient = $r;
     } else {

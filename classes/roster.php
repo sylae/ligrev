@@ -104,6 +104,7 @@ class roster {
 
   function onlineByJID($id) {
     global $config;
+    $id = str_replace(" ", "\\20", $id);
     foreach ($this->roster as $room) {
       foreach ($room as $nick => $info) {
         if ($info['jid']->bare == $id && $config['tellCaseSensitive']) {
@@ -119,7 +120,7 @@ class roster {
   function processTells($user, $room) {
     global $db, $client;
     $sql = $db->prepare('SELECT * FROM tell WHERE recipient = ?', array("string"));
-    $sql->bindValue(1, $user, "string");
+    $sql->bindValue(1, str_replace("\\20", " ", $user), "string");
     $sql->execute();
     $tells = $sql->fetchAll();
     foreach($tells as $tell) {
