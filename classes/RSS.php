@@ -37,8 +37,10 @@ class RSS {
     $curl->get($this->url);
     if ($curl->error) {
       l($curl->errorCode . ': ' . $curl->errorMessage, "CURL", L_WARN);
+      curl_close($curl->curl);
       return false;
     }
+    curl_close($curl->curl);
     $data = \qp($curl->response);
     $items = $data->find('item');
     $newest = $this->last['latest'];
