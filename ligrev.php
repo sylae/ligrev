@@ -23,13 +23,13 @@ require_once 'classes/roster.php';
 require_once 'classes/RSS.php';
 require_once 'classes/rawXML.php';
 
-require_once 'commands/roll.php';
-require_once 'commands/slap.php';
-require_once 'commands/diag.php';
-require_once 'commands/card.php';
-require_once 'commands/shuffle.php';
-require_once 'commands/sybeam.php';
-require_once 'commands/tell.php';
+l(_("Registering SPL command autoloader"));
+spl_autoload_register(function ($class) {
+  $class = str_replace("Ligrev\\Command\\", "", $class);
+  if (file_exists("commands/$class.php")) {
+    require_once "commands/$class.php";
+  }
+});
 
 l(_("Initializing database..."), "DBAL");
 $db = \Doctrine\DBAL\DriverManager::getConnection(array('url' => $config['db']), new \Doctrine\DBAL\Configuration());
