@@ -24,11 +24,11 @@ namespace Ligrev {
     switch ($no) {
       case E_ERROR:
       case E_RECOVERABLE_ERROR:
+      case E_PARSE:
         l($message, "PHP", L_AAAA);
-        die();
+        die(1);
         break;
       case E_WARNING:
-      case E_PARSE:
         l($message, "PHP", L_WARN);
         break;
       case E_NOTICE:
