@@ -58,7 +58,7 @@ $client->add_cb('on_auth_success', function() {
     $rooms[$id] = new \XMPPJid($jid . '/' . $config['botname']);
     l(sprintf(_("Joining room %s"), $rooms[$id]->to_string()), "JAXL");
     $client->xeps['0045']->join_room($rooms[$id]);
-    l(sprintf(_("Joined room %s"),$rooms[$id]->to_string()), "JAXL");
+    l(sprintf(_("Joined room %s"), $rooms[$id]->to_string()), "JAXL");
   }
   rss_init();
 });
