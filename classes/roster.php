@@ -117,6 +117,24 @@ class roster {
     return false;
   }
   
+  function generateHTML($nick, $room) {
+    $id = $this->roster[$room][$nick];
+    $s = $id['jid']->to_string();
+    var_dump($this->roster[$room], $id, $s);
+    $html = <<<H
+<span
+  class="user user-role-{$id['role']} user-affiliation-{$id['affiliation']} user-show-{$id['show']}"
+  data-affiliation="{$id['affiliation']}"
+  data-nick="$nick"
+  data-jid="$s"
+  title="$s">
+    $nick
+</span>
+H;
+  
+  return $html;
+  }
+  
   function processTells($user, $room) {
     global $db, $client;
     $sql = $db->prepare('SELECT * FROM tell WHERE recipient = ?', array("string"));
