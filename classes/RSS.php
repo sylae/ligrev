@@ -34,6 +34,8 @@ class RSS {
     global $client;
     $this->last['request'] = time();
     $curl = new \Curl\Curl();
+    $lv = V_LIGREV;
+    $curl->setUserAgent("ligrev/$lv (https://github.com/sylae/ligrev)");
     $curl->get($this->url);
     if ($curl->error) {
       l($curl->errorCode . ': ' . $curl->errorMessage, "CURL", L_WARN);
