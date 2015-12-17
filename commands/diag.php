@@ -12,7 +12,7 @@ namespace Ligrev\Command;
 class diag extends \Ligrev\command {
 
   function process() {
-    $lv = trim(`git rev-parse HEAD`);
+    $lv = V_LIGREV;
     $string = _('Ligrev Diagnostic Information') . PHP_EOL .
       sprintf(_('Ligrev Version: %s'), "[$lv](https://github.com/sylae/ligrev/commit/$lv)") . PHP_EOL .
       sprintf(_('PHP Version: %s'), phpversion()) . PHP_EOL .
