@@ -145,9 +145,9 @@ H;
       $time = ($tell['sent'] > time()-(60*60*24)) ? strftime('%X', $tell['sent']) : strftime('%c', $tell['sent']);
       $message = sprintf(_("Message from %s for %s at %s:").PHP_EOL.$tell['message'], $tell['sender'], $tell['recipient'], $time);
       if ($tell['private']) {
-        \Ligrev\_send($user, $message, false, "chat");
+        \Ligrev\_send($user, $message, true, "chat");
       } else {
-        \Ligrev\_send($room, $message, false, "groupchat");
+        \Ligrev\_send($room, $message, true, "groupchat");
       }
       $db->delete('tell', array('id' => $tell['id']));
     }

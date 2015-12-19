@@ -88,7 +88,8 @@ namespace Ligrev {
     global $client;
     if ($isMarkdown) {
       // TODO: fuck all this, do it properly
-      $html = trim(\Michelf\Markdown::defaultTransform($text));
+      $Pd = new \Parsedown();
+      $html = trim($Pd->text($text));
       $md = $text;
       $qp = "<body>$md</body><html xmlns=\"http://jabber.org/protocol/xhtml-im\"><body xmlns=\"http://www.w3.org/1999/xhtml\">$html</body></html>";
     } else {
