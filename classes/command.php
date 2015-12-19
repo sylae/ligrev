@@ -36,12 +36,20 @@ class command {
    */
   protected $origin;
 
+  /**
+   * Cadence HTML represenation of user
+   * @var string 
+   */
+  protected $authorHTML;
+
   function __construct(\XMPPStanza $stanza, $origin) {
+    global $roster;
     $this->text = $stanza->body;
     $this->from = new \XMPPJid($stanza->from);
     $this->room = $this->from->bare;
     $this->author = $this->from->resource;
     $this->origin = $origin;
+    $this->authorHTML = $roster->generateHTML($this->author, $this->room);
   }
 
   function _send($to, $text, $isMarkdown = true) {

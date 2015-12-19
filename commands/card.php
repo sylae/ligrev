@@ -22,7 +22,7 @@ class card extends \Ligrev\command {
       $this->_send($this->room, _("Deck depleted, use :shuffle."));
     } else {
       $c = array_pop($decks[$this->room]);
-      $this->_send($this->room, sprintf(_("%s draws a %s"), $this->author, $c));
+      $this->_send($this->room, sprintf(_("%s draws a %s"), $this->authorHTML, $c));
     }
   }
 
