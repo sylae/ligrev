@@ -116,25 +116,24 @@ class roster {
     }
     return false;
   }
-  
-  function generateHTML($nick, $room) {
-    $id = $this->roster[$room][$nick];
-    $s = $id['jid']->to_string();
-    var_dump($this->roster[$room], $id, $s);
-    $html = <<<H
-<span
-  class="user user-role-{$id['role']} user-affiliation-{$id['affiliation']} user-show-{$id['show']}"
-  data-affiliation="{$id['affiliation']}"
-  data-nick="$nick"
-  data-jid="$s"
-  title="$s">
-    $nick
-</span>
-H;
-  
-  return $html;
+  function escape_class($string) {
+      return $string ? preg_replace_callback('/[\\s\0\\\\]/', function ($x) {
+        return '\\' . ord($x[0]);
+      }, $string) : '';
   }
-  
+  function jid_classes(\XMPPJid $jid) {
+    return 'user jid-node-' . $this->escape_class(strtolower($jid->node))
+      . ' jid-domain-' . $this->escape_class($jid->domain)
+      . ' jid-resource-' . $this->escape_class($jid->resource);
+  }
+  function generateHTML($nick, $room) {
+    $id = $this->roster[$room][$nick]['jid'];
+    $jid = $id->to_string();
+    $classes = $this->jid_classes($id);
+    $html = "<span class=\"$classes\" data-jid=\"$jid\" data-nick=\"$nick\">$nick</span>";
+    return $html;
+  }
+
   function processTells($user, $room) {
     global $db, $client;
     $sql = $db->prepare('SELECT * FROM tell WHERE recipient = ?', array("string"));
