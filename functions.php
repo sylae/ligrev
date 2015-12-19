@@ -90,10 +90,10 @@ namespace Ligrev {
       // TODO: fuck all this, do it properly
       $Pd = new \Parsedown();
       $html = trim($Pd->text($text));
-      $md = $text;
+      $md = strip_tags($text);
       $qp = "<body>$md</body><html xmlns=\"http://jabber.org/protocol/xhtml-im\"><body xmlns=\"http://www.w3.org/1999/xhtml\">$html</body></html>";
     } else {
-      $qp = '<body>' . $text . '</body>';
+      $qp = '<body>' . strip_tags($text) . '</body>';
     }
     $body = new rawXML($qp);
     $msg = new \XMPPMsg(
