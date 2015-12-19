@@ -3,7 +3,7 @@
 /**
  * Handles our entire user roster management. Uses querypath because
  * sweet christ, JAXL has a shitty XML parser...
- * 
+ *
  * Blatantly copies code from cadence
  *
  * @link https://github.com/cburschka/cadence/blob/master/js/core/xmpp.js
@@ -97,7 +97,7 @@ class roster {
     l("[" . $room . "] " . sprintf(_("%s joined room"), $nick));
     $this->processTells($user['jid']->bare, $room);
   }
-  
+
   function nickToJid($room, $nick) {
     return $this->roster[$room][$nick]['jid'];
   }
