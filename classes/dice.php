@@ -21,10 +21,11 @@ class dice {
    * Constructor function. Handles the entire dice roll and returns the result
    * @param int $n Number of dice
    * @param type $d Number of sides per die
-   * @param string $method Adding method. "sum", "savage", or "array"
+   * @param string $method Adding method. "sum" or "array"
+   * @param boolean $savage If true, "explode" the dice
    * @return int|string the result of the roll
    */
-  function __construct($n, $d, $method = "sum") {
+  function __construct($n, $d, $method = "sum", $savage = false) {
     $n = (int) $n;
     if (!is_int($n) || $n < 1 || $n > 128) {
       $n = 1;
@@ -37,18 +38,16 @@ class dice {
     $die = array();
 
     for ($i = 0; $i < $n; $i++) {
-      if ($method == "sum") {
-        $die[] = $this->_dice(1, $d);
-      } elseif ($method == "savage") {
+      if ($savage) {
         $die[] = $this->_rollSavageDice($d);
+      } else {
+        $die[] = $this->_dice(1, $d);
       }
     }
-    if ($method == "sum" || $method == "savage") {
-      $result = array_sum($die);
-    } elseif ($method == "array") {
+    if ($method == "array") {
       $result = implode(", ", $die);
     } else {
-      $result = 0;
+      $result = array_sum($die);
     }
     $this->result = $result;
   }
