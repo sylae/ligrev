@@ -19,7 +19,7 @@ class tell extends \Ligrev\command {
     if ($r) {
       $recipient = $r;
     } else {
-      $this->_send($this->room, sprintf(_("Error: %s"), _(" No recipient.")));
+      $this->_send($this->room, sprintf(_("Error: %s"), _("No recipient.")));
       return;
     }
     $private = ($this->origin == "groupchat" ? false : true);
