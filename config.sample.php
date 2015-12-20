@@ -18,6 +18,9 @@ $config['rooms'] = array(
   'test'   => 'test@conference.example.org',
 );
 
+// Send a message on room join; great if you have five bots sharing a common bot name
+$config['announceOnStart'] = true;
+
 // :tell settings
 // defaultTellDomain automatically provides a domain if not provided in the :tell command
 // (ie ':tell sylae message' would become ':tell sylae@example.net message')
