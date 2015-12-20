@@ -1,29 +1,24 @@
 <?php
-$config = array();
+/**
+ * Sample configuration for ligrev. To make changes, copy to config.php
+ * and make your edits there.
+ * 
+ * This file documents the bare-bones minimum to get Ligrev started and running.
+ * For more details, see the wiki's documentation.
+ * 
+ * @link https://github.com/sylae/ligrev/wiki
+ * @license http://www.gnu.org/licenses/gpl-3.0.txt GNU General Public License 3
+ * @author Sylae Jiendra Corell <sylae@calref.net>
+ */
 
-// DSN sent to DBAL
 $config['db'] = 'mysqli://user:password@localhost/database';
 
-// Bot credentials
 $config['jaxl'] = array(
   'jid' => 'ligrev@example.net',
   'pass' => 'rainbowdashisactuallybestpony',
   'host' => 'example.net',
 );
-$config['botname'] = "Ligrev";
 
-// List of rooms to join
-$config['rooms'] = array(
-  'lounge' => 'lounge@conference.example.net',
-  'test'   => 'test@conference.example.org',
+$config['rooms']['lounge'] = array(
+  'id' => 'lounge@conference.example.net',
 );
-
-// Send a message on room join; great if you have five bots sharing a common bot name
-$config['announceOnStart'] = true;
-
-// :tell settings
-// defaultTellDomain automatically provides a domain if not provided in the :tell command
-// (ie ':tell sylae message' would become ':tell sylae@example.net message')
-$config['defaultTellDomain'] = 'example.net';
-$config['tellCaseSensitive'] = true;
-
