@@ -60,7 +60,6 @@ $client->add_cb('on_auth_success', function() {
     l(sprintf(_("Joining room %s"), $room->to_string()), "JAXL");
     $client->xeps['0045']->join_room($room);
     l(sprintf(_("Joined room %s"), $room->to_string()), "JAXL");
-var_dump($c);
     if ($c['announceOnStart']) {
       $lv = V_LIGREV;
       _send($room->bare, sprintf(_("Ligrev version %s now online."), "[$lv](https://github.com/sylae/ligrev/commit/$lv)"));
