@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Template class for any ligrev :commands
+ * Handler for any messages incoming. Calls a Ligrev\command class if needed
  *
  * @license http://www.gnu.org/licenses/gpl-3.0.txt GNU General Public License 3
  * @author Sylae Jiendra Corell <sylae@calref.net>
@@ -9,7 +9,7 @@
 
 namespace Ligrev;
 
-class ligrevCommand {
+class messageHandler {
 
   protected $client;
   protected $rooms;

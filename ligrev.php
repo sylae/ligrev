@@ -78,10 +78,10 @@ $client->add_cb('on_auth_failure', function($reason) {
 
 // Where the magic happens. "Magic" "Happens". I dunno why I type this either.
 $client->add_cb('on_groupchat_message', function($stanza) {
-  new ligrevCommand($stanza, "groupchat");
+  new messageHandler($stanza, "groupchat");
 });
 $client->add_cb('on_chat_message', function($stanza) {
-  new ligrevCommand($stanza, "chat");
+  new messageHandler($stanza, "chat");
 });
 $client->add_cb('on_presence_stanza', function($stanza) {
   global $roster;
