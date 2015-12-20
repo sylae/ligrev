@@ -49,9 +49,10 @@ class command {
   protected $config;
 
   function __construct(\XMPPStanza $stanza, $origin) {
-    global $roster, $config;
+    global $roster, $config, $db;
     
     $this->roster = &$roster;
+    $this->db = &$db;
     
     $this->text = $stanza->body;
     $this->from = new \XMPPJid($stanza->from);
