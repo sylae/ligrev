@@ -126,11 +126,20 @@ class roster {
       . ' jid-domain-' . $this->escape_class($jid->domain)
       . ' jid-resource-' . $this->escape_class($jid->resource);
   }
-  function generateHTML($nick, $room) {
-    $id = $this->roster[$room][$nick]['jid'];
-    $jid = $id->to_string();
+  function generateHTML($user) {
+    if (!$user['jid'] && $user['nick'] && $user['room']) {
+      $id = $this->roster[$user['room']][$$user['nick']]['jid'];
+      $user['jid'] = $id->to_string();
+    }
+    elseif ($user['jid']) {
+      $id = new \XMPPJid($user['jid']);
+    }
+
+    $display = $user['nick'] ? $user['nick'] : $user['jid'];
     $classes = $this->jid_classes($id);
-    $html = "<span class=\"$classes\" data-jid=\"$jid\" data-nick=\"$nick\">$nick</span>";
+    $html = "<span class=\"$classes\" data-jid=\"${user['jid']}\""
+          . ($user['nick'] ? " data-nick=\"{$user['nick']}\"" : '')
+          . ">{$display}</span>";
     return $html;
   }
 
@@ -141,8 +150,11 @@ class roster {
     $sql->execute();
     $tells = $sql->fetchAll();
     foreach($tells as $tell) {
+      $senderHTML = $this->generateHTML(['jid' => $tell['sender']);
+      $recipientHTML = $this->generateHTML(['jid' => $tell['recipient']);
+
       $time = ($tell['sent'] > time()-(60*60*24)) ? strftime('%X', $tell['sent']) : strftime('%c', $tell['sent']);
-      $message = sprintf(_("Message from %s for %s at %s:").PHP_EOL.$tell['message'], $tell['sender'], $tell['recipient'], $time);
+      $message = sprintf(_("Message from %s for %s at %s:").PHP_EOL.$tell['message'], $senderHTML, $recipientHTML, $time);
       if ($tell['private']) {
         \Ligrev\_send($user, $message, true, "chat");
       } else {

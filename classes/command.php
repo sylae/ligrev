@@ -49,7 +49,7 @@ class command {
     $this->room = $this->from->bare;
     $this->author = $this->from->resource;
     $this->origin = $origin;
-    $this->authorHTML = $roster->generateHTML($this->author, $this->room);
+    $this->authorHTML = $roster->generateHTML(['nick' => $this->author, 'room' => $this->room]);
   }
 
   function _send($to, $text, $isMarkdown = true) {

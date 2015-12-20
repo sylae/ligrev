@@ -29,9 +29,11 @@ class tell extends \Ligrev\command {
       $recipient = $r . "@" . $config['defaultTellDomain'];
     }
 
+    $recipientHTML = $roster->generateHTML(['jid' => $recipient]);
+
     // Let's make sure the user isn't already online.
     if ($roster->onlineByJID($recipient)) {
-      $this->_send($this->room, sprintf(_("Error: %s"), sprintf(_("%s already online. Contact user directly."), $recipient)));
+      $this->_send($this->room, sprintf(_("Error: %s"), sprintf(_("%s already online. Contact user directly."), $recipientHTML)));
       return false;
     }
     $sql = $db->prepare('INSERT INTO tell (sender, recipient, sent, private, message) VALUES(?, ?, ?, ?, ?);', array('string', 'string', 'integer', 'boolean', 'string'));
@@ -41,7 +43,7 @@ class tell extends \Ligrev\command {
     $sql->bindValue(4, $private, "boolean");
     $sql->bindValue(5, $message, "string");
     $sql->execute();
-    $this->_send($this->room, sprintf(_("Message for %s processed."), $recipient));
+    $this->_send($this->room, sprintf(_("Message for %s processed."), $recipientHTML));
   }
 
 }
