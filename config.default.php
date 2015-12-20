@@ -52,7 +52,6 @@ $config['announceOnStart'] = true;
 /**
  * defaultTellDomain automatically provides a domain if not provided in the :tell command
  * (ie ':tell sylae message' would become ':tell sylae@example.net message')
- * 
  * @var string
  **/
 $config['defaultTellDomain'] = 'example.net';
@@ -60,5 +59,6 @@ $config['defaultTellDomain'] = 'example.net';
 /**
  * Whether or not :tell is case-sensitive for username matching. To comply with the XMPP
  * spec, set this to false.
+ * @var boolean
  */
 $config['tellCaseSensitive'] = false;
