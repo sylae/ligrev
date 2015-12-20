@@ -38,10 +38,7 @@ $config['botname'] = "Ligrev";
  * A list of rooms to join. In addition, defaults may be overridden here.
  * @var array
  */
-$config['rooms'] = array(
-  'lounge' => 'lounge@conference.example.net',
-  'test'   => 'test@conference.example.org',
-);
+$config['rooms'] = array();
 
 /**
  * Send a message on room join; great if you have five bots sharing a common bot name
@@ -52,9 +49,11 @@ $config['announceOnStart'] = true;
 /**
  * defaultTellDomain automatically provides a domain if not provided in the :tell command
  * (ie ':tell sylae message' would become ':tell sylae@example.net message')
- * @var string
+ * 
+ * If false, will default to the domain of the room (minus 'conference.' if applicable)
+ * @var string|boolean
  **/
-$config['defaultTellDomain'] = 'example.net';
+$config['defaultTellDomain'] = false;
 
 /**
  * Whether or not :tell is case-sensitive for username matching. To comply with the XMPP

@@ -105,11 +105,14 @@ class roster {
   function onlineByJID($id) {
     global $config;
     $id = str_replace(" ", "\\20", $id);
-    foreach ($this->roster as $room) {
+    foreach ($this->roster as $name => $room) {
+      if (array_key_exists($name, $config['rooms'])) {
+        $c = array_merge($config, $config['rooms'][$name]);
+      }
       foreach ($room as $nick => $info) {
-        if ($info['jid']->bare == $id && $config['tellCaseSensitive']) {
+        if ($info['jid']->bare == $id && $c['tellCaseSensitive']) {
           return true;
-        } elseif (strtolower($info['jid']->bare) == strtolower($id) && !$config['tellCaseSensitive']) {
+        } elseif (strtolower($info['jid']->bare) == strtolower($id) && !$c['tellCaseSensitive']) {
           return true;
         }
       }

@@ -9,13 +9,14 @@ set_include_path(get_include_path() . PATH_SEPARATOR . __DIR__ . DIRECTORY_SEPAR
 
 // Hey, let's load some things
 l(_("Reading config.php..."));
+require_once 'config.default.php';
 require_once 'config.php';
 
 l(_("Loading libraries..."));
 require __DIR__ . '/vendor/autoload.php';
 require_once 'JAXL/jaxl.php';
 
-require_once 'classes/ligrevCommand.php';
+require_once 'classes/messageHandler.php';
 require_once 'classes/bc.php';
 require_once 'classes/dice.php';
 require_once 'classes/command.php';
@@ -40,28 +41,29 @@ l(_("Loading JAXL and connecting..."), "JAXL");
 $client = new \JAXL($config['jaxl']);
 
 $client->require_xep(array(
-  '0045', // MUC
-  '0203', // Delayed Delivery
-  '0199'  // XMPP Ping
+    '0045', // MUC
+    '0203', // Delayed Delivery
+    '0199'  // XMPP Ping
 ));
 
-$rooms = array();
 
 $client->add_cb('on_auth_success', function() {
-  global $client, $config, $rooms;
+  global $client, $config;
   l(sprintf(_("Connected with jid %s"), $client->full_jid->to_string()), "JAXL");
   $client->get_vcard();
   $client->get_roster();
   $client->set_status("", "chat", 10);
 
-  foreach ($config['rooms'] as $id => $jid) {
-    $rooms[$id] = new \XMPPJid($jid . '/' . $config['botname']);
-    l(sprintf(_("Joining room %s"), $rooms[$id]->to_string()), "JAXL");
-    $client->xeps['0045']->join_room($rooms[$id]);
-    l(sprintf(_("Joined room %s"), $rooms[$id]->to_string()), "JAXL");
-    if ($config['announceOnStart']) {
+  foreach ($config['rooms'] as $jid => $conf) {
+    $c = array_merge($config, $conf);
+    $room = new \XMPPJid($jid . '/' . $c['botname']);
+    l(sprintf(_("Joining room %s"), $room->to_string()), "JAXL");
+    $client->xeps['0045']->join_room($room);
+    l(sprintf(_("Joined room %s"), $room->to_string()), "JAXL");
+var_dump($c);
+    if ($c['announceOnStart']) {
       $lv = V_LIGREV;
-      _send($rooms[$id]->bare, sprintf(_("Ligrev version %s now online."), "[$lv](https://github.com/sylae/ligrev/commit/$lv)"));
+      _send($room->bare, sprintf(_("Ligrev version %s now online."), "[$lv](https://github.com/sylae/ligrev/commit/$lv)"));
     }
   }
   rss_init();

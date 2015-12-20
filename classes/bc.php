@@ -24,7 +24,6 @@ class bc {
   public $result;
 
   function __construct($math) {
-    global $config;
 
     $remove = array(
       'read',
