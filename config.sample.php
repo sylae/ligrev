@@ -19,4 +19,4 @@ $config['jaxl'] = array(
   'host' => 'example.net',
 );
 
-$config['rooms']['lounge@conference.calref.net'] = array();
+$config['rooms']['lounge@conference.example.net'] = array();
