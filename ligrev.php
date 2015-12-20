@@ -32,18 +32,16 @@ spl_autoload_register(function ($class) {
   }
 });
 
-l(_("Initializing database..."), "DBAL");
-$db = \Doctrine\DBAL\DriverManager::getConnection(array('url' => $config['db']), new \Doctrine\DBAL\Configuration());
-
-// TODO: Schema validation/installation/update
+// Database stuff is a bit heavy, so it's thrown in an include to keep this area tidy.
+require_once 'includes/schema.php';
 
 l(_("Loading JAXL and connecting..."), "JAXL");
 $client = new \JAXL($config['jaxl']);
 
 $client->require_xep(array(
-    '0045', // MUC
-    '0203', // Delayed Delivery
-    '0199'  // XMPP Ping
+  '0045', // MUC
+  '0203', // Delayed Delivery
+  '0199'  // XMPP Ping
 ));
 
 
