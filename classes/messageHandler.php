@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Template class for any ligrev :commands
+ * Handler for any messages incoming. Calls a Ligrev\command class if needed
  *
  * @license http://www.gnu.org/licenses/gpl-3.0.txt GNU General Public License 3
  * @author Sylae Jiendra Corell <sylae@calref.net>
@@ -9,33 +9,37 @@
 
 namespace Ligrev;
 
-class ligrevCommand {
+class messageHandler {
 
   protected $client;
-  protected $rooms;
   protected $origin;
   protected $stanza;
   protected $from;
   protected $text;
   protected $author;
   protected $room;
+  protected $config;
 
   function __construct(\XMPPStanza $stanza, $origin) {
-    global $client, $rooms, $roster, $config;
-    $this->client = $client;
-    $this->rooms = $rooms;
-
+    global $client, $roster, $config;
+    $this->client = &$client;
+    $this->roster = &$roster;
     $this->origin = $origin;
     $this->stanza = $stanza;
-
     $this->from = new \XMPPJid($stanza->from);
-    if ($this->from->resource) {
-      if (!$this->stanza->exists('delay', NS_DELAYED_DELIVERY)) {
-        l("[" . $this->from->node . "] " . $this->from->resource . (($this->origin == "chat") ? " (" . _("PM") . ")" : "") . ": " . $this->stanza->body);
-        $this->text = $this->stanza->body;
-        $this->room = $this->from->bare;
-        $this->author = $this->from->resource;
-      }
+
+    if ($origin == "groupchat" && array_key_exists($this->from->bare, $config['rooms'])) {
+      $this->config = array_merge($config, $config['rooms'][$this->from->bare]);
+    } else {
+      $this->config = $config;
+    }
+
+    if ($this->from->resource && !$this->stanza->exists('delay', NS_DELAYED_DELIVERY)) {
+      $f = (($this->origin == "chat") ? _(" (PM)") : "");
+      l(sprintf(_("%s%s: %s"), $this->from->resource, $f, $this->stanza->body), $this->from->node);
+      $this->text = $this->stanza->body;
+      $this->room = $this->from->bare;
+      $this->author = $this->from->resource;
       $preg = "/^[\/:!](\w+)(\s|$)/";
       if (!in_array($this->author[0], array(':', '!', '/')) && preg_match($preg, $this->text, $match) && class_exists("Ligrev\\Command\\" . $match[1])) {
         $class = "Ligrev\\Command\\" . $match[1];

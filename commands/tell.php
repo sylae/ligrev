@@ -12,7 +12,7 @@ namespace Ligrev\Command;
 class tell extends \Ligrev\command {
 
   function process() {
-    global $config, $roster, $db;
+    global $roster, $db;
     $textParts = $this->_split($this->text);
     $r = (array_key_exists(1, $textParts) ? $textParts[1] : null);
     $message = trim(implode(" ", array_slice($textParts, 2)));
@@ -26,7 +26,13 @@ class tell extends \Ligrev\command {
 
     if (!preg_match("/@+/", $recipient)) {
       // If there's no domain, assume it's for the default
-      $recipient = $r . "@" . $config['defaultTellDomain'];
+      if (is_bool($this->config['defaultTellDomain']) && !$this->config['defaultTellDomain']) {
+        // if config is false, use the domain of the MUC server sans conference.
+        $domain = str_replace("conference.", "", $this->from->domain);
+      } else {
+        $domain = $this->config['defaultTellDomain'];
+      }
+      $recipient = $r . "@" . $domain;
     }
 
     // Let's make sure the user isn't already online.
