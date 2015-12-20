@@ -130,7 +130,8 @@ class roster {
     $id = $this->roster[$room][$nick]['jid'];
     $jid = $id->to_string();
     $classes = $this->jid_classes($id);
-    $html = "<span class=\"$classes\" data-jid=\"$jid\" data-nick=\"$nick\">$nick</span>";
+    $dispnick = ($nick == $id->node) ? $nick : "($nick)";
+    $html = "<span class=\"$classes\" data-jid=\"$jid\" data-nick=\"$nick\">$dispnick</span>";
     return $html;
   }
 
