@@ -16,6 +16,10 @@ class tell extends \Ligrev\command {
     $textParts = $this->_split($this->text);
     $r = (array_key_exists(1, $textParts) ? $textParts[1] : null);
     $message = trim(implode(" ", array_slice($textParts, 2)));
+    if (strlen($message) < 1) {
+      $this->_send($this->room, sprintf(_("Error: %s"), _("No message.")));
+      return false;
+    }
     if ($r) {
       $recipient = $r;
     } else {
