@@ -18,7 +18,7 @@ class restart extends \Ligrev\command {
     if ($sender['affiliation'] == "admin" || $sender['affiliation'] == "owner") {
       $this->_send($this->room, "Restarting...");
       \JAXLLoop::$clock->call_fun_after(5000000, function () {
-        die(1);
+        die();
       });
     }
   }

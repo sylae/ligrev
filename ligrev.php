@@ -87,4 +87,10 @@ $client->add_cb('on_presence_stanza', function($stanza) {
   $roster->ingest($stanza);
 });
 
+/**
+ * This is way down here to make sure our shutdown handler is the last one in
+ * the stack.
+ */
+require_once 'includes/shutdown.php';
+
 $client->start();
