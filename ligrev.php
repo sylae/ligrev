@@ -16,13 +16,10 @@ l(_("Loading libraries..."));
 require __DIR__ . '/vendor/autoload.php';
 require_once 'JAXL/jaxl.php';
 
-require_once 'classes/messageHandler.php';
-require_once 'classes/bc.php';
-require_once 'classes/dice.php';
-require_once 'classes/command.php';
-require_once 'classes/roster.php';
-require_once 'classes/RSS.php';
-require_once 'classes/rawXML.php';
+l(_("Loading core classes"));
+foreach (glob("classes/*.php") as $file) {
+  require_once $file;
+}
 
 l(_("Registering SPL command autoloader"));
 spl_autoload_register(function ($class) {
