@@ -29,6 +29,17 @@ spl_autoload_register(function ($class) {
   }
 });
 
+l(_("Scanning IQ parsers"));
+foreach (glob("iq/*.php") as $file) {
+  require_once $file;
+}
+$iq_classes = array();
+foreach (get_declared_classes() as $class) {
+  $c = new \ReflectionClass($class);
+  if ($c->getNameSpaceName() == "Ligrev\IQ") {
+    $iq_classes[] = $class;
+  }
+}
 // Database stuff is a bit heavy, so it's thrown in an include to keep this area tidy.
 require_once 'includes/schema.php';
 
@@ -80,6 +91,15 @@ $client->add_cb('on_chat_message', function($stanza) {
 $client->add_cb('on_presence_stanza', function($stanza) {
   global $roster;
   $roster->ingest($stanza);
+});
+$client->add_cb('on_result_iq', function($stanza) {
+  new iqHandler($stanza);
+});
+$client->add_cb('on_get_iq', function($stanza) {
+  new iqHandler($stanza);
+});
+$client->add_cb('on_error_iq', function($stanza) {
+  new iqHandler($stanza);
 });
 
 /**
