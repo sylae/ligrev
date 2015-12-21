@@ -48,8 +48,6 @@ $client->require_xep(array(
 $client->add_cb('on_auth_success', function() {
   global $client, $config;
   l(sprintf(_("Connected with jid %s"), $client->full_jid->to_string()), "JAXL");
-  $client->get_vcard();
-  $client->get_roster();
   $client->set_status("", "chat", 10);
 
   foreach ($config['rooms'] as $jid => $conf) {
