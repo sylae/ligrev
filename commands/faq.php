@@ -16,6 +16,11 @@ class faq extends \Ligrev\command {
     $set = (array_key_exists(1, $textParts) ? $textParts[1] : false);
 
     if ($set == "set" || $set == _("set")) {
+      $sender = $this->roster->roster[$this->room][$this->author]["affiliation"];
+      if (!($sender == "admin" || $sender == "owner")) {
+        $this->_send($this->room, sprintf(_("Error: %s"), _("Insufficient permissions")));
+        return;
+      }
       $code = (array_key_exists(2, $textParts) ? $textParts[2] : false);
       $message = trim(implode(" ", array_slice($textParts, 3)));
       if (!$code) {
