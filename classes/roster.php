@@ -72,7 +72,7 @@ class roster {
       $type = (array_key_exists(301, $codes) && $codes[301] >= 0) ? 'banned' : 'kicked';
       $actor = \qp($item, 'actor')->attr('nick');
       $reason = \qp($item, 'reason')->text();
-      l("[" . $room . "] " . sprintf(_("%s %s by %s"), $nick,  $type,  $actor));
+      l("[" . $room . "] " . sprintf(_("%s %s by %s"), $nick, $type, $actor));
     } else { // Any other `unavailable` presence indicates a logout.
       l("[" . $room . "] " . sprintf(_("%s left room"), $nick));
     }
@@ -119,22 +119,32 @@ class roster {
     }
     return false;
   }
+
   function escape_class($string) {
-      return $string ? preg_replace_callback('/[\\s\0\\\\]/', function ($x) {
+    return $string ? preg_replace_callback('/[\\s\0\\\\]/', function ($x) {
         return '\\' . ord($x[0]);
       }, $string) : '';
   }
+
   function jid_classes(\XMPPJid $jid) {
     return 'user jid-node-' . $this->escape_class(strtolower($jid->node))
       . ' jid-domain-' . $this->escape_class($jid->domain)
       . ' jid-resource-' . $this->escape_class($jid->resource);
   }
-  function generateHTML($nick, $room) {
-    $id = $this->roster[$room][$nick]['jid'];
-    $jid = $id->to_string();
+
+  function generateHTML($user) {
+    if (!$user['jid'] && $user['nick'] && $user['room']) {
+      $id = $this->roster[$user['room']][$$user['nick']]['jid'];
+      $user['jid'] = $id->to_string();
+    } elseif ($user['jid']) {
+      $id = new \XMPPJid($user['jid']);
+    }
+
+    $display = $user['nick'] ? $user['nick'] : $user['jid'];
     $classes = $this->jid_classes($id);
-    $dispnick = ($nick == $id->node) ? $nick : "($nick)";
-    $html = "<span class=\"$classes\" data-jid=\"$jid\" data-nick=\"$nick\">$dispnick</span>";
+    $html = "<span class=\"$classes\" data-jid=\"${user['jid']}\""
+      . ($user['nick'] ? " data-nick=\"{$user['nick']}\"" : '')
+      . ">{$display}</span>";
     return $html;
   }
 
@@ -144,9 +154,12 @@ class roster {
     $sql->bindValue(1, str_replace("\\20", " ", $user), "string");
     $sql->execute();
     $tells = $sql->fetchAll();
-    foreach($tells as $tell) {
-      $time = ($tell['sent'] > time()-(60*60*24)) ? strftime('%X', $tell['sent']) : strftime('%c', $tell['sent']);
-      $message = sprintf(_("Message from %s for %s at %s:").PHP_EOL.$tell['message'], $tell['sender'], $tell['recipient'], $time);
+    foreach ($tells as $tell) {
+      $senderHTML = $this->generateHTML(['jid' => $tell['sender']]);
+      $recipientHTML = $this->generateHTML(['jid' => $tell['recipient']]);
+
+      $time = ($tell['sent'] > time() - (60 * 60 * 24)) ? strftime('%X', $tell['sent']) : strftime('%c', $tell['sent']);
+      $message = sprintf(_("Message from %s for %s at %s:") . PHP_EOL . $tell['message'], $senderHTML, $recipientHTML, $time);
       if ($tell['private']) {
         \Ligrev\_send($user, $message, true, "chat");
       } else {
@@ -155,4 +168,5 @@ class roster {
       $db->delete('tell', array('id' => $tell['id']));
     }
   }
+
 }

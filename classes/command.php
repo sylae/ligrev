@@ -13,53 +13,53 @@ class command {
 
   /**
    * Body of the message. Probably want to explode() this.
-   * @var string 
+   * @var string
    */
   protected $text;
 
   /**
    * Who sent the message.
-   * @var string 
+   * @var string
    */
   protected $author;
 
   /**
    * MUC room this message originated from
-   * @var string 
+   * @var string
    */
   protected $room;
 
   /**
    * Where the message came from (will be used to differentiate non-MUC messages)
    * Currently not used
-   * @var string 
+   * @var string
    */
   protected $origin;
 
   /**
    * Cadence HTML represenation of user
-   * @var string 
+   * @var string
    */
   protected $authorHTML;
 
   /**
    * Config array for this room.
-   * @var array 
+   * @var array
    */
   protected $config;
 
   function __construct(\XMPPStanza $stanza, $origin) {
     global $roster, $config, $db;
-    
+
     $this->roster = &$roster;
     $this->db = &$db;
-    
+
     $this->text = $stanza->body;
     $this->from = new \XMPPJid($stanza->from);
     $this->room = $this->from->bare;
     $this->author = $this->from->resource;
     $this->origin = $origin;
-    $this->authorHTML = $roster->generateHTML($this->author, $this->room);
+    $this->authorHTML = $roster->generateHTML(['nick' => $this->author, 'room' => $this->room]);
 
     if ($this->origin == "groupchat" && array_key_exists($this->room, $config['rooms'])) {
       $this->config = array_merge($config, $config['rooms'][$this->room]);
