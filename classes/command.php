@@ -74,7 +74,6 @@ class command {
     } elseif ($to instanceof \XMPPJid && $this->origin == "chat") {
       $to = $to->to_string();
     }
-    var_dump($to, $text, $this->origin);
     \Ligrev\_send($to, $text, $isMarkdown, $this->origin);
   }
 
