@@ -16,6 +16,7 @@ namespace Ligrev;
 class roster {
 
   public $roster = array();
+  private $isNickChange = false;
 
   function ingest(\XMPPStanza $stanza) {
     global $config;
@@ -67,14 +68,15 @@ class roster {
       // Move the roster entry to the new nick, so the new presence
       // won't trigger a notification.
       $this->roster[$room][$newNick] = $this->roster[$room][$nick];
-      l("[" . $room . "] " . sprintf(_("%s is now %s"), $nick, $newNick));
+      l(sprintf(_("%s is now %s"), $nick, $newNick), $room);
+      $this->isNickChange = true;
     } elseif ((array_key_exists(301, $codes) && $codes[301] >= 0) || (array_key_exists(307, $codes) && $codes[307] >= 0)) { // An `unavailable` 301 is a ban; a 307 is a kick.
       $type = (array_key_exists(301, $codes) && $codes[301] >= 0) ? 'banned' : 'kicked';
       $actor = \qp($item, 'actor')->attr('nick');
       $reason = \qp($item, 'reason')->text();
-      l("[" . $room . "] " . sprintf(_("%s %s by %s"), $nick, $type, $actor));
+      l(sprintf(_("%s %s by %s"), $nick, $type, $actor), $room);
     } else { // Any other `unavailable` presence indicates a logout.
-      l("[" . $room . "] " . sprintf(_("%s left room"), $nick));
+      l(sprintf(_("%s left room"), $nick), $room);
     }
     // In either case, the old nick must be removed and destroyed.
     unset($this->roster[$room][$nick]);
@@ -94,7 +96,11 @@ class roster {
       'status' => $status,
     );
     $this->roster[$room][$nick] = $user;
-    l("[" . $room . "] " . sprintf(_("%s joined room"), $nick));
+    if ($this->isNickChange) {
+      $this->isNickChange = false;
+    } else {
+      l(sprintf(_("%s joined room"), $nick), $room);
+    }
     $this->processTells($user['jid']->bare, $room);
   }
 
