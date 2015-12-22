@@ -133,17 +133,17 @@ class roster {
   }
 
   function generateHTML($user) {
-    if (!$user['jid'] && $user['nick'] && $user['room']) {
-      $id = $this->roster[$user['room']][$$user['nick']]['jid'];
+    if (!array_key_exists('jid', $user) && $user['nick'] && $user['room']) {
+      $id = $this->roster[$user['room']][$user['nick']]['jid'];
       $user['jid'] = $id->to_string();
     } elseif ($user['jid']) {
       $id = new \XMPPJid($user['jid']);
     }
 
-    $display = $user['nick'] ? $user['nick'] : $user['jid'];
+    $display = array_key_exists('nick', $user) ? $user['nick'] : $user['jid'];
     $classes = $this->jid_classes($id);
     $html = "<span class=\"$classes\" data-jid=\"${user['jid']}\""
-      . ($user['nick'] ? " data-nick=\"{$user['nick']}\"" : '')
+      . (array_key_exists('nick', $user) ? " data-nick=\"{$user['nick']}\"" : '')
       . ">{$display}</span>";
     return $html;
   }
