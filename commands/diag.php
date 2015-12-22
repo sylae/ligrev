@@ -18,7 +18,7 @@ class diag extends \Ligrev\command {
       sprintf(_('PHP Version: %s'), phpversion()) . PHP_EOL .
       sprintf(_('Process ID %s as %s'), getmypid(), get_current_user()) . PHP_EOL .
       sprintf(_('System: %s'), php_uname());
-    $this->_send($this->room, $string);
+    $this->_send($this->from, $string);
   }
 
 }

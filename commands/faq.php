@@ -18,16 +18,16 @@ class faq extends \Ligrev\command {
     if ($set == "set" || $set == _("set")) {
       $sender = $this->roster->roster[$this->room][$this->author]["affiliation"];
       if (!($sender == "admin" || $sender == "owner")) {
-        $this->_send($this->room, sprintf(_("Error: %s"), _("Insufficient permissions")));
+        $this->_send($this->from, sprintf(_("Error: %s"), _("Insufficient permissions")));
         return;
       }
       $code = (array_key_exists(2, $textParts) ? $textParts[2] : false);
       $message = trim(implode(" ", array_slice($textParts, 3)));
       if (!$code) {
-        $this->_send($this->room, sprintf(_("Error: %s"), _("No keyword for FAQ.\nUsage `:faq set \$keyword \$message`")));
+        $this->_send($this->from, sprintf(_("Error: %s"), _("No keyword for FAQ.\nUsage `:faq set \$keyword \$message`")));
         return;
       } elseif (strlen($message) < 1) {
-        $this->_send($this->room, sprintf(_("Error: %s"), _("No FAQ Body.\nUsage: `:faq set \$keyword \$message`")));
+        $this->_send($this->from, sprintf(_("Error: %s"), _("No FAQ Body.\nUsage: `:faq set \$keyword \$message`")));
         return;
       }
       // check if the key already exists, if so, don't do anything.
@@ -38,7 +38,7 @@ class faq extends \Ligrev\command {
       $faqs = $sql->fetchAll();
       foreach ($faqs as $a) {
         // $author = $this->$roster->generateHTML()
-        $this->_send($this->room, sprintf(_("FAQ %s already in use"), $code));
+        $this->_send($this->from, sprintf(_("FAQ %s already in use"), $code));
         return;
       }
 
@@ -48,7 +48,7 @@ class faq extends \Ligrev\command {
       $sql->bindValue(3, $message, "string");
       $sql->bindValue(4, $code, "string");
       $sql->execute();
-      $this->_send($this->room, sprintf(_("FAQ with keyword %s added."), $code));
+      $this->_send($this->from, sprintf(_("FAQ with keyword %s added."), $code));
       return;
     } else {
       $sql = $this->db->prepare('SELECT * FROM faq WHERE room = ? AND keyword = ?', array("string", "string"));
@@ -58,10 +58,10 @@ class faq extends \Ligrev\command {
       $faqs = $sql->fetchAll();
       foreach ($faqs as $a) {
         // $author = $this->$roster->generateHTML()
-        $this->_send($this->room, sprintf(_("FAQ authored by %s: %s"), $a['author'], $a['message']));
+        $this->_send($this->from, sprintf(_("FAQ authored by %s: %s"), $a['author'], $a['message']));
         return;
       }
-      $this->_send($this->room, sprintf(_("FAQ %s not found."), $set));
+      $this->_send($this->from, sprintf(_("FAQ %s not found."), $set));
       return;
     }
   }

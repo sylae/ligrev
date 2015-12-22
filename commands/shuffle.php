@@ -47,7 +47,7 @@ class shuffle extends \Ligrev\command {
     }
     shuffle($decks[$this->room]);
     l(sprintf(_("Reset %s"), $this->room), "CARD", L_DEBUG);
-    $this->_send($this->room, _("Deck shuffled."));
+    $this->_send($this->from, _("Deck shuffled."));
   }
 
 }

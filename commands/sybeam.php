@@ -17,9 +17,8 @@ class sybeam extends \Ligrev\command {
       $sybeams = new \Ligrev\bc((array_key_exists(1, $textParts) ? $textParts[1] : 1));
       $num = max(1, min(100, $sybeams->result));
       $string = str_repeat(':sybeam:', $num);
-      $this->_send($this->room, $string);
+      $this->_send($this->from, $string);
     }
-    
   }
 
 }
