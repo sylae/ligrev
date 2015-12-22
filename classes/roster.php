@@ -164,7 +164,7 @@ class roster {
       $senderHTML = $this->generateHTML(['jid' => $tell['sender']]);
       $recipientHTML = $this->generateHTML(['jid' => $tell['recipient']]);
 
-      $time = ($tell['sent'] > time() - (60 * 60 * 24)) ? strftime('%X', $tell['sent']) : strftime('%c', $tell['sent']);
+      $time = ($tell['sent'] > time() - (60 * 60 * 24)) ? strftime('%X %z', $tell['sent']) : strftime('%c %z', $tell['sent']);
       $message = sprintf(_("Message from %s for %s at %s:") . PHP_EOL . $tell['message'], $senderHTML, $recipientHTML, $time);
       if ($tell['private']) {
         \Ligrev\_send($user, $message, true, "chat");
