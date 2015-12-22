@@ -8,7 +8,7 @@
  */
 
 namespace Ligrev {
-  
+
   define("V_LIGREV", trim(`git rev-parse HEAD`));
 
   define("L_DEBUG", 0);
