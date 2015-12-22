@@ -24,10 +24,10 @@ class faq extends \Ligrev\command {
       $code = (array_key_exists(2, $textParts) ? $textParts[2] : false);
       $message = trim(implode(" ", array_slice($textParts, 3)));
       if (!$code) {
-        $this->_send($this->room, sprintf(_("Error: %s"), _("No keyword for FAQ.\nUsage `:faq set <keyword> <message>`")));
+        $this->_send($this->room, sprintf(_("Error: %s"), _("No keyword for FAQ.\nUsage `:faq set \$keyword \$message`")));
         return;
       } elseif (strlen($message) < 1) {
-        $this->_send($this->room, sprintf(_("Error: %s"), _("No FAQ Body.\nUsage: `:faq set <keyword> <message>`")));
+        $this->_send($this->room, sprintf(_("Error: %s"), _("No FAQ Body.\nUsage: `:faq set \$keyword \$message`")));
         return;
       }
       // check if the key already exists, if so, don't do anything.
