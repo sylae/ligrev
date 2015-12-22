@@ -16,6 +16,10 @@ class card extends \Ligrev\command {
 
   function process() {
     global $decks;
+    if ($this->origin == "chat") {
+      $this->_send($this->from, _("Cannot use cards in private context."));
+      return;
+    }
     if (!array_key_exists($this->room, $decks)) {
       $this->_send($this->from, _("Deck uninitialized, use :shuffle."));
     } elseif (count($decks[$this->room]) == 0) {

@@ -14,6 +14,10 @@ class shuffle extends \Ligrev\command {
   function process() {
     global $decks;
 
+    if ($this->origin == "chat") {
+      $this->_send($this->from, _("Cannot use cards in private context."));
+      return;
+    }
     $decks[$this->room] = array();
     $suits = array(
       _('Hearts'),
