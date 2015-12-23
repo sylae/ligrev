@@ -13,38 +13,34 @@
 
 namespace Ligrev;
 
-class roster {
+class roster extends ligrevGlobals {
 
-  public $roster = array();
+  public $rooms = array();
+  public $jids = array();
   private $isNickChange = false;
-  private $client;
-  private $db;
 
   function __construct() {
-    global $client, $db;
-    $this->client = &$client;
-    $this->db = &$db;
+    parent::__construct();
   }
 
   function ingest(\XMPPStanza $stanza) {
     global $config;
 
-    $xml = '<?xml version="1.0"?>' . $stanza->to_string();
+    $xml = \qp('<?xml version="1.0"?>' . $stanza->to_string());
 
 
     $from = new \XMPPJid($stanza->from);
     $room = $from->bare;
     $nick = $from->resource;
     $type = \qp($xml)->attr('type');
-    if ($room == $config['jaxl']['jid'])
-      return true;
-    // Initialize the room roster if it doesn't exist yet.
-    if (!array_key_exists($room, $this->roster)) {
-      $this->roster[$room] = array();
-    }
 
-    if ($type == 'error') {
+    // Don't add self to roster, or if its an error
+    if ($room == $config['jaxl']['jid'] || $type == 'error') {
       return true;
+    }
+    // Initialize the room if it doesn't exist yet.
+    if (!array_key_exists($room, $this->rooms)) {
+      $this->rooms[$room] = new mucRoom();
     }
 
     // Find the status codes.
@@ -75,8 +71,8 @@ class roster {
 
       // Move the roster entry to the new nick, so the new presence
       // won't trigger a notification.
-      $this->roster[$room][$newNick] = $this->roster[$room][$nick];
-      l(sprintf(_("%s is now %s"), $nick, $newNick), $room);
+      $this->rooms[$room]->renameMember($nick, $newNick);
+      l(sprintf(_("%s is now known as %s"), $nick, $newNick), $room);
       $this->isNickChange = true;
     } elseif ((array_key_exists(301, $codes) && $codes[301] >= 0) || (array_key_exists(307, $codes) && $codes[307] >= 0)) { // An `unavailable` 301 is a ban; a 307 is a kick.
       $type = (array_key_exists(301, $codes) && $codes[301] >= 0) ? 'banned' : 'kicked';
@@ -85,9 +81,8 @@ class roster {
       l(sprintf(_("%s %s by %s"), $nick, $type, $actor), $room);
     } else { // Any other `unavailable` presence indicates a logout.
       l(sprintf(_("%s left room"), $nick), $room);
+      $this->rooms[$room]->removeMember($nick);
     }
-    // In either case, the old nick must be removed and destroyed.
-    unset($this->roster[$room][$nick]);
   }
 
   private function eventPresenceDefault($room, $nick, $item, $stanza) {
@@ -95,141 +90,33 @@ class roster {
     $show = \qp($stanza, 'show')->text() || 'default';
     $status = \qp($stanza, 'status')->text() || '';
 
-    // Create the user object.
-    $user = array(
-      'jid' => new \XMPPJid($item->attr('jid')), // if not anonymous.
-      'role' => $item->attr('role'),
-      'affiliation' => $item->attr('affiliation'),
-      'show' => $show,
-      'status' => $status,
-    );
-    $this->roster[$room][$nick] = $user;
+    $this->rooms[$room]->addMember($nick, new \XMPPJid($item->attr('jid')));
+    $user = & $this->rooms[$room]->members[$nick];
+    $user->setData('role', $item->attr('role'));
+    $user->setData('affiliation', $item->attr('affiliation'));
+    $user->setData('show', $item->attr('show'));
+    $user->setData('status', $item->attr('status'));
+
     if ($this->isNickChange) {
       $this->isNickChange = false;
     } else {
       l(sprintf(_("%s joined room"), $nick), $room);
-      $this->getUserTime($user['jid']);
+      $user->getUserTime();
     }
-    $this->processTells($user['jid']->bare, $room);
-  }
-
-  function nickToJid($room, $nick) {
-    return $this->roster[$room][$nick]['jid'];
+    $user->processTells($room);
   }
 
   function onlineByJID($id) {
     global $config;
-    $id = str_replace(" ", "\\20", $id);
-    foreach ($this->roster as $name => $room) {
-      if (array_key_exists($name, $config['rooms'])) {
-        $c = array_merge($config, $config['rooms'][$name]);
-      }
-      foreach ($room as $nick => $info) {
-        if ($info['jid']->bare == $id && $c['tellCaseSensitive']) {
-          return true;
-        } elseif (strtolower($info['jid']->bare) == strtolower($id) && !$c['tellCaseSensitive']) {
-          return true;
-        }
+    $id = new \XMPPJid(str_replace(" ", "\\20", $id));
+    foreach ($this->rooms as $name => $mucRoomObj) {
+      $found = $mucRoomObj->jidToNick($id, false);
+      var_dump($found);
+      if ($found) {
+        return true;
       }
     }
     return false;
-  }
-
-  function escape_class($string) {
-    return $string ? preg_replace_callback('/[\\s\0\\\\]/', function ($x) {
-        return '\\' . ord($x[0]);
-      }, $string) : '';
-  }
-
-  function jid_classes(\XMPPJid $jid) {
-    return 'user jid-node-' . $this->escape_class(strtolower($jid->node))
-      . ' jid-domain-' . $this->escape_class($jid->domain)
-      . ' jid-resource-' . $this->escape_class($jid->resource);
-  }
-
-  function generateHTML($user) {
-    if (!array_key_exists('jid', $user) && $user['nick'] && $user['room']) {
-      $id = $this->roster[$user['room']][$user['nick']]['jid'];
-      $user['jid'] = $id->to_string();
-    } elseif ($user['jid']) {
-      $id = new \XMPPJid($user['jid']);
-    }
-
-    $display = array_key_exists('nick', $user) ? $user['nick'] : $user['jid'];
-    $classes = $this->jid_classes($id);
-    $html = "<span class=\"$classes\" data-jid=\"${user['jid']}\""
-      . (array_key_exists('nick', $user) ? " data-nick=\"{$user['nick']}\"" : '')
-      . ">{$display}</span>";
-    return $html;
-  }
-
-  function processTells($user, $room) {
-    global $db, $client;
-    $sql = $db->prepare('SELECT * FROM tell WHERE recipient = ?', array("string"));
-    $sql->bindValue(1, str_replace("\\20", " ", $user), "string");
-    $sql->execute();
-    $tells = $sql->fetchAll();
-    foreach ($tells as $tell) {
-      $senderHTML = $this->generateHTML(['jid' => $tell['sender']]);
-      $recipientHTML = $this->generateHTML(['jid' => $tell['recipient']]);
-
-      $time = $this->formatUserTime($tell['sent'], new \XMPPJid($tell['recipient']));
-      $message = sprintf(_("Message from %s for %s at %s:") . PHP_EOL . $tell['message'], $senderHTML, $recipientHTML, $time);
-      if ($tell['private']) {
-        \Ligrev\_send($user, $message, true, "chat");
-      } else {
-        \Ligrev\_send($room, $message, true, "groupchat");
-      }
-      $db->delete('tell', array('id' => $tell['id']));
-    }
-  }
-
-  /**
-   * Send an IQ to get a user's timezone
-   * @param \XMPPJid $jid The JID to query
-   */
-  function getUserTime(\XMPPJid $jid) {
-    $id = $this->client->get_id();
-    $resp = new \XMPPIq(array('from' => $this->client->full_jid->to_string(), 'to' => $jid->to_string(), 'type' => 'get', 'id' => $id));
-    $resp->c('time', NS_TIME);
-
-    $this->client->send($resp);
-    $this->client->add_cb('on_stanza_id_' . $id, function($stanza) {
-      global $roster;
-      $qp = \qp('<?xml version="1.0"?>' . $stanza->to_string());
-      if (\qp($qp, 'time')->attr('xmlns') == NS_TIME && $stanza->type == "result") {
-        $user = new \XMPPJid($stanza->from);
-        $tzo = \qp($qp, 'tzo')->text();
-        $roster->processUserTime($user, $tzo);
-      }
-    });
-  }
-
-  function processUserTime(\XMPPJid $user, $tzo) {
-    foreach ($this->roster as $room => $users) {
-      foreach ($users as $id => $item) {
-        if ($item['jid']->to_string() == $user->to_string()) {
-          $this->roster[$room][$id]['tzo'] = $tzo;
-        }
-      }
-    }
-  }
-
-  function formatUserTime($epoch, \XMPPJid $jid) {
-    $user = false;
-    var_dump($jid->to_string());
-    foreach ($this->roster as $room => $users) {
-      foreach ($users as $id => $item) {
-        if ($item['jid']->to_string() == $jid->to_string()) {
-          $user = $this->roster[$room][$id];
-        }
-      }
-    }
-    if (is_array($user) && array_key_exists('tzo', $user)) {
-      return userTime($epoch, $user['tzo']);
-    } else {
-      return userTime($epoch);
-    }
   }
 
 }

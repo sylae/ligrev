@@ -15,6 +15,7 @@ l(_("Loading libraries..."));
 require __DIR__ . '/vendor/autoload.php';
 
 l(_("Loading core classes"));
+require_once 'classes/ligrevGlobals.php';
 foreach (glob("classes/*.php") as $file) {
   require_once $file;
 }
@@ -46,6 +47,7 @@ $client = new \JAXL($config['jaxl']);
 
 $client->require_xep(array(
     '0045', // MUC
+    '0203', // Delayed Delivery
     '0199'  // XMPP Ping
 ));
 

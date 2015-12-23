@@ -84,29 +84,6 @@ namespace Ligrev {
     }
   }
 
-  function _send($to, $text, $isMarkdown = true, $origin = "groupchat") {
-    global $client;
-    if ($isMarkdown) {
-      // TODO: fuck all this, do it properly
-      $Pd = new \Parsedown();
-      $html = trim($Pd->text($text));
-      $md = strip_tags($text);
-      $qp = "<body>$md</body><html xmlns=\"http://jabber.org/protocol/xhtml-im\"><body xmlns=\"http://www.w3.org/1999/xhtml\">$html</body></html>";
-    } else {
-      $qp = '<body>' . strip_tags($text) . '</body>';
-    }
-    $body = new rawXML($qp);
-    $msg = new \XMPPMsg(
-      array(
-      'type' => (($origin == "groupchat") ? "groupchat" : "chat"),
-      'to' => (($to instanceof \XMPPJid) ? $to->to_string() : $to),
-      'from' => $client->full_jid->to_string(),
-      )
-    );
-    $msg->cnode($body);
-    $client->send($msg);
-  }
-
   function userTime($epoch, $tzo = "+00:00", $locale = null, $html = true) {
 
     // first, parse our tzo into seconds

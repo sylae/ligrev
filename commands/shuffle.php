@@ -15,30 +15,30 @@ class shuffle extends \Ligrev\command {
     global $decks;
 
     if ($this->origin == "chat") {
-      $this->_send($this->from, _("Cannot use cards in private context."));
+      $this->_send($this->getDefaultResponse(), _("Cannot use cards in private context."));
       return;
     }
     $decks[$this->room] = array();
     $suits = array(
-      _('Hearts'),
-      _('Diamonds'),
-      _('Clubs'),
-      _('Spades'),
+        _('Hearts'),
+        _('Diamonds'),
+        _('Clubs'),
+        _('Spades'),
     );
     $nums = array(
-      _('Ace'),
-      _('Two'),
-      _('Three'),
-      _('Four'),
-      _('Five'),
-      _('Six'),
-      _('Seven'),
-      _('Eight'),
-      _('Nine'),
-      _('Ten'),
-      _('Jack'),
-      _('Queen'),
-      _('King'),
+        _('Ace'),
+        _('Two'),
+        _('Three'),
+        _('Four'),
+        _('Five'),
+        _('Six'),
+        _('Seven'),
+        _('Eight'),
+        _('Nine'),
+        _('Ten'),
+        _('Jack'),
+        _('Queen'),
+        _('King'),
     );
     $c = 1;
     while ($c <= 54) {
@@ -51,7 +51,7 @@ class shuffle extends \Ligrev\command {
     }
     shuffle($decks[$this->room]);
     l(sprintf(_("Reset %s"), $this->room), "CARD", L_DEBUG);
-    $this->_send($this->from, _("Deck shuffled."));
+    $this->_send($this->getDefaultResponse(), _("Deck shuffled."));
   }
 
 }

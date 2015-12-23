@@ -14,11 +14,11 @@ class diag extends \Ligrev\command {
   function process() {
     $lv = V_LIGREV;
     $string = _('Ligrev Diagnostic Information') . PHP_EOL .
-      sprintf(_('Ligrev Version: %s'), "[$lv](https://github.com/sylae/ligrev/commit/$lv)") . PHP_EOL .
-      sprintf(_('PHP Version: %s'), phpversion()) . PHP_EOL .
-      sprintf(_('Process ID %s as %s'), getmypid(), get_current_user()) . PHP_EOL .
-      sprintf(_('System: %s'), php_uname());
-    $this->_send($this->from, $string);
+            sprintf(_('Ligrev Version: %s'), "[$lv](https://github.com/sylae/ligrev/commit/$lv)") . PHP_EOL .
+            sprintf(_('PHP Version: %s'), phpversion()) . PHP_EOL .
+            sprintf(_('Process ID %s as %s'), getmypid(), get_current_user()) . PHP_EOL .
+            sprintf(_('System: %s'), php_uname());
+    $this->_send($this->getDefaultResponse(), $string);
   }
 
 }

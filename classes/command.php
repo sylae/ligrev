@@ -9,7 +9,7 @@
 
 namespace Ligrev;
 
-class command {
+class command extends ligrevGlobals {
 
   /**
    * Body of the message. Probably want to explode() this.
@@ -49,17 +49,17 @@ class command {
   protected $config;
 
   function __construct(\XMPPStanza $stanza, $origin) {
-    global $roster, $config, $db;
+    global $client, $db, $config, $roster;
 
-    $this->roster = &$roster;
-    $this->db = &$db;
+    parent::__construct();
 
     $this->text = $stanza->body;
     $this->from = new \XMPPJid($stanza->from);
     $this->room = $this->from->bare;
-    $this->author = $this->from->resource;
+    $this->nick = $this->from->resource;
     $this->origin = $origin;
-    $this->authorHTML = $roster->generateHTML(['nick' => $this->author, 'room' => $this->room]);
+    $this->fromJID = $roster->rooms[$this->room]->nickToEntity($this->nick);
+    $this->authorHTML = $this->fromJID->generateHTML($this->nick);
 
     if ($this->origin == "groupchat" && array_key_exists($this->room, $config['rooms'])) {
       $this->config = array_merge($config, $config['rooms'][$this->room]);
@@ -69,21 +69,26 @@ class command {
   }
 
   function _send($to, $text, $isMarkdown = true) {
-    if ($to instanceof \XMPPJid && $this->origin == "groupchat") {
-      $to = $to->bare;
-    } elseif ($to instanceof \XMPPJid && $this->origin == "chat") {
-      $to = $to->to_string();
-    }
-    \Ligrev\_send($to, $text, $isMarkdown, $this->origin);
+    $this->sendMessage($to, $text, $isMarkdown, $this->origin);
   }
 
-  function _split($string) {
+  public static function _split($string) {
     $regex = '/(.*?[^\\\\](\\\\\\\\)*?)\\s/';
     preg_match_all($regex, $string . ' ', $matches);
     $m = array_map(function($s) {
       return str_replace("\\ ", " ", $s);
     }, $matches[1]);
     return $m;
+  }
+
+  protected function getDefaultResponse() {
+    if ($this->origin == "chat") {
+      return $this->from;
+    } elseif ($this->origin == "groupchat") {
+      return $this->room;
+    } else {
+      return false;
+    }
   }
 
 }
