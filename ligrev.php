@@ -65,7 +65,7 @@ $client->add_cb('on_auth_success', function() {
     l(sprintf(_("Joined room %s"), $room->to_string()), "JAXL");
     if ($c['announceOnStart']) {
       $lv = V_LIGREV;
-      _send($room->bare, sprintf(_("Ligrev version %s now online."), "[$lv](https://github.com/sylae/ligrev/commit/$lv)"));
+      ligrevGlobals::sendMessage($room->bare, sprintf(_("Ligrev version %s now online."), "[$lv](https://github.com/sylae/ligrev/commit/$lv)"));
     }
   }
   rss_init();
