@@ -5,7 +5,6 @@ namespace Ligrev;
 require_once 'functions.php';
 
 set_error_handler("Ligrev\\php_error_handler");
-set_include_path(get_include_path() . PATH_SEPARATOR . __DIR__ . DIRECTORY_SEPARATOR . 'lib');
 
 // Hey, let's load some things
 l(_("Reading config.php..."));
@@ -46,9 +45,8 @@ l(_("Loading JAXL and connecting..."), "JAXL");
 $client = new \JAXL($config['jaxl']);
 
 $client->require_xep(array(
-  '0045', // MUC
-  '0203', // Delayed Delivery
-  '0199'  // XMPP Ping
+    '0045', // MUC
+    '0199'  // XMPP Ping
 ));
 
 
