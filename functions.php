@@ -120,8 +120,8 @@ namespace Ligrev {
     } else {
       $offset = 0;
     }
-    $intl_soon = new \IntlDateFormatter($locale, \IntlDateFormatter::NONE, \IntlDateFormatter::LONG, new \DateTimezone(timezone_name_from_abbr("", $offset, false)));
-    $intl_past = new \IntlDateFormatter($locale, \IntlDateFormatter::MEDIUM, \IntlDateFormatter::LONG, new \DateTimezone(timezone_name_from_abbr("", $offset, false)));
+    $intl_soon = new \IntlDateFormatter($locale, \IntlDateFormatter::NONE, \IntlDateFormatter::LONG, timezone_name_from_abbr("", $offset, false));
+    $intl_past = new \IntlDateFormatter($locale, \IntlDateFormatter::MEDIUM, \IntlDateFormatter::LONG, timezone_name_from_abbr("", $offset, false));
     $date = new \DateTime(date('c', $epoch));
     $date->setTimezone(new \DateTimezone(timezone_name_from_abbr("", $offset, false)));
     $time = ($epoch > time() - (60 * 60 * 24)) ? $intl_soon->format($date) : $intl_past->format($date);
