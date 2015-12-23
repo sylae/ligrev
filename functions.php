@@ -107,6 +107,32 @@ namespace Ligrev {
     $client->send($msg);
   }
 
+  function userTime($epoch, $tzo = "+00:00", $locale = null, $html = true) {
+
+    // first, parse our tzo into seconds
+    preg_match_all('/([+-]?)(\\d{2}):(\\d{2})/', $tzo, $matches);
+    if (array_key_exists(0, $matches[1])) {
+      $sign = $matches[1][0];
+      $h = $matches[2][0] * 3600;
+      $m = $matches[3][0] * 60;
+      $offset = ($sign == "-") ? -1 * $h + $m : $h + $m;
+      ;
+    } else {
+      $offset = 0;
+    }
+    $intl_soon = new \IntlDateFormatter($locale, \IntlDateFormatter::NONE, \IntlDateFormatter::LONG, new \DateTimezone(timezone_name_from_abbr("", $offset, false)));
+    $intl_past = new \IntlDateFormatter($locale, \IntlDateFormatter::MEDIUM, \IntlDateFormatter::LONG, new \DateTimezone(timezone_name_from_abbr("", $offset, false)));
+    $date = new \DateTime(date('c', $epoch));
+    $date->setTimezone(new \DateTimezone(timezone_name_from_abbr("", $offset, false)));
+    $time = ($epoch > time() - (60 * 60 * 24)) ? $intl_soon->format($date) : $intl_past->format($date);
+    $xmpptime = date(DATE_ATOM, $epoch);
+    if ($html) {
+      return "<span data-timestamp=\"$xmpptime\">$time</span>";
+    } else {
+      return $time;
+    }
+  }
+
 }
 
 namespace Ligrev\Command {

@@ -17,6 +17,14 @@ class roster {
 
   public $roster = array();
   private $isNickChange = false;
+  private $client;
+  private $db;
+
+  function __construct() {
+    global $client, $db;
+    $this->client = &$client;
+    $this->db = &$db;
+  }
 
   function ingest(\XMPPStanza $stanza) {
     global $config;
@@ -100,6 +108,7 @@ class roster {
       $this->isNickChange = false;
     } else {
       l(sprintf(_("%s joined room"), $nick), $room);
+      $this->getUserTime($user['jid']);
     }
     $this->processTells($user['jid']->bare, $room);
   }
@@ -164,7 +173,7 @@ class roster {
       $senderHTML = $this->generateHTML(['jid' => $tell['sender']]);
       $recipientHTML = $this->generateHTML(['jid' => $tell['recipient']]);
 
-      $time = ($tell['sent'] > time() - (60 * 60 * 24)) ? strftime('%X %z', $tell['sent']) : strftime('%c %z', $tell['sent']);
+      $time = $this->formatUserTime($tell['sent'], new \XMPPJid($tell['recipient']));
       $message = sprintf(_("Message from %s for %s at %s:") . PHP_EOL . $tell['message'], $senderHTML, $recipientHTML, $time);
       if ($tell['private']) {
         \Ligrev\_send($user, $message, true, "chat");
@@ -172,6 +181,54 @@ class roster {
         \Ligrev\_send($room, $message, true, "groupchat");
       }
       $db->delete('tell', array('id' => $tell['id']));
+    }
+  }
+
+  /**
+   * Send an IQ to get a user's timezone
+   * @param \XMPPJid $jid The JID to query
+   */
+  function getUserTime(\XMPPJid $jid) {
+    $id = $this->client->get_id();
+    $resp = new \XMPPIq(array('from' => $this->client->full_jid->to_string(), 'to' => $jid->to_string(), 'type' => 'get', 'id' => $id));
+    $resp->c('time', NS_TIME);
+
+    $this->client->send($resp);
+    $this->client->add_cb('on_stanza_id_' . $id, function($stanza) {
+      global $roster;
+      $qp = \qp('<?xml version="1.0"?>' . $stanza->to_string());
+      if (\qp($qp, 'time')->attr('xmlns') == NS_TIME && $stanza->type == "result") {
+        $user = new \XMPPJid($stanza->from);
+        $tzo = \qp($qp, 'tzo')->text();
+        $roster->processUserTime($user, $tzo);
+      }
+    });
+  }
+
+  function processUserTime(\XMPPJid $user, $tzo) {
+    foreach ($this->roster as $room => $users) {
+      foreach ($users as $id => $item) {
+        if ($item['jid']->to_string() == $user->to_string()) {
+          $this->roster[$room][$id]['tzo'] = $tzo;
+        }
+      }
+    }
+  }
+
+  function formatUserTime($epoch, \XMPPJid $jid) {
+    $user = false;
+    var_dump($jid->to_string());
+    foreach ($this->roster as $room => $users) {
+      foreach ($users as $id => $item) {
+        if ($item['jid']->to_string() == $jid->to_string()) {
+          $user = $this->roster[$room][$id];
+        }
+      }
+    }
+    if (is_array($user) && array_key_exists('tzo', $user)) {
+      return userTime($epoch, $user['tzo']);
+    } else {
+      return userTime($epoch);
     }
   }
 
