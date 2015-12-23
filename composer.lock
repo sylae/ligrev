@@ -4,9 +4,60 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "9ae752e236cdd33fafb7d64115955ecb",
-    "content-hash": "306db65614364cc278a1c250c7b94960",
+    "hash": "6d526347fd619383410db090953bf1f5",
+    "content-hash": "f6548f2876568fb593b7dbd44aed9956",
     "packages": [
+        {
+            "name": "abhinavsingh/jaxl",
+            "version": "3.x-dev",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:abhinavsingh/JAXL.git",
+                "reference": "c2593cf957e2455dd26d65fba53fd4a6f46d6b1d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/abhinavsingh/JAXL/zipball/c2593cf957e2455dd26d65fba53fd4a6f46d6b1d",
+                "reference": "c2593cf957e2455dd26d65fba53fd4a6f46d6b1d",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2.4"
+            },
+            "bin": [
+                "jaxlctl"
+            ],
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "jaxl.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Abhinavsingh",
+                    "homepage": "https://abhinavsingh.com/"
+                }
+            ],
+            "description": "Jaxl - Async, Non-Blocking, Event based Networking Library in PHP.",
+            "homepage": "http://jaxl.readthedocs.org/en/latest/index.html",
+            "keywords": [
+                "abhinavsingh",
+                "asynchronous",
+                "event loop",
+                "http",
+                "jabber",
+                "jaxl",
+                "non blocking",
+                "php",
+                "xmpp"
+            ],
+            "time": "2015-05-29 01:17:22"
+        },
         {
             "name": "doctrine/annotations",
             "version": "v1.2.7",
@@ -682,7 +733,9 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "abhinavsingh/jaxl": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],
