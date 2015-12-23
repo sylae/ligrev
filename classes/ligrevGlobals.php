@@ -40,7 +40,7 @@ class ligrevGlobals {
     return true;
   }
 
-  public function sendMessage($to, $text, $isMarkdown = true, $origin = "groupchat") {
+  public static function sendMessage($to, $text, $isMarkdown = true, $origin = "groupchat") {
     global $client;
     if ($isMarkdown) {
       // TODO: fuck all this, do it properly
