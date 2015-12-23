@@ -17,6 +17,8 @@ $config['jaxl'] = array(
   'jid' => 'ligrev@example.net',
   'pass' => 'rainbowdashisactuallybestpony',
   'host' => 'example.net',
+  'force_tls' => true,
+  'protocol' => 'tcp'
 );
 
 $config['rooms']['lounge@conference.example.net'] = array();
