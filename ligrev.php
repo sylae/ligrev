@@ -14,7 +14,6 @@ require_once 'config.php';
 
 l(_("Loading libraries..."));
 require __DIR__ . '/vendor/autoload.php';
-require_once 'JAXL/jaxl.php';
 
 l(_("Loading core classes"));
 foreach (glob("classes/*.php") as $file) {
