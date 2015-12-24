@@ -110,6 +110,10 @@ namespace Ligrev {
     }
   }
 
+  function t($string, $lang = null) {
+    return $string;
+  }
+
 }
 
 namespace Ligrev\Command {
