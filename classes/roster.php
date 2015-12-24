@@ -72,7 +72,7 @@ class roster extends ligrevGlobals {
       // Move the roster entry to the new nick, so the new presence
       // won't trigger a notification.
       $this->rooms[$room]->renameMember($nick, $newNick);
-      l(sprintf(_("%s is now known as %s"), $nick, $newNick), $room);
+      l(sprintf("%s is now known as %s", $nick, $newNick), $room);
       $this->isNickChange = true;
     } elseif ((array_key_exists(301, $codes) && $codes[301] >= 0) || (array_key_exists(307, $codes) && $codes[307] >= 0)) { // An `unavailable` 301 is a ban; a 307 is a kick.
       $type = (array_key_exists(301, $codes) && $codes[301] >= 0) ? 'banned' : 'kicked';
