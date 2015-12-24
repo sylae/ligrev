@@ -127,7 +127,7 @@ namespace Ligrev {
     // the "en" lang file won't show up, because it's empty, but that's okay.
     $opts['en'] = $string;
 
-    $best = \Locale::lookup(array_keys($opts), $inlang, true, "en");
+    $best = \Locale::lookup(array_keys($opts), $lang, true, "en");
     if (count($opts) == 0) {
       return $string;
     }
