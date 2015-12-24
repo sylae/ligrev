@@ -1,5 +1,7 @@
 <?php
 
+namespace Ligrev;
+
 /**
  * Handles our entire user roster management. Uses querypath because
  * sweet christ, JAXL has a shitty XML parser...
@@ -10,21 +12,41 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.txt GNU General Public License 3
  * @author Sylae Jiendra Corell <sylae@calref.net>
  */
-
-namespace Ligrev;
-
 class roster extends ligrevGlobals {
 
+  /**
+   * An array of rooms. Key is room jid, value is a \Ligrev\mucRoom object
+   * @var array
+   */
   public $rooms = array();
+
+  /**
+   * Where we keep all of the JIDs in use by Ligrev
+   * @var array
+   */
   public $jids = array();
+
+  /**
+   * Used internally to store nick changing state (otherwise duped messages appear)
+   * @var boolean
+   */
   private $isNickChange = false;
 
+  /**
+   * Constructor
+   */
   function __construct() {
     parent::__construct();
   }
 
+  /**
+   * Read a stanza and parse its presence information
+   * @global array $codes
+   * @param \XMPPStanza $stanza The stanza to parse
+   * @return boolean True if everything went well
+   * @todo replace the $codes global with $this->codes
+   */
   function ingest(\XMPPStanza $stanza) {
-    global $config;
 
     $xml = \qp('<?xml version="1.0"?>' . $stanza->to_string());
 
@@ -35,7 +57,7 @@ class roster extends ligrevGlobals {
     $type = \qp($xml)->attr('type');
 
     // Don't add self to roster, or if its an error
-    if ($room == $config['jaxl']['jid'] || $type == 'error') {
+    if ($room == $this->config['jaxl']['jid'] || $type == 'error') {
       return true;
     }
     // Initialize the room if it doesn't exist yet.
@@ -64,6 +86,13 @@ class roster extends ligrevGlobals {
     return true;
   }
 
+  /**
+   * Handle nick changes, logouts, kicks
+   * @param sting $room
+   * @param string $nick
+   * @param array $codes
+   * @param \DOMQuery $item
+   */
   private function eventPresenceUnavailable($room, $nick, $codes, $item) {
 
     if (array_key_exists(303, $codes) && $codes[303] >= 0) { // An `unavailable` 303 is a nick change to <item nick="{new}"/>
@@ -85,6 +114,13 @@ class roster extends ligrevGlobals {
     }
   }
 
+  /**
+   * Handle logins
+   * @param string $room
+   * @param string $nick
+   * @param \DOMQuery $item
+   * @param \DOMQuery $stanza
+   */
   private function eventPresenceDefault($room, $nick, $item, $stanza) {
     // away, dnd, xa, chat, [default].
     $show = \qp($stanza, 'show')->text() || 'default';
@@ -106,12 +142,15 @@ class roster extends ligrevGlobals {
     $user->processTells($room);
   }
 
+  /**
+   * Check the rooms to see if a given JID is online
+   * @param \XMPPJid $id The JID to check for
+   * @return boolean True if found, false otherwise
+   */
   function onlineByJID($id) {
-    global $config;
     $id = new \XMPPJid(str_replace(" ", "\\20", $id));
     foreach ($this->rooms as $name => $mucRoomObj) {
       $found = $mucRoomObj->jidToNick($id, false);
-      var_dump($found);
       if ($found) {
         return true;
       }

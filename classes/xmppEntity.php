@@ -1,18 +1,26 @@
 <?php
 
+namespace Ligrev;
+
 /**
- * Represents one xmpp resource.
+ * The xmppEntity class is a representation of an xmpp "resource". It provides
+ * any functions that relate to a specific user
  *
  * @license http://www.gnu.org/licenses/gpl-3.0.txt GNU General Public License 3
  * @author Sylae Jiendra Corell <sylae@calref.net>
  */
-
-namespace Ligrev;
-
 class xmppEntity extends ligrevGlobals {
 
+  /**
+   * The JID of this user
+   * @var \XMPPJid
+   */
   public $jid;
 
+  /**
+   * Constructor
+   * @param \XMPPJid $jid The JID of the user in question
+   */
   public function __construct(\XMPPJid $jid) {
     parent::__construct();
     $this->jid = $jid;
@@ -37,11 +45,21 @@ class xmppEntity extends ligrevGlobals {
     });
   }
 
+  /**
+   * Set the user's time offset
+   * @param string $tzo Offset in "[+/-]HH:MM" notation or "Z".
+   * @return boolean True if everything went well
+   */
   public function setUserTime($tzo) {
     $this->setData('tzo', $tzo);
     return true;
   }
 
+  /**
+   * Format a timestamp for presentation to a user
+   * @param int $epoch a unix timestamp
+   * @return string The localized representation of the time
+   */
   public function formatUserTime($epoch) {
     $tzo = $this->getData('tzo');
     if (is_string($tzo)) {
@@ -51,18 +69,34 @@ class xmppEntity extends ligrevGlobals {
     }
   }
 
+  /**
+   * Escape whitespace for use in JID classes
+   * @param string $string The string to esape
+   * @return string The escaped string
+   * @todo Option to switch between decimal and hex
+   * @link https://github.com/cburschka/cadence/issues/298
+   */
   protected function escape_class($string) {
     return $string ? preg_replace_callback('/[\\s\0\\\\]/', function ($x) {
         return '\\' . ord($x[0]);
       }, $string) : '';
   }
 
+  /**
+   * Generate JID classes for use by Cadence-compatible chats.
+   * @return string A string of CSS classes
+   */
   protected function jid_classes() {
     return 'user jid-node-' . $this->escape_class(strtolower($this->jid->node))
       . ' jid-domain-' . $this->escape_class($this->jid->domain)
       . ' jid-resource-' . $this->escape_class($this->jid->resource);
   }
 
+  /**
+   * Wrap a username in a Cadence-compatible span element.
+   * @param string $nick Optionally include a nick to display as
+   * @return string The wrapped string
+   */
   public function generateHTML($nick = null) {
 
     $display = str_replace('\\20', ' ', (is_string($nick) ? $nick : $this->jid->bare));
@@ -73,8 +107,11 @@ class xmppEntity extends ligrevGlobals {
     return $html;
   }
 
+  /**
+   * Check if the user has any pending :tell messages
+   * @param string $room The room the user has joined, for public :tells
+   */
   function processTells($room) {
-    global $roster;
     $sql = $this->db->prepare('SELECT * FROM tell WHERE recipient = ? ORDER BY sent ASC', array("string"));
     $sql->bindValue(1, str_replace("\\20", " ", $this->jid->bare), "string");
     $sql->execute();
