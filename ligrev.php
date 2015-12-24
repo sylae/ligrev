@@ -14,6 +14,15 @@ require_once 'config.php';
 l("Loading libraries...");
 require __DIR__ . '/vendor/autoload.php';
 
+l("Loading i18n...");
+$i18n = array();
+foreach (glob("i18n/*.po") as $file) {
+  $lang = preg_replace_callback('/i18n\\/(.+?)\\.po/', function ($m) {
+    return $m[1];
+  }, $file);
+  $i18n[$lang] = \Sepia\PoParser::parseFile($file)->getEntries();
+}
+
 l("Loading core classes");
 require_once 'classes/ligrevGlobals.php';
 foreach (glob("classes/*.php") as $file) {
