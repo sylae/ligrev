@@ -118,12 +118,16 @@ namespace Ligrev {
     }
 
     $opts = array();
-    foreach ($i18n as $lang => $strings) {
+    foreach ($i18n as $ilang => $strings) {
       if (array_key_exists($string, $strings) && strlen($strings[$string]['msgstr'][0]) > 0) {
-        $opts[$lang] = $strings[$string]['msgstr'][0];
+        $opts[$ilang] = $strings[$string]['msgstr'][0];
       }
     }
-    $best = \Locale::lookup(array_keys($opts), $lang, true, "en");
+
+    // the "en" lang file won't show up, because it's empty, but that's okay.
+    $opts['en'] = $string;
+
+    $best = \Locale::lookup(array_keys($opts), $inlang, true, "en");
     if (count($opts) == 0) {
       return $string;
     }
