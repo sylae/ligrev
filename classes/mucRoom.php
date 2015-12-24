@@ -12,9 +12,15 @@ namespace Ligrev;
 class mucRoom extends ligrevGlobals {
 
   public $members = array();
+  public $name;
 
-  public function __construct() {
+  public function __construct($name) {
     parent::__construct();
+    $this->name = $name;
+
+    if (array_key_exists("lang", $this->config['rooms'][$this->name])) {
+      $this->lang = $this->config['rooms'][$this->name]['lang'];
+    }
   }
 
   public function addMember($nick, $jid) {

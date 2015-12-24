@@ -40,7 +40,7 @@ class roster extends ligrevGlobals {
     }
     // Initialize the room if it doesn't exist yet.
     if (!array_key_exists($room, $this->rooms)) {
-      $this->rooms[$room] = new mucRoom();
+      $this->rooms[$room] = new mucRoom($room);
     }
 
     // Find the status codes.

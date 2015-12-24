@@ -66,6 +66,7 @@ class command extends ligrevGlobals {
     } else {
       $this->config = $config;
     }
+    $this->lang = $this->config['lang'];
   }
 
   function _send($to, $text, $isMarkdown = true) {

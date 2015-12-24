@@ -27,7 +27,7 @@ class ligrevGlobals {
     $r = &$roster;
     $this->roster = (isset($roster) && $roster instanceof roster) ? $r : null;
 
-    $this->lang = "en";
+    $this->lang = $this->config['lang'];
   }
 
   public function getData($key) {
