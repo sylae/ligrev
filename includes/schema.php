@@ -2,7 +2,7 @@
 
 namespace Ligrev;
 
-l(_("Initializing database..."), "DBAL");
+l("Initializing database...", "DBAL");
 $db = \Doctrine\DBAL\DriverManager::getConnection(array('url' => $config['db']), new \Doctrine\DBAL\Configuration());
 $sm = $db->getSchemaManager();
 $fromSchema = $sm->createSchema();
@@ -43,10 +43,10 @@ $sql = $schemaDiff->toSaveSql($db->getDatabasePlatform());
 $total_changes = count($sql);
 
 if ($total_changes > 0) {
-  l(sprintf(_("Schema needs initialization or upgrade, executing %s SQL statement(s) to correct..."), $total_changes), "DBAL");
+  l(sprintf("Schema needs initialization or upgrade, executing %s SQL statement(s) to correct...", $total_changes), "DBAL");
   foreach ($sql as $s) {
     $db->exec($s);
   }
 } else {
-  l(_("Schema up to date."), "DBAL");
+  l("Schema up to date.", "DBAL");
 }

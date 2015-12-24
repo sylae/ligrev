@@ -35,8 +35,8 @@ class messageHandler {
     }
 
     if ($this->from->resource && !$this->stanza->exists('delay', NS_DELAYED_DELIVERY)) {
-      $f = (($this->origin == "chat") ? _(" (PM)") : "");
-      l(sprintf(_("%s%s: %s"), $this->from->resource, $f, $this->stanza->body), $this->from->node);
+      $f = (($this->origin == "chat") ? " (PM)" : "");
+      l(sprintf("%s%s: %s", $this->from->resource, $f, $this->stanza->body), $this->from->node);
       $this->text = $this->stanza->body;
       $this->room = $this->from->bare;
       $this->author = $this->from->resource;

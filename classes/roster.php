@@ -78,9 +78,9 @@ class roster extends ligrevGlobals {
       $type = (array_key_exists(301, $codes) && $codes[301] >= 0) ? 'banned' : 'kicked';
       $actor = \qp($item, 'actor')->attr('nick');
       $reason = \qp($item, 'reason')->text();
-      l(sprintf(_("%s %s by %s"), $nick, $type, $actor), $room);
+      l(sprintf("%s %s by %s", $nick, $type, $actor), $room);
     } else { // Any other `unavailable` presence indicates a logout.
-      l(sprintf(_("%s left room"), $nick), $room);
+      l(sprintf("%s left room", $nick), $room);
       $this->rooms[$room]->removeMember($nick);
     }
   }
@@ -100,7 +100,7 @@ class roster extends ligrevGlobals {
     if ($this->isNickChange) {
       $this->isNickChange = false;
     } else {
-      l(sprintf(_("%s joined room"), $nick), $room);
+      l(sprintf("%s joined room", $nick), $room);
       $user->getUserTime();
     }
     $user->processTells($room);

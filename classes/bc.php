@@ -58,7 +58,7 @@ class bc {
       fclose($pipes[2]);
       proc_close($process);
 
-      l(sprintf(_("Exited with status code %s"), $pinfo['exitcode']), "DICE", L_DEBUG);
+      l(sprintf("Exited with status code %s", $pinfo['exitcode']), "DICE", L_DEBUG);
 
       if ($pinfo['exitcode'] == 124) {
         $this->result = "timeout";
@@ -68,7 +68,7 @@ class bc {
         $this->result = $stdout;
       }
     } else {
-      l(_("Could not create dice roll process!"), "DICE", L_WARN);
+      l("Could not create dice roll process!", "DICE", L_WARN);
       $this->result = sprintf(_("Ligrev error in bc parsing module: %s"), _("Process not created"));
     }
   }

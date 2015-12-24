@@ -22,7 +22,7 @@ namespace Ligrev {
 
   // Take over PHP's error handling, since it's a picky whore sometimes.
   function php_error_handler($no, $str, $file, $line) {
-    $message = sprintf(_("%s at %s: %s"), $str, $file, $line);
+    $message = sprintf("%s at %s: %s", $str, $file, $line);
     switch ($no) {
       case E_ERROR:
       case E_RECOVERABLE_ERROR:

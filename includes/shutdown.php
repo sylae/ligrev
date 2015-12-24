@@ -19,10 +19,10 @@ register_shutdown_function(function() {
   global $ligrev_inhibit_auto_restart;
 
   if ($ligrev_inhibit_auto_restart) {
-    l(_("Auto restart inhibited...exiting with status code 0."));
+    l("Auto restart inhibited...exiting with status code 0.");
     die(0);
   } else {
-    l(_("Auto restarting...exiting with status code 1."));
+    l("Auto restarting...exiting with status code 1.");
     die(1);
   }
 });
