@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "6d526347fd619383410db090953bf1f5",
-    "content-hash": "f6548f2876568fb593b7dbd44aed9956",
+    "hash": "2fb864d5a15e035f72f4268d9a4b29ee",
+    "content-hash": "51dea4adc2b7e990b6916beff2084d9f",
     "packages": [
         {
             "name": "abhinavsingh/jaxl",
@@ -728,13 +728,62 @@
                 "xslt"
             ],
             "time": "2015-10-10 20:46:32"
+        },
+        {
+            "name": "sepia/po-parser",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/raulferras/PHP-po-parser.git",
+                "reference": "c7d2141af3d77b54c691dfc6f269d7ae5fd89036"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/raulferras/PHP-po-parser/zipball/c7d2141af3d77b54c691dfc6f269d7ae5fd89036",
+                "reference": "c7d2141af3d77b54c691dfc6f269d7ae5fd89036",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "3.7.*",
+                "squizlabs/php_codesniffer": "1.5.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Sepia": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Raúl Ferràs",
+                    "email": "raul.ferras@gmail.com",
+                    "role": "developer"
+                }
+            ],
+            "description": "Gettext *.PO file parser for PHP.",
+            "homepage": "https://github.com/raulferras/PHP-po-parser",
+            "keywords": [
+                "gettext",
+                "i10n",
+                "i18n",
+                "po"
+            ],
+            "time": "2015-12-17 10:19:06"
         }
     ],
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "abhinavsingh/jaxl": 20
+        "abhinavsingh/jaxl": 20,
+        "sepia/po-parser": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
