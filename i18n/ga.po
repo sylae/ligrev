@@ -1,0 +1,278 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Ligrev\n"
+"POT-Creation-Date: 2015-12-23 20:32-0700\n"
+"PO-Revision-Date: 2015-12-23 21:27-0700\n"
+"Language-Team: Sylae Corell <sylae@calref.net>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.6\n"
+"X-Poedit-Basepath: ..\n"
+"Plural-Forms: nplurals=5; plural=(n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n<11 ? 3 : 4);\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: t\n"
+"Last-Translator: Sylae Corell <sylae@calref.net>\n"
+"Language: ga\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: vendor\n"
+"X-Poedit-SearchPathExcluded-1: lib\n"
+"X-Poedit-SearchPathExcluded-2: nbproject\n"
+
+#: classes/RSS.php:70
+#, fuzzy, php-format
+msgid "New post in _%s_ / %s: (%s)[%s]"
+msgstr "Postáil nua i _%s_ / %s: (%s)[%s]"
+
+#: classes/bc.php:72
+#, fuzzy, php-format
+msgid "Ligrev error in bc parsing module: %s"
+msgstr "botún sa mhodúl bc: %s"
+
+#: classes/bc.php:72
+#, fuzzy
+msgid "Process not created"
+msgstr "Ní raibh an próiseas a cruthaíodh"
+
+#: classes/xmppEntity.php:88
+#, php-format
+msgid "Message from %s for %s at %s:"
+msgstr ""
+
+#: commands/card.php:20 commands/shuffle.php:18
+msgid "Cannot use cards in private context."
+msgstr ""
+
+#: commands/card.php:24
+msgid "Deck uninitialized, use :shuffle."
+msgstr ""
+
+#: commands/card.php:26
+msgid "Deck depleted, use :shuffle."
+msgstr ""
+
+#: commands/card.php:29
+#, fuzzy, php-format
+msgid "%s draws a %s"
+msgstr "%s tarraingíonn sí %s"
+
+#: commands/diag.php:16
+#, fuzzy
+msgid "Ligrev Diagnostic Information"
+msgstr "Faisnéis Ligrev"
+
+#: commands/diag.php:17
+#, fuzzy, php-format
+msgid "Ligrev Version: %s"
+msgstr "Leagan Ligrev: %s"
+
+#: commands/diag.php:18
+#, fuzzy, php-format
+msgid "PHP Version: %s"
+msgstr "Leagan PHP: %s"
+
+#: commands/diag.php:19
+#, fuzzy, php-format
+msgid "Process ID %s as %s"
+msgstr "Próiseas %s mar %s"
+
+#: commands/diag.php:20
+#, fuzzy, php-format
+msgid "System: %s"
+msgstr "Córas: %s"
+
+#: commands/faq.php:18
+#, fuzzy
+msgid "set"
+msgstr "sannaim"
+
+#: commands/faq.php:21 commands/faq.php:27 commands/faq.php:30
+#: commands/tell.php:22 commands/tell.php:26 commands/tell.php:47
+#, fuzzy, php-format
+msgid "Error: %s"
+msgstr "Botún: %s"
+
+#: commands/faq.php:21
+msgid "Insufficient permissions"
+msgstr ""
+
+#: commands/faq.php:27
+msgid ""
+"No keyword for FAQ.\n"
+"Usage `:faq set $keyword $message`"
+msgstr ""
+
+#: commands/faq.php:30
+msgid ""
+"No FAQ Body.\n"
+"Usage: `:faq set $keyword $message`"
+msgstr ""
+
+#: commands/faq.php:40
+#, php-format
+msgid "FAQ %s already in use"
+msgstr ""
+
+#: commands/faq.php:50
+#, php-format
+msgid "FAQ with keyword %s added."
+msgstr ""
+
+#: commands/faq.php:61
+#, php-format
+msgid "FAQ authored by %s: %s"
+msgstr ""
+
+#: commands/faq.php:64
+#, php-format
+msgid "FAQ %s not found."
+msgstr ""
+
+#: commands/roll.php:61
+#, php-format
+msgid "%s rolls %s"
+msgstr ""
+
+#: commands/shuffle.php:23
+msgid "Hearts"
+msgstr "hairt"
+
+#: commands/shuffle.php:24
+msgid "Diamonds"
+msgstr "muileata"
+
+#: commands/shuffle.php:25
+msgid "Clubs"
+msgstr "triuf"
+
+#: commands/shuffle.php:26
+msgid "Spades"
+msgstr "spéireata"
+
+#: commands/shuffle.php:29
+msgid "Ace"
+msgstr "Aon"
+
+#: commands/shuffle.php:30
+msgid "Two"
+msgstr "Dó"
+
+#: commands/shuffle.php:31
+msgid "Three"
+msgstr "Trí"
+
+#: commands/shuffle.php:32
+msgid "Four"
+msgstr "Ceathair"
+
+#: commands/shuffle.php:33
+msgid "Five"
+msgstr "Cúig"
+
+#: commands/shuffle.php:34
+msgid "Six"
+msgstr "Sé"
+
+#: commands/shuffle.php:35
+msgid "Seven"
+msgstr "Seacht"
+
+#: commands/shuffle.php:36
+msgid "Eight"
+msgstr "Ocht"
+
+#: commands/shuffle.php:37
+msgid "Nine"
+msgstr "Naoi"
+
+#: commands/shuffle.php:38
+msgid "Ten"
+msgstr "Deich"
+
+#: commands/shuffle.php:39
+msgid "Jack"
+msgstr "Cuireata"
+
+#: commands/shuffle.php:40
+msgid "Queen"
+msgstr "Banríon"
+
+#: commands/shuffle.php:41
+msgid "King"
+msgstr "Rí"
+
+#: commands/shuffle.php:46
+msgid "Joker"
+msgstr "Fear na gcrúb"
+
+#: commands/shuffle.php:48
+#, php-format
+msgid "%s of %s"
+msgstr "%s %s"
+
+#: commands/shuffle.php:53
+#, fuzzy, php-format
+msgid "Reset %s"
+msgstr "%s a athshocrú"
+
+#: commands/shuffle.php:54
+#, fuzzy
+msgid "Deck shuffled."
+msgstr "Is é an deic Suaitheadh."
+
+#: commands/slap.php:16
+msgid "Ligrev"
+msgstr "Ligrev"
+
+#: commands/slap.php:17
+msgid "poach"
+msgstr ""
+
+#: commands/slap.php:17
+#, fuzzy
+msgid "salmon"
+msgstr "bradán"
+
+#: commands/slap.php:17
+#, fuzzy
+msgid "greyling"
+msgstr "greyling"
+
+#: commands/slap.php:17
+#, fuzzy
+msgid "coelecanth"
+msgstr "coelecanth"
+
+#: commands/slap.php:17
+#, fuzzy
+msgid "trout"
+msgstr "breac"
+
+#: commands/slap.php:18
+#, php-format
+msgid "%s slaps %s with a large %s"
+msgstr ""
+
+#: commands/tell.php:22
+#, fuzzy
+msgid "No recipient."
+msgstr "Aon faighteoir."
+
+#: commands/tell.php:26
+msgid "No message."
+msgstr "Aon teachtaireacht."
+
+#: commands/tell.php:47
+#, php-format
+msgid "%s already online. Contact user directly."
+msgstr ""
+
+#: commands/tell.php:57
+#, php-format
+msgid "Message for %s processed."
+msgstr ""
+
+#: ligrev.php:68
+#, fuzzy, php-format
+msgid "Ligrev version %s now online."
+msgstr "An leagan Ligrev %s dúiseacht."
