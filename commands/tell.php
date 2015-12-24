@@ -19,11 +19,11 @@ class tell extends \Ligrev\command {
     if (strlen($r) > 0) {
       $recipient = $r;
     } else {
-      $this->_send($this->getDefaultResponse(), sprintf(_("Error: %s"), _("No recipient.")));
+      $this->_send($this->getDefaultResponse(), sprintf($this->t("Error: %s"), $this->t("No recipient.")));
       return;
     }
     if (strlen($message) < 1) {
-      $this->_send($this->getDefaultResponse(), sprintf(_("Error: %s"), _("No message.")));
+      $this->_send($this->getDefaultResponse(), sprintf($this->t("Error: %s"), $this->t("No message.")));
       return false;
     }
     $private = ($this->origin == "groupchat" ? false : true);
@@ -44,7 +44,7 @@ class tell extends \Ligrev\command {
 
     // Let's make sure the user isn't already online.
     if ($roster->onlineByJID($recipient)) {
-      $this->_send($this->getDefaultResponse(), sprintf(_("Error: %s"), sprintf(_("%s already online. Contact user directly."), $recipientHTML)));
+      $this->_send($this->getDefaultResponse(), sprintf($this->t("Error: %s"), sprintf($this->t("%s already online. Contact user directly."), $recipientHTML)));
       return false;
     }
     $sql = $db->prepare('INSERT INTO tell (sender, recipient, sent, private, message) VALUES(?, ?, ?, ?, ?);', array('string', 'string', 'integer', 'boolean', 'string'));
@@ -54,7 +54,7 @@ class tell extends \Ligrev\command {
     $sql->bindValue(4, $private, "boolean");
     $sql->bindValue(5, $message, "string");
     $sql->execute();
-    $this->_send($this->getDefaultResponse(), sprintf(_("Message for %s processed."), $recipientHTML));
+    $this->_send($this->getDefaultResponse(), sprintf($this->t("Message for %s processed."), $recipientHTML));
   }
 
 }

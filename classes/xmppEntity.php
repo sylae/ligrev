@@ -85,7 +85,7 @@ class xmppEntity extends ligrevGlobals {
       $recipientHTML = $this->generateHTML();
 
       $time = $this->formatUserTime($tell['sent']);
-      $message = sprintf(_("Message from %s for %s at %s:") . PHP_EOL . $tell['message'], $senderHTML, $recipientHTML, $time);
+      $message = sprintf($this->t("Message from %s for %s at %s:") . PHP_EOL . $tell['message'], $senderHTML, $recipientHTML, $time);
       if ($tell['private']) {
         $this->sendMessage($user, $message, true, "chat");
       } else {
