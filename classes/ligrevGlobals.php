@@ -14,7 +14,7 @@ class ligrevGlobals {
   protected $client;
   protected $db;
   protected $config;
-  protected $data;
+  protected $data = array();
   protected $roster;
   protected $lang;
 
