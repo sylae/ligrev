@@ -16,6 +16,7 @@ class ligrevGlobals {
   protected $config;
   protected $data;
   protected $roster;
+  protected $lang;
 
   function __construct() {
 
@@ -25,6 +26,8 @@ class ligrevGlobals {
     $this->config = &$config;
     $r = &$roster;
     $this->roster = (isset($roster) && $roster instanceof roster) ? $r : null;
+
+    $this->lang = $this->config['lang'];
   }
 
   public function getData($key) {
@@ -53,14 +56,18 @@ class ligrevGlobals {
     }
     $body = new rawXML($qp);
     $msg = new \XMPPMsg(
-            array(
-        'type' => (($origin == "groupchat") ? "groupchat" : "chat"),
-        'to' => (($to instanceof \XMPPJid) ? $to->to_string() : $to),
-        'from' => $client->full_jid->to_string(),
-            )
+      array(
+      'type' => (($origin == "groupchat") ? "groupchat" : "chat"),
+      'to' => (($to instanceof \XMPPJid) ? $to->to_string() : $to),
+      'from' => $client->full_jid->to_string(),
+      )
     );
     $msg->cnode($body);
     $client->send($msg);
+  }
+
+  public function t($string) {
+    return t($string, $this->lang);
   }
 
 }

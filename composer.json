@@ -1,9 +1,10 @@
 {
-    "require": {
-        "querypath/querypath": "^3.04",
-        "doctrine/dbal": "2.5.2",
-        "php-curl-class/php-curl-class": "^4.8",
-        "erusev/parsedown": "^1.6",
-        "abhinavsingh/jaxl": "3.x-dev"
-    }
+  "require": {
+    "querypath/querypath": "^3.04",
+    "doctrine/dbal": "2.5.2",
+    "php-curl-class/php-curl-class": "^4.8",
+    "erusev/parsedown": "^1.6",
+    "abhinavsingh/jaxl": "3.x-dev",
+    "sepia/po-parser": "dev-master"
+  }
 }

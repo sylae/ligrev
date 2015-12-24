@@ -22,7 +22,7 @@ namespace Ligrev {
 
   // Take over PHP's error handling, since it's a picky whore sometimes.
   function php_error_handler($no, $str, $file, $line) {
-    $message = sprintf(_("%s at %s: %s"), $str, $file, $line);
+    $message = sprintf("%s at %s: %s", $str, $file, $line);
     switch ($no) {
       case E_ERROR:
       case E_RECOVERABLE_ERROR:
@@ -108,6 +108,26 @@ namespace Ligrev {
     } else {
       return $time;
     }
+  }
+
+  function t($string, $lang = null) {
+    global $i18n, $config;
+
+    if (is_null($lang)) {
+      $lang = $config['lang'];
+    }
+
+    $opts = array();
+    foreach ($i18n as $lang => $strings) {
+      if (array_key_exists($string, $strings) && strlen($strings[$string]['msgstr'][0]) > 0) {
+        $opts[$lang] = $strings[$string]['msgstr'][0];
+      }
+    }
+    $best = \Locale::lookup(array_keys($opts), $lang, true, "en");
+    if (count($opts) == 0) {
+      return $string;
+    }
+    return $opts[$best];
   }
 
 }

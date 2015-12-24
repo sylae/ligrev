@@ -58,7 +58,7 @@ class roll extends \Ligrev\command {
 
       $st[] = $sa;
     }
-    $snd = sprintf(_("%s rolls %s"), $this->authorHTML, implode(", ", $st));
+    $snd = sprintf($this->t("%s rolls %s"), $this->authorHTML, implode(", ", $st));
     $this->_send($this->getDefaultResponse(), $snd);
   }
 

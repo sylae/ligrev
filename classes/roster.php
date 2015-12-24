@@ -40,7 +40,7 @@ class roster extends ligrevGlobals {
     }
     // Initialize the room if it doesn't exist yet.
     if (!array_key_exists($room, $this->rooms)) {
-      $this->rooms[$room] = new mucRoom();
+      $this->rooms[$room] = new mucRoom($room);
     }
 
     // Find the status codes.
@@ -72,15 +72,15 @@ class roster extends ligrevGlobals {
       // Move the roster entry to the new nick, so the new presence
       // won't trigger a notification.
       $this->rooms[$room]->renameMember($nick, $newNick);
-      l(sprintf(_("%s is now known as %s"), $nick, $newNick), $room);
+      l(sprintf("%s is now known as %s", $nick, $newNick), $room);
       $this->isNickChange = true;
     } elseif ((array_key_exists(301, $codes) && $codes[301] >= 0) || (array_key_exists(307, $codes) && $codes[307] >= 0)) { // An `unavailable` 301 is a ban; a 307 is a kick.
       $type = (array_key_exists(301, $codes) && $codes[301] >= 0) ? 'banned' : 'kicked';
       $actor = \qp($item, 'actor')->attr('nick');
       $reason = \qp($item, 'reason')->text();
-      l(sprintf(_("%s %s by %s"), $nick, $type, $actor), $room);
+      l(sprintf("%s %s by %s", $nick, $type, $actor), $room);
     } else { // Any other `unavailable` presence indicates a logout.
-      l(sprintf(_("%s left room"), $nick), $room);
+      l(sprintf("%s left room", $nick), $room);
       $this->rooms[$room]->removeMember($nick);
     }
   }
@@ -100,7 +100,7 @@ class roster extends ligrevGlobals {
     if ($this->isNickChange) {
       $this->isNickChange = false;
     } else {
-      l(sprintf(_("%s joined room"), $nick), $room);
+      l(sprintf("%s joined room", $nick), $room);
       $user->getUserTime();
     }
     $user->processTells($room);

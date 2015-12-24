@@ -53,14 +53,14 @@ class xmppEntity extends ligrevGlobals {
 
   protected function escape_class($string) {
     return $string ? preg_replace_callback('/[\\s\0\\\\]/', function ($x) {
-              return '\\' . ord($x[0]);
-            }, $string) : '';
+        return '\\' . ord($x[0]);
+      }, $string) : '';
   }
 
   protected function jid_classes() {
     return 'user jid-node-' . $this->escape_class(strtolower($this->jid->node))
-            . ' jid-domain-' . $this->escape_class($this->jid->domain)
-            . ' jid-resource-' . $this->escape_class($this->jid->resource);
+      . ' jid-domain-' . $this->escape_class($this->jid->domain)
+      . ' jid-resource-' . $this->escape_class($this->jid->resource);
   }
 
   public function generateHTML($nick = null) {
@@ -68,8 +68,8 @@ class xmppEntity extends ligrevGlobals {
     $display = str_replace('\\20', ' ', (is_string($nick) ? $nick : $this->jid->bare));
     $classes = $this->jid_classes();
     $html = "<span class=\"$classes\" data-jid=\"{$this->jid->to_string()}\""
-            . (is_string($nick) ? " data-nick=\"$nick\"" : '')
-            . ">{$display}</span>";
+      . (is_string($nick) ? " data-nick=\"$nick\"" : '')
+      . ">{$display}</span>";
     return $html;
   }
 
@@ -85,7 +85,7 @@ class xmppEntity extends ligrevGlobals {
       $recipientHTML = $this->generateHTML();
 
       $time = $this->formatUserTime($tell['sent']);
-      $message = sprintf(_("Message from %s for %s at %s:") . PHP_EOL . $tell['message'], $senderHTML, $recipientHTML, $time);
+      $message = sprintf($this->t("Message from %s for %s at %s:") . PHP_EOL . $tell['message'], $senderHTML, $recipientHTML, $time);
       if ($tell['private']) {
         $this->sendMessage($user, $message, true, "chat");
       } else {
