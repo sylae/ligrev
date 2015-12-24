@@ -15,7 +15,7 @@ $config = array();
  * Default language for Ligrev.
  * @var string
  */
-$config['lang'] = 'en_US';
+$config['lang'] = 'en';
 
 /**
  * Passed on to DBAL to connect to the database.
