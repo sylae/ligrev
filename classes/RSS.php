@@ -19,7 +19,7 @@ class RSS {
     $this->rooms = $rooms;
     $sql = $db->executeQuery('SELECT request, latest FROM rss WHERE url=? ORDER BY request DESC LIMIT 1;', array($url));
     $result = $sql->fetchAll();
-    $this->last = array_key_exists(0, $result) ? $result[0] : array("request"=>0, "latest"=>0);
+    $this->last = array_key_exists(0, $result) ? $result[0] : array("request" => 0, "latest" => 0);
     $this->updateLast = $db->prepare('
          INSERT INTO rss (url, request, latest) VALUES(?, ?, ?)
          ON DUPLICATE KEY UPDATE request=VALUES(request), latest=VALUES(latest);', array('string', 'integer', 'integer'));
@@ -69,7 +69,7 @@ class RSS {
     foreach ($newItems as $item) {
       $message = sprintf(_("New post in _%s_ / %s: (%s)[%s]"), $item->channel, $item->category, $item->title, $item->link);
       foreach ($this->rooms as $room) {
-        \Ligrev\_send($room, $message, true, "groupchat");
+        ligrevGlobals::sendMessage($room, $message, true, "groupchat");
       }
     }
   }
