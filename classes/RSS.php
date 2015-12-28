@@ -17,12 +17,12 @@ class RSS {
     $this->url = $url;
     $this->ttl = $ttl;
     $this->rooms = $rooms;
-    $sql = $db->executeQuery('SELECT request, latest FROM rss WHERE url=? ORDER BY request DESC LIMIT 1;', array($url));
+    $sql = $db->executeQuery('SELECT request, latest FROM rss WHERE url=? ORDER BY request DESC LIMIT 1;', [$url]);
     $result = $sql->fetchAll();
-    $this->last = array_key_exists(0, $result) ? $result[0] : array("request" => 0, "latest" => 0);
+    $this->last = array_key_exists(0, $result) ? $result[0] : ["request" => 0, "latest" => 0];
     $this->updateLast = $db->prepare('
          INSERT INTO rss (url, request, latest) VALUES(?, ?, ?)
-         ON DUPLICATE KEY UPDATE request=VALUES(request), latest=VALUES(latest);', array('string', 'integer', 'integer'));
+         ON DUPLICATE KEY UPDATE request=VALUES(request), latest=VALUES(latest);', ['string', 'integer', 'integer']);
     // Update once on startup, and then every TTL seconds.
     $this->update();
     \JAXLLoop::$clock->call_fun_periodic($this->ttl * 1000000, function () {
@@ -46,7 +46,7 @@ class RSS {
     $data = \qp($curl->response);
     $items = $data->find('item');
     $newest = $this->last['latest'];
-    $newItems = array();
+    $newItems = [];
     foreach ($items as $item) {
       $published = strtotime($item->find('pubDate')->text());
       if ($published <= $this->last['latest'])

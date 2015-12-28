@@ -21,7 +21,7 @@ class roll extends \Ligrev\command {
     $savdice = "/(\d*)d(\d+)e/";
     $dlist = "/(\d*)a(\d+)/";
     $savdlist = "/(\d*)a(\d+)e/";
-    $st = array();
+    $st = [];
     foreach ($strings as $i => $s) {
       $sa = preg_replace_callback($savdice, function ($m) {
         $m[2] = (($m[2] == 0) ? 1 : $m[2]);

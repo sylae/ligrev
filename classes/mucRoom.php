@@ -14,7 +14,7 @@ class mucRoom extends ligrevGlobals {
    * An array of xmppEntities, key is room nick
    * @var array
    */
-  public $members = array();
+  public $members = [];
 
   /**
    * The name/string JID of the room

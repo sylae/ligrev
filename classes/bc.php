@@ -25,17 +25,17 @@ class bc {
 
   function __construct($math) {
 
-    $remove = array(
+    $remove = [
       'read',
-    );
+    ];
     $expr = trim("scale=3; " . str_replace($remove, '', html_entity_decode($math)));
 
-    $descriptorspec = array(
-      0 => array("pipe", "r"),
-      1 => array("pipe", "w"),
-      2 => array("pipe", "w")
-    );
-    $pipes = array();
+    $descriptorspec = [
+      0 => ["pipe", "r"],
+      1 => ["pipe", "w"],
+      2 => ["pipe", "w"]
+    ];
+    $pipes = [];
 
     $process = proc_open('timeout 5 bc -l ' . $this->libs, $descriptorspec, $pipes);
 

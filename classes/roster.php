@@ -24,7 +24,7 @@ class roster extends ligrevGlobals {
    * Where we keep all of the JIDs in use by Ligrev
    * @var array
    */
-  public $jids = array();
+  public $jids = [];
 
   /**
    * Used internally to store nick changing state (otherwise duped messages appear)
@@ -68,7 +68,7 @@ class roster extends ligrevGlobals {
     // Find the status codes.
     $item = \qp($xml)->find('item');
     global $codes;
-    $codes = array();
+    $codes = [];
     \qp($xml, 'status')->map(function($index, $item) {
       global $codes;
       $c = (int) qp($item)->attr('code');

@@ -35,7 +35,7 @@ class dice {
       $result = 0;
     }
 
-    $die = array();
+    $die = [];
 
     for ($i = 0; $i < $n; $i++) {
       if ($savage) {

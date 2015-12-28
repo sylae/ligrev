@@ -78,7 +78,7 @@ namespace Ligrev {
   function rss_init() {
     global $config;
     $rss = $config['rss'];
-    $feeds = array();
+    $feeds = [];
     foreach ($rss as $feed) {
       $feeds[] = new RSS($feed['url'], $feed['rooms'], $feed['ttl']);
     }
@@ -117,7 +117,7 @@ namespace Ligrev {
       $lang = $config['lang'];
     }
 
-    $opts = array();
+    $opts = [];
     foreach ($i18n as $ilang => $strings) {
       if (array_key_exists($string, $strings) && strlen($strings[$string]['msgstr'][0]) > 0) {
         $opts[$ilang] = $strings[$string]['msgstr'][0];

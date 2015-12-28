@@ -31,7 +31,12 @@ class xmppEntity extends ligrevGlobals {
    */
   public function getUserTime() {
     $id = $this->client->get_id();
-    $resp = new \XMPPIq(array('from' => $this->client->full_jid->to_string(), 'to' => $this->jid->to_string(), 'type' => 'get', 'id' => $id));
+    $resp = new \XMPPIq([
+      'from' => $this->client->full_jid->to_string(),
+      'to' => $this->jid->to_string(),
+      'type' => 'get',
+      'id' => $id
+    ]);
     $resp->c('time', NS_TIME);
 
     $this->client->send($resp);
@@ -128,7 +133,7 @@ class xmppEntity extends ligrevGlobals {
       } else {
         $this->sendMessage($room, $message, true, "groupchat");
       }
-      $this->db->delete('tell', array('id' => $tell['id']));
+      $this->db->delete('tell', ['id' => $tell['id']]);
     }
   }
 

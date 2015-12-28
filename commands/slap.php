@@ -14,7 +14,8 @@ class slap extends \Ligrev\command {
   function process() {
     $textParts = $this->_split($this->text);
     $vic = (array_key_exists(1, $textParts) ? $textParts[1] : $this->t('Ligrev'));
-    $wep = (array_key_exists(2, $textParts) ? $textParts[2] : array_rand(array_flip(array($this->t('poach'), $this->t('salmon'), $this->t('greyling'), $this->t('coelecanth'), $this->t('trout')))));
+    $fish = [$this->t('poach'), $this->t('salmon'), $this->t('greyling'), $this->t('coelecanth'), $this->t('trout')];
+    $wep = (array_key_exists(2, $textParts) ? $textParts[2] : array_rand(array_flip($fish)));
     $this->_send($this->getDefaultResponse(), sprintf($this->t("%s slaps %s with a large %s"), $this->authorHTML, $vic, $wep));
   }
 

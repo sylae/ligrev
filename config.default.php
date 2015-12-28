@@ -9,7 +9,7 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.txt GNU General Public License 3
  * @author Sylae Jiendra Corell <sylae@calref.net>
  */
-$config = array();
+$config = [];
 
 /**
  * Default language for Ligrev.
@@ -27,11 +27,11 @@ $config['db'] = 'mysqli://user:password@localhost/database';
  * Passed on to JAXL to configure basic XMPP stuff.
  * @var array
  */
-$config['jaxl'] = array(
+$config['jaxl'] = [
   'jid' => 'ligrev@example.net',
   'pass' => 'rainbowdashisactuallybestpony',
   'host' => 'example.net',
-);
+];
 
 /**
  * The default nick to join MUC chats with.
@@ -43,7 +43,7 @@ $config['botname'] = "Ligrev";
  * A list of rooms to join. In addition, defaults may be overridden here.
  * @var array
  */
-$config['rooms'] = array();
+$config['rooms'] = [];
 
 /**
  * Send a message on room join; great if you have five bots sharing a common bot name

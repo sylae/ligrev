@@ -10,11 +10,11 @@ require_once 'includes/schema.php';
 l("Loading JAXL and connecting...", "JAXL");
 $client = new \JAXL($config['jaxl']);
 
-$client->require_xep(array(
+$client->require_xep([
   '0045', // MUC
   '0203', // Delayed Delivery
   '0199'  // XMPP Ping
-));
+]);
 
 
 $client->add_cb('on_auth_success', function() {
@@ -37,7 +37,7 @@ $client->add_cb('on_auth_success', function() {
 });
 
 $roster = new roster();
-$decks = array();
+$decks = [];
 
 $client->add_cb('on_auth_failure', function($reason) {
   global $client;

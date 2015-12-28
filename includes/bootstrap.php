@@ -22,7 +22,7 @@ l("Loading libraries...");
 require __DIR__ . '/../vendor/autoload.php';
 
 l("Loading i18n...");
-$i18n = array();
+$i18n = [];
 foreach (glob(__DIR__ . "/../i18n/*.po") as $file) {
   $lang = preg_replace_callback('/i18n\\/(.+?)\\.po/', function ($m) {
     return $m[1];
@@ -48,7 +48,7 @@ l("Scanning IQ parsers");
 foreach (glob(__DIR__ . "/../iq/*.php") as $file) {
   require_once $file;
 }
-$iq_classes = array();
+$iq_classes = [];
 foreach (get_declared_classes() as $class) {
   $c = new \ReflectionClass($class);
   if ($c->getNameSpaceName() == "Ligrev\IQ") {

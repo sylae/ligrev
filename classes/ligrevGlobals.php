@@ -33,7 +33,7 @@ class ligrevGlobals {
    * An array to store object data
    * @var array
    */
-  protected $data = array();
+  protected $data = [];
 
   /**
    * If available, a reference to the main roster object

@@ -31,7 +31,7 @@ class faq extends \Ligrev\command {
         return;
       }
       // check if the key already exists, if so, don't do anything.
-      $sql = $this->db->prepare('SELECT * FROM faq WHERE room = ? AND keyword = ?', array("string", "string"));
+      $sql = $this->db->prepare('SELECT * FROM faq WHERE room = ? AND keyword = ?', ["string", "string"]);
       $sql->bindValue(1, $this->room, "string");
       $sql->bindValue(2, $code, "string");
       $sql->execute();
@@ -41,7 +41,7 @@ class faq extends \Ligrev\command {
         return;
       }
 
-      $sql = $this->db->prepare('INSERT INTO faq (author, room, message, keyword) VALUES(?, ?, ?, ?);', array('string', 'string', 'string', 'string'));
+      $sql = $this->db->prepare('INSERT INTO faq (author, room, message, keyword) VALUES(?, ?, ?, ?);', ['string', 'string', 'string', 'string']);
       $sql->bindValue(1, $this->fromJID->jid->bare, "string");
       $sql->bindValue(2, $this->room, "string");
       $sql->bindValue(3, $message, "string");
@@ -50,7 +50,7 @@ class faq extends \Ligrev\command {
       $this->_send($this->getDefaultResponse(), sprintf($this->t("FAQ with keyword %s added."), $code));
       return;
     } else {
-      $sql = $this->db->prepare('SELECT * FROM faq WHERE room = ? AND keyword = ?', array("string", "string"));
+      $sql = $this->db->prepare('SELECT * FROM faq WHERE room = ? AND keyword = ?', ["string", "string"]);
       $sql->bindValue(1, $this->room, "string");
       $sql->bindValue(2, $set, "string");
       $sql->execute();

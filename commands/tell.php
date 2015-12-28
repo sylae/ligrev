@@ -47,7 +47,7 @@ class tell extends \Ligrev\command {
       $this->_send($this->getDefaultResponse(), sprintf($this->t("Error: %s"), sprintf($this->t("%s already online. Contact user directly."), $recipientHTML)));
       return false;
     }
-    $sql = $db->prepare('INSERT INTO tell (sender, recipient, sent, private, message) VALUES(?, ?, ?, ?, ?);', array('string', 'string', 'integer', 'boolean', 'string'));
+    $sql = $db->prepare('INSERT INTO tell (sender, recipient, sent, private, message) VALUES(?, ?, ?, ?, ?);', ['string', 'string', 'integer', 'boolean', 'string']);
     $sql->bindValue(1, $this->fromJID->jid->bare, "string");
     $sql->bindValue(2, $recipient, "string");
     $sql->bindValue(3, time(), "integer");

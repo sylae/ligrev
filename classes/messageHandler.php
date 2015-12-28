@@ -41,7 +41,7 @@ class messageHandler {
       $this->room = $this->from->bare;
       $this->author = $this->from->resource;
       $preg = "/^[\/:!](\w+)(\s|$)/";
-      if (!in_array($this->author[0], array(':', '!', '/')) && preg_match($preg, $this->text, $match) && class_exists("Ligrev\\Command\\" . $match[1])) {
+      if (!in_array($this->author[0], [':', '!', '/']) && preg_match($preg, $this->text, $match) && class_exists("Ligrev\\Command\\" . $match[1])) {
         $class = "Ligrev\\Command\\" . $match[1];
         $command = new $class($stanza, $this->origin);
         $command->process();

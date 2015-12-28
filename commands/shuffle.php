@@ -18,14 +18,14 @@ class shuffle extends \Ligrev\command {
       $this->_send($this->getDefaultResponse(), $this->t("Cannot use cards in private context."));
       return;
     }
-    $decks[$this->room] = array();
-    $suits = array(
+    $decks[$this->room] = [];
+    $suits = [
       $this->t('Hearts'),
       $this->t('Diamonds'),
       $this->t('Clubs'),
       $this->t('Spades'),
-    );
-    $nums = array(
+    ];
+    $nums = [
       $this->t('Ace'),
       $this->t('Two'),
       $this->t('Three'),
@@ -39,7 +39,7 @@ class shuffle extends \Ligrev\command {
       $this->t('Jack'),
       $this->t('Queen'),
       $this->t('King'),
-    );
+    ];
     $c = 1;
     while ($c <= 54) {
       if ($c >= 53) {
