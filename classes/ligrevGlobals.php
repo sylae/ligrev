@@ -101,16 +101,6 @@ class ligrevGlobals {
    */
   public static function sendMessage($to, $text, $isMarkdown = true, $origin = "groupchat") {
     global $client;
-    if ($isMarkdown) {
-      // TODO: fuck all this, do it properly
-      $Pd = new \Parsedown();
-      $html = trim($Pd->text($text));
-      $md = strip_tags($text);
-      $qp = "<body>$md</body><html xmlns=\"http://jabber.org/protocol/xhtml-im\"><body xmlns=\"http://www.w3.org/1999/xhtml\">$html</body></html>";
-    } else {
-      $qp = '<body>' . strip_tags($text) . '</body>';
-    }
-    $body = new rawXML($qp);
     $msg = new \XMPPMsg(
       array(
       'type' => (($origin == "groupchat") ? "groupchat" : "chat"),
@@ -118,7 +108,15 @@ class ligrevGlobals {
       'from' => $client->full_jid->to_string(),
       )
     );
-    $msg->cnode($body);
+    $plaintext = new rawXML(strip_tags($text));
+    $msg->c('body')->cnode($plaintext)->up()->up();
+    if ($isMarkdown) {
+      $md = new \Parsedown();
+      $html = trim($md->text($text));
+      $msg->c('html', 'http://jabber.org/protocol/xhtml-im');
+      $msg->c('body', 'http://www.w3.org/1999/xhtml');
+      $msg->cnode(new RawXML($html));
+    }
     $client->send($msg);
   }
 
