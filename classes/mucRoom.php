@@ -76,7 +76,6 @@ class mucRoom extends ligrevGlobals {
    */
   public function jidToNick(\XMPPJid $jid, $resource_sensitive = true) {
     foreach ($this->members as $nick => $member) {
-      var_dump($member->jid->to_string(), $jid->to_string());
       if ($resource_sensitive && $jid->to_string() == $member->jid->to_string()) {
         return $nick;
       } elseif (!$resource_sensitive && $jid->bare == $member->jid->bare) {
