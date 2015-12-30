@@ -47,22 +47,28 @@ $client->add_cb('on_auth_failure', function($reason) {
 
 // Where the magic happens. "Magic" "Happens". I dunno why I type this either.
 $client->add_cb('on_groupchat_message', function($stanza) {
+  l($stanza->to_string(), "RECV", L_DEBUG);
   new messageHandler($stanza, "groupchat");
 });
 $client->add_cb('on_chat_message', function($stanza) {
+  l($stanza->to_string(), "RECV", L_DEBUG);
   new messageHandler($stanza, "chat");
 });
 $client->add_cb('on_presence_stanza', function($stanza) {
+  l($stanza->to_string(), "RECV", L_DEBUG);
   global $roster;
   $roster->ingest($stanza);
 });
 $client->add_cb('on_result_iq', function($stanza) {
+  l($stanza->to_string(), "RECV", L_DEBUG);
   new iqHandler($stanza);
 });
 $client->add_cb('on_get_iq', function($stanza) {
+  l($stanza->to_string(), "RECV", L_DEBUG);
   new iqHandler($stanza);
 });
 $client->add_cb('on_error_iq', function($stanza) {
+  l($stanza->to_string(), "RECV", L_DEBUG);
   new iqHandler($stanza);
 });
 
