@@ -66,3 +66,9 @@ $config['defaultTellDomain'] = false;
  * @var boolean
  */
 $config['tellCaseSensitive'] = false;
+
+/**
+ * Whether or not to disclose the system OS via XEP-0092.
+ * @var boolean
+ */
+$config['discloseOSwithXEP0092'] = true;
