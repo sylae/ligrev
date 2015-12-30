@@ -10,6 +10,8 @@
 
 namespace Ligrev\IQ;
 
+define("NS_TIME", 'urn:xmpp:time');
+
 class xep_0202 extends \Ligrev\iq {
 
   static function canUse(\XMPPStanza $stanza, \QueryPath\DOMQuery $qp) {

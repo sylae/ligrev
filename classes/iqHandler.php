@@ -9,8 +9,6 @@
 
 namespace Ligrev;
 
-define("NS_TIME", 'urn:xmpp:time');
-
 class iqHandler {
 
   protected $stanza;
