@@ -67,7 +67,7 @@ class RSS {
     $this->updateLast->bindValue(3, $this->last['latest'], "integer");
     $this->updateLast->execute();
     foreach ($newItems as $item) {
-      $message = sprintf(_("New post in _%s_ / %s: (%s)[%s]"), $item->channel, $item->category, $item->title, $item->link);
+      $message = sprintf(_("New post in _%s_ / %s: [%s](%s)"), $item->channel, $item->category, $item->title, $item->link);
       foreach ($this->rooms as $room) {
         ligrevGlobals::sendMessage($room, $message, true, "groupchat");
       }
