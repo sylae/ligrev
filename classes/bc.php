@@ -37,7 +37,12 @@ class bc {
     ];
     $pipes = [];
 
-    $process = proc_open('timeout 5 bc -l ' . $this->libs, $descriptorspec, $pipes);
+    if (php_uname('s') == "Windows NT") {
+      // currently, timeout does something completely dfferent on windows
+      $process = proc_open('bc -l ' . $this->libs, $descriptorspec, $pipes);
+    } else {
+      $process = proc_open('timeout 5 bc -l ' . $this->libs, $descriptorspec, $pipes);
+    }
 
     if (is_resource($process)) {
       fwrite($pipes[0], $expr . PHP_EOL);
