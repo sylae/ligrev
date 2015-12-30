@@ -134,6 +134,20 @@ namespace Ligrev {
     return $opts[$best];
   }
 
+  function caps_sort($a, $b) {
+    $sca = $a['rating'];
+    $scb = $b['rating'];
+    $na = $a['reviews'];
+    $nb = $b['reviews'];
+    if ($sca == $scb) {
+      if ($na == $nb) {
+        return 0;
+      }
+      return ($na > $nb) ? -1 : 1;
+    }
+    return ($sca > $scb) ? -1 : 1;
+  }
+
 }
 
 namespace Ligrev\Command {

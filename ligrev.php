@@ -16,11 +16,37 @@ $client->require_xep([
   '0199'  // XMPP Ping
 ]);
 
+require_once __DIR__ . '/includes/disco_id.php';
 
 $client->add_cb('on_auth_success', function() {
-  global $client, $config;
+  global $client, $config, $disco;
   l(sprintf("Connected with jid %s", $client->full_jid->to_string()), "JAXL");
-  $client->set_status("", "chat", 10);
+
+  /**
+   * Why not use $client->set_status()? Well, a very popular XMPP messenger
+   * buggily does not send a service disco (0030) if the client it is interested
+   * in doesn't support XEP-0115. So we've basically had to rewrite JAXL's
+   * presence info here, to bodge in XEP-0115 saupport.
+   *
+   * Also, JAXL's XEP-0115 xep/ class is...lacking.
+   */
+  $S = "";
+  $S_id = [];
+  foreach ($disco['identity'] as $id) {
+    $S_id[] = "{$id[0]}/{$id[1]}/{$id[2]}/{$id[3]}<";
+  }
+  sort($S_id);
+  foreach ($S_id as $id) {
+    $S .= $id;
+  }
+  foreach ($disco['features'] as $feature) {
+    $S .= $feature . "<";
+  }
+
+  $pres = new \XMPPPres(['from' => $client->full_jid->to_string()], '', 'chat', 10);
+  $pres->id = $client->get_id();
+  $pres->c("c", NS_CAPS, ['hash' => 'sha-1', 'node' => 'https://github.com/sylae/ligrev', 'ver' => base64_encode(sha1($S, true))]);
+  $client->send($pres);
 
   foreach ($config['rooms'] as $jid => $conf) {
     $c = array_merge($config, $conf);
