@@ -38,7 +38,7 @@ abstract class iq {
    * This function will be called to populate XEP-0030 support (disco).
    *
    * @link http://xmpp.org/registrar/disco-features.html
-   * @return boolean|string A string containing a disco feature string, or false if the IQ doesn't provide one
+   * @return array An array of strings, each containing a disco feature string
    */
   abstract static public function disco();
 

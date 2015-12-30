@@ -19,7 +19,7 @@ class xep_0202 extends \Ligrev\iq {
   }
 
   static function disco() {
-    return NS_TIME;
+    return [NS_TIME];
   }
 
   function process(\XMPPStanza $stanza) {
