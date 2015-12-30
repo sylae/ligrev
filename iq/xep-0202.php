@@ -18,6 +18,10 @@ class xep_0202 extends \Ligrev\iq {
     return (\qp($qp, 'time')->attr('xmlns') == NS_TIME && $stanza->type == "get");
   }
 
+  static function disco() {
+    return NS_TIME;
+  }
+
   function process(\XMPPStanza $stanza) {
 
     $resp = new \XMPPIq(array('from' => $this->client->full_jid->to_string(), 'to' => $stanza->from, 'type' => 'result', 'id' => $stanza->id));

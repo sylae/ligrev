@@ -35,6 +35,14 @@ abstract class iq {
   abstract static public function canUse(\XMPPStanza $stanza, \QueryPath\DOMQuery $qp);
 
   /**
+   * This function will be called to populate XEP-0030 support (disco).
+   *
+   * @link http://xmpp.org/registrar/disco-features.html
+   * @return boolean|string A string containing a disco feature string, or false if the IQ doesn't provide one
+   */
+  abstract static public function disco();
+
+  /**
    * If the class can use this IQ, this will be called. Send responses, use the db, knock yourself out
    * @param \XMPPStanza $stanza The IQ stanza sent by the server
    */
