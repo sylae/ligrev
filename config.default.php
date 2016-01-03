@@ -46,6 +46,12 @@ $config['botname'] = "Ligrev";
 $config['rooms'] = [];
 
 /**
+ * A list of RSS feeds to crawl.
+ * @var array
+ */
+$config['rss'] = [];
+
+/**
  * Send a message on room join; great if you have five bots sharing a common bot name
  * @var boolean
  */
