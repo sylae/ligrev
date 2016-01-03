@@ -139,7 +139,7 @@ class roster extends ligrevGlobals {
       l(sprintf("%s joined room", $nick), $room);
       $user->getUserTime();
     }
-    $user->processTells($room);
+    $user->processTells($room, $nick);
   }
 
   /**

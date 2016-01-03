@@ -115,8 +115,9 @@ class xmppEntity extends ligrevGlobals {
   /**
    * Check if the user has any pending :tell messages
    * @param string $room The room the user has joined, for public :tells
+   * @param string $nick The user's nick, for private :tells
    */
-  function processTells($room) {
+  function processTells($room, $nick = null) {
     $sql = $this->db->prepare('SELECT * FROM tell WHERE recipient = ? ORDER BY sent ASC', array("string"));
     $sql->bindValue(1, str_replace("\\20", " ", $this->jid->bare), "string");
     $sql->execute();
@@ -129,7 +130,9 @@ class xmppEntity extends ligrevGlobals {
       $time = $this->formatUserTime($tell['sent']);
       $message = sprintf($this->t("Message from %s for %s at %s:") . PHP_EOL . $tell['message'], $senderHTML, $recipientHTML, $time);
       if ($tell['private']) {
-        $this->sendMessage($this->jid->bare, $message, true, "chat");
+        $jid = new \XMPPJid($room);
+        $jid->resource = $nick;
+        $this->sendMessage($jid, $message, true, "chat");
       } else {
         $this->sendMessage($room, $message, true, "groupchat");
       }
