@@ -128,7 +128,7 @@ class xmppEntity extends ligrevGlobals {
       $recipientHTML = $this->generateHTML();
 
       $time = $this->formatUserTime($tell['sent']);
-      $message = sprintf($this->t("Message from %s for %s at %s:") . PHP_EOL . $tell['message'], $senderHTML, $recipientHTML, $time);
+      $message = sprintf($this->t("Message from %s for %s at %s:"), $senderHTML, $recipientHTML, $time) . PHP_EOL . $tell['message'];
       if ($tell['private']) {
         $jid = new \XMPPJid($room);
         $jid->resource = $nick;
