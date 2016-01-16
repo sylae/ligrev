@@ -10,4 +10,4 @@ Requirements
 
 * PHP 5
 * GNU bc
-* Some sort of SQl database (MySQL, PostgreSQL, SQLite, or any of those hipster databases, as long as it's supported by Doctrine/DBAL)
+* Some sort of SQL database (MySQL, PostgreSQL, SQLite, or any of those hipster databases, as long as it's supported by Doctrine/DBAL)
