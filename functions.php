@@ -9,7 +9,9 @@
 
 namespace Ligrev {
 
-  define("V_LIGREV", trim(`git rev-parse HEAD`));
+  // Check if Ligrev has been modified locally.
+  exec("git diff --quiet HEAD", $null, $rv);
+  define("V_LIGREV", trim(`git rev-parse HEAD`) . ($rv == 1 ? "-modified" : ""));
 
   define("L_DEBUG", 0);
   define("L_INFO", 1);
