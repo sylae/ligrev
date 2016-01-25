@@ -67,13 +67,6 @@ $config['announceOnStart'] = true;
 $config['defaultTellDomain'] = false;
 
 /**
- * Whether or not :tell is case-sensitive for username matching. To comply with the XMPP
- * spec, set this to false.
- * @var boolean
- */
-$config['tellCaseSensitive'] = false;
-
-/**
  * Whether or not to disclose the system OS via XEP-0092.
  * @var boolean
  */
