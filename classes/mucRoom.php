@@ -78,7 +78,7 @@ class mucRoom extends ligrevGlobals {
     foreach ($this->members as $nick => $member) {
       if ($resource_sensitive && mb_strtolower($jid->to_string()) == mb_strtolower($member->jid->to_string())) {
         return $nick;
-      } elseif (!$resource_sensitive && $jid->bare == $member->jid->bare) {
+      } elseif (!$resource_sensitive && mb_strtolower($jid->bare) == mb_strtolower($member->jid->bare)) {
         return $nick;
       }
     }
