@@ -132,8 +132,8 @@ class xmppEntity extends ligrevGlobals {
     $tells = $sql->fetchAll();
     foreach ($tells as $tell) {
       $sender = new xmppEntity(new \XMPPJid($tell['sender']));
-      $senderHTML = $sender->generateHTML();
-      $recipientHTML = $this->generateHTML();
+      $senderHTML = $sender->generateHTML($this->roster->onlineByJID($sender, $room) ? $this->roster->rooms[$room]->jidToNick($sender->jid, false) : null);
+      $recipientHTML = $this->generateHTML(is_string($nick) ? $nick : null);
 
       $time = $this->formatUserTime($tell['sent']);
       $message = sprintf($this->t("Message from %s for %s at %s:"), $senderHTML, $recipientHTML, $time) . PHP_EOL . $tell['message'];
