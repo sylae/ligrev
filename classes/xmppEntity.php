@@ -27,6 +27,14 @@ class xmppEntity extends ligrevGlobals {
   }
 
   /**
+   * Magic method
+   * @return string JID as a string
+   */
+  public function __toString() {
+    return $this->jid->to_string();
+  }
+
+  /**
    * Send an IQ to get a user's timezone
    */
   public function getUserTime() {
