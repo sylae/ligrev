@@ -145,13 +145,16 @@ class roster extends ligrevGlobals {
   /**
    * Check the rooms to see if a given JID is online
    * @param \XMPPJid $id The JID to check for
+   * @param string $room If given, only search this room in particular
    * @return boolean True if found, false otherwise
    */
-  function onlineByJID($id) {
+  function onlineByJID($id, $room = null) {
     $id = new \XMPPJid(str_replace(" ", "\\20", $id));
     foreach ($this->rooms as $name => $mucRoomObj) {
       $found = $mucRoomObj->jidToNick($id, false);
-      if ($found) {
+      if ($found && is_null($room)) {
+        return true;
+      } elseif ($found && is_string($room) && $room == $name) {
         return true;
       }
     }
