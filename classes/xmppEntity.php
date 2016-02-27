@@ -18,6 +18,12 @@ class xmppEntity extends ligrevGlobals {
   public $jid;
 
   /**
+   * Last time the user was seen active
+   * @var int Unix timestamp.
+   */
+  public $lastActivity;
+
+  /**
    * Constructor
    * @param \XMPPJid $jid The JID of the user in question
    */
@@ -32,6 +38,15 @@ class xmppEntity extends ligrevGlobals {
    */
   public function __toString() {
     return $this->jid->to_string();
+  }
+
+  /**
+   * Update the activity counter
+   * @return boolean true
+   */
+  public function active() {
+    $this->lastActivity = time();
+    return true;
   }
 
   /**

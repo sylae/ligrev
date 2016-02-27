@@ -66,6 +66,8 @@ class mucRoom extends ligrevGlobals {
   public function renameMember($oldnick, $newnick) {
     $this->members[$newnick] = $this->members[$oldnick];
     $this->removeMember($oldnick);
+
+    $this->members[$newnick]->active();
   }
 
   /**

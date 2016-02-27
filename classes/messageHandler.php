@@ -40,6 +40,12 @@ class messageHandler {
       $this->text = $this->stanza->body;
       $this->room = $this->from->bare;
       $this->author = $this->from->resource;
+
+      $real_jid = $roster->rooms[$this->room]->nickToEntity($this->author);
+      if ($real_jid instanceof xmppEntity) {
+        $real_jid->active();
+      }
+
       $preg = "/^[\/:!](\w+)(\s|$)/";
       if (!in_array($this->author[0], [':', '!', '/']) && preg_match($preg, $this->text, $match) && class_exists("Ligrev\\Command\\" . $match[1])) {
         $class = "Ligrev\\Command\\" . $match[1];

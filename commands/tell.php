@@ -43,7 +43,7 @@ class tell extends \Ligrev\command {
     $recipientHTML = $rec->generateHTML();
 
     // Let's make sure the user isn't already online.
-    if ($roster->onlineByJID($recipient)) {
+    if ($roster->onlineByJID($recipient) && (time() - $roster->onlineByJID($recipient, null, true)->lastActivity < $this->config['afkThreshold'])) {
       $this->_send($this->getDefaultResponse(), sprintf($this->t("Error: %s"), sprintf($this->t("%s already online. Contact user directly."), $recipientHTML)));
       return false;
     }

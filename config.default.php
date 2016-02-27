@@ -71,3 +71,9 @@ $config['defaultTellDomain'] = false;
  * @var boolean
  */
 $config['discloseOSwithXEP0092'] = true;
+
+/**
+ * Time, in seconds, before a user is considered AFK by ligrev
+ * @var integer
+ */
+$config['afkThreshold'] = 1800;

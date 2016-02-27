@@ -18,7 +18,7 @@ class roster extends ligrevGlobals {
    * An array of rooms. Key is room jid, value is a \Ligrev\mucRoom object
    * @var array
    */
-  public $rooms = array();
+  public $rooms = [];
 
   /**
    * Where we keep all of the JIDs in use by Ligrev
@@ -139,6 +139,8 @@ class roster extends ligrevGlobals {
       l(sprintf("%s joined room", $nick), $room);
       $user->getUserTime();
     }
+
+    // TODO: get XEP-0256 info if possible, use it to update user activity timer
     $user->processTells($room, $nick);
   }
 
@@ -146,16 +148,17 @@ class roster extends ligrevGlobals {
    * Check the rooms to see if a given JID is online
    * @param \XMPPJid $id The JID to check for
    * @param string $room If given, only search this room in particular
-   * @return boolean True if found, false otherwise
+   * @param bool $return_obj If true, return the object itself instead of a bool
+   * @return boolean|xmppEntity True/object if found, false otherwise
    */
-  function onlineByJID($id, $room = null) {
+  function onlineByJID($id, $room = null, $return_obj = false) {
     $id = new \XMPPJid(str_replace(" ", "\\20", $id));
     foreach ($this->rooms as $name => $mucRoomObj) {
       $found = $mucRoomObj->jidToNick($id, false);
       if ($found && is_null($room)) {
-        return true;
+        return $return_obj ? $mucRoomObj->nickToEntity($found) : true;
       } elseif ($found && is_string($room) && $room == $name) {
-        return true;
+        return $return_obj ? $mucRoomObj->nickToEntity($found) : true;
       }
     }
     return false;
