@@ -44,6 +44,7 @@ class messageHandler {
       $real_jid = $roster->rooms[$this->room]->nickToEntity($this->author);
       if ($real_jid instanceof xmppEntity) {
         $real_jid->active();
+        $real_jid->processTells($this->room);
       }
 
       $preg = "/^[\/:!](\w+)(\s|$)/";
