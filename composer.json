@@ -5,6 +5,7 @@
     "php-curl-class/php-curl-class": "^4.8",
     "erusev/parsedown": "^1.6",
     "abhinavsingh/jaxl": "3.x-dev",
-    "sepia/po-parser": "dev-master"
+    "sepia/po-parser": "dev-master",
+    "monolog/monolog": "^1.18"
   }
 }
