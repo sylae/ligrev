@@ -2,12 +2,14 @@
 
 namespace Ligrev;
 
+use Monolog\Registry;
+
 require_once 'includes/bootstrap.php';
 
 // Database stuff is a bit heavy, so it's thrown in an include to keep this area tidy.
 require_once 'includes/schema.php';
 
-l("Loading JAXL and connecting...", "JAXL");
+Registry::JAXL()->debug("Initializing JAXL");
 $client = new \JAXL($config['jaxl']);
 
 $client->require_xep([
@@ -20,7 +22,7 @@ require_once __DIR__ . '/includes/disco_id.php';
 
 $client->add_cb('on_auth_success', function() {
   global $client, $config, $disco;
-  l(sprintf("Connected with jid %s", $client->full_jid->to_string()), "JAXL");
+  Registry::JAXL()->debug("Connected to XMPP Server", ['jid' => $client->full_jid->to_string()]);
 
   /**
    * Why not use $client->set_status()? Well, a very popular XMPP messenger
@@ -51,9 +53,9 @@ $client->add_cb('on_auth_success', function() {
   foreach ($config['rooms'] as $jid => $conf) {
     $c = array_merge($config, $conf);
     $room = new \XMPPJid($jid . '/' . $c['botname']);
-    l(sprintf("Joining room %s", $room->to_string()), "JAXL");
+    Registry::JAXL()->debug("Joining room", ['room' => $room->to_string()]);
     $client->xeps['0045']->join_room($room);
-    l(sprintf("Joined room %s", $room->to_string()), "JAXL");
+    Registry::JAXL()->info("Joined room", ['room' => $room->to_string()]);
     if ($c['announceOnStart']) {
       $lv = V_LIGREV;
       ligrevGlobals::sendMessage($room->bare, sprintf(_("Ligrev version %s now online."), "[$lv](https://github.com/sylae/ligrev/commit/$lv)"));
@@ -68,33 +70,33 @@ $decks = [];
 $client->add_cb('on_auth_failure', function($reason) {
   global $client;
   $client->send_end_stream();
-  l(sprintf("Auth failure: %s", $reason), "JAXL", L_WARN);
+  Registry::JAXL()->error("Authentication failure", ['reason' => $reason]);
 });
 
 // Where the magic happens. "Magic" "Happens". I dunno why I type this either.
 $client->add_cb('on_groupchat_message', function($stanza) {
-  l($stanza->to_string(), "RECV", L_DEBUG);
+  Registry::STREAM()->debug("Stanza received", ['callback' => func_get_arg(0), 'stanza' => $stanza->to_string()]);
   new messageHandler($stanza, "groupchat");
 });
 $client->add_cb('on_chat_message', function($stanza) {
-  l($stanza->to_string(), "RECV", L_DEBUG);
+  Registry::STREAM()->debug("Stanza received", ['callback' => func_get_arg(0), 'stanza' => $stanza->to_string()]);
   new messageHandler($stanza, "chat");
 });
 $client->add_cb('on_presence_stanza', function($stanza) {
-  l($stanza->to_string(), "RECV", L_DEBUG);
+  Registry::STREAM()->debug("Stanza received", ['callback' => func_get_arg(0), 'stanza' => $stanza->to_string()]);
   global $roster;
   $roster->ingest($stanza);
 });
 $client->add_cb('on_result_iq', function($stanza) {
-  l($stanza->to_string(), "RECV", L_DEBUG);
+  Registry::STREAM()->debug("Stanza received", ['callback' => func_get_arg(0), 'stanza' => $stanza->to_string()]);
   new iqHandler($stanza);
 });
 $client->add_cb('on_get_iq', function($stanza) {
-  l($stanza->to_string(), "RECV", L_DEBUG);
+  Registry::STREAM()->debug("Stanza received", ['callback' => func_get_arg(0), 'stanza' => $stanza->to_string()]);
   new iqHandler($stanza);
 });
 $client->add_cb('on_error_iq', function($stanza) {
-  l($stanza->to_string(), "RECV", L_DEBUG);
+  Registry::STREAM()->debug("Stanza received", ['callback' => func_get_arg(0), 'stanza' => $stanza->to_string()]);
   new iqHandler($stanza);
 });
 

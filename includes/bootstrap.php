@@ -9,19 +9,20 @@
 
 namespace Ligrev;
 
+// initialize all the composer shit
+require __DIR__ . '/../vendor/autoload.php';
+
+// first things first, lets get proper logging online
+require_once __DIR__ . '/logger.php';
+
+// now load all the other basic stuff
 require_once __DIR__ . '/../functions.php';
 
-set_error_handler("Ligrev\\php_error_handler");
 
 // Hey, let's load some things
-l("Reading config.php...");
 require_once __DIR__ . '/../config.default.php';
 require_once __DIR__ . '/../config.php';
 
-l("Loading libraries...");
-require __DIR__ . '/../vendor/autoload.php';
-
-l("Loading i18n...");
 $i18n = [];
 foreach (glob(__DIR__ . "/../i18n/*.po") as $file) {
   $lang = preg_replace_callback('/i18n\\/(.+?)\\.po/', function ($m) {
@@ -30,13 +31,11 @@ foreach (glob(__DIR__ . "/../i18n/*.po") as $file) {
   $i18n[$lang] = \Sepia\PoParser::parseFile($file)->getEntries();
 }
 
-l("Loading core classes");
 require_once __DIR__ . '/../classes/ligrevGlobals.php';
 foreach (glob("classes/*.php") as $file) {
   require_once $file;
 }
 
-l("Registering SPL command autoloader");
 spl_autoload_register(function ($class) {
   $class = str_replace("Ligrev\\Command\\", "", $class);
   if (file_exists(__DIR__ . "/../commands/$class.php")) {
@@ -44,7 +43,6 @@ spl_autoload_register(function ($class) {
   }
 });
 
-l("Scanning IQ parsers");
 foreach (glob(__DIR__ . "/../iq/*.php") as $file) {
   require_once $file;
 }

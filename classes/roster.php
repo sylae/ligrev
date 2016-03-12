@@ -2,6 +2,8 @@
 
 namespace Ligrev;
 
+use Monolog\Registry;
+
 /**
  * Handles our entire user roster management. Uses querypath because
  * sweet christ, JAXL has a shitty XML parser...
@@ -101,15 +103,15 @@ class roster extends ligrevGlobals {
       // Move the roster entry to the new nick, so the new presence
       // won't trigger a notification.
       $this->rooms[$room]->renameMember($nick, $newNick);
-      l(sprintf("%s is now known as %s", $nick, $newNick), $room);
+      Registry::ROSTER()->info("Username change", ['nick' => $newNick, 'old_nick' => $nick, 'room' => $room]);
       $this->isNickChange = true;
     } elseif ((array_key_exists(301, $codes) && $codes[301] >= 0) || (array_key_exists(307, $codes) && $codes[307] >= 0)) { // An `unavailable` 301 is a ban; a 307 is a kick.
       $type = (array_key_exists(301, $codes) && $codes[301] >= 0) ? 'banned' : 'kicked';
       $actor = \qp($item, 'actor')->attr('nick');
       $reason = \qp($item, 'reason')->text();
-      l(sprintf("%s %s by %s", $nick, $type, $actor), $room);
+      Registry::ROSTER()->info("User booted from chat", ['nick' => $nick, 'type' => $type, 'actor' => $actor, 'reason' => $reason, 'room' => $room]);
     } else { // Any other `unavailable` presence indicates a logout.
-      l(sprintf("%s left room", $nick), $room);
+      Registry::ROSTER()->info("User left room", ['nick' => $nick, 'room' => $room]);
       $this->rooms[$room]->removeMember($nick);
     }
   }
@@ -136,7 +138,7 @@ class roster extends ligrevGlobals {
     if ($this->isNickChange) {
       $this->isNickChange = false;
     } else {
-      l(sprintf("%s joined room", $nick), $room);
+      Registry::ROSTER()->info("User joined room", ['nick' => $nick, 'room' => $room]);
       $user->getUserTime();
     }
 

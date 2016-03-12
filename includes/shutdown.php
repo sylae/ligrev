@@ -13,16 +13,18 @@
 
 namespace Ligrev;
 
+use Monolog\Registry;
+
 $ligrev_inhibit_auto_restart = false;
 
 register_shutdown_function(function() {
   global $ligrev_inhibit_auto_restart;
 
   if ($ligrev_inhibit_auto_restart) {
-    l("Auto restart inhibited...exiting with status code 0.");
+    Registry::CORE()->warning("Auto restart has been inhibited. Ligrev shutting down", ['status_code' => 0]);
     die(0);
   } else {
-    l("Auto restarting...exiting with status code 1.");
+    Registry::CORE()->notice("Ligrev shutting down with intent to restart", ['status_code' => 1]);
     die(1);
   }
 });
