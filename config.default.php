@@ -77,3 +77,16 @@ $config['discloseOSwithXEP0092'] = true;
  * @var integer
  */
 $config['afkThreshold'] = 1800;
+
+/**
+ * List of JIDs to send log messages to
+ * @var array
+ */
+$config['remoteLogRecipients'] = [];
+
+/**
+ * Send messages no faster than this rate (in seconds).
+ * For example, "5" will send one message packet every five seconds.
+ * Note that a packet can contain multiple messages.
+ */
+$config['remoteLogThrottle'] = 5;

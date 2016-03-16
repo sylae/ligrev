@@ -62,6 +62,7 @@ $client->add_cb('on_auth_success', function() {
     }
   }
   rss_init();
+  remoteLog_init();
 });
 
 $roster = new roster();

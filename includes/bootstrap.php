@@ -13,6 +13,7 @@ namespace Ligrev;
 require __DIR__ . '/../vendor/autoload.php';
 
 // first things first, lets get proper logging online
+require_once __DIR__ . '/../classes/xmppLogHandler.php';
 require_once __DIR__ . '/logger.php';
 
 // now load all the other basic stuff

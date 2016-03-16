@@ -13,6 +13,8 @@ namespace Ligrev {
   exec("git diff --quiet HEAD", $null, $rv);
   define("V_LIGREV", trim(`git rev-parse HEAD`) . ($rv == 1 ? "-modified" : ""));
 
+  define("NS_EVENT_LOGGING", "urn:xmpp:eventlog");
+
   function rss_init() {
     global $config;
     $rss = $config['rss'];
@@ -20,6 +22,112 @@ namespace Ligrev {
     foreach ($rss as $feed) {
       $feeds[] = new RSS($feed['url'], $feed['rooms'], $feed['ttl']);
     }
+  }
+
+  function remoteLog_init() {
+    global $config;
+    \JAXLLoop::$clock->call_fun_periodic($config['remoteLogThrottle'] * 1000000, function () {
+      global $_xmppLogHandler_messageQueue, $client, $config;
+
+      if (count($_xmppLogHandler_messageQueue) < 1) {
+        return;
+      }
+
+      foreach ($config['remoteLogRecipients'] as $recipient) {
+        $msg = new \XMPPMsg(
+          array(
+          'type' => "chat",
+          'to' => $recipient,
+          'from' => $client->full_jid->to_string(),
+          )
+        );
+        foreach ($_xmppLogHandler_messageQueue as $item) {
+          switch ($item['level']) {
+            case \Monolog\Logger::DEBUG:
+              $type = "Debug";
+              break;
+            case \Monolog\Logger::INFO:
+              $type = "Informational";
+              break;
+            case \Monolog\Logger::NOTICE:
+              $type = "Notice";
+              break;
+            case \Monolog\Logger::WARNING:
+              $type = "Warning";
+              break;
+            case \Monolog\Logger::ERROR:
+              $type = "Error";
+              break;
+            case \Monolog\Logger::CRITICAL:
+              $type = "Critical";
+              break;
+            case \Monolog\Logger::ALERT:
+              $type = "Alert";
+              break;
+            case \Monolog\Logger::EMERGENCY:
+              $type = "Emergency";
+              break;
+          }
+          $msg->c('log', NS_EVENT_LOGGING, [
+            'timestamp' => $xmpptime = $item['datetime']->format(\DateTime::ATOM),
+            "type" => $type,
+            "module" => $item['channel'],
+          ]);
+          $msg->c("message", null, [], $item['message'])->up();
+          foreach ($item['context'] as $tag => $value) {
+            switch (gettype($value)) {
+              case "boolean":
+                $type = "xs:boolean";
+                break;
+              case "integer":
+                $type = "xs:integer";
+                break;
+              case "double":
+                $type = "xs:double";
+                break;
+              case "string":
+                $type = "xs:string";
+                break;
+              default:
+                $type = NULL;
+                break;
+            }
+            $attrs = [
+              'name' => $tag,
+              'value' => $value,
+            ];
+            if (!is_null($type)) {
+              $attrs['type'] = $type;
+            }
+
+            $msg->c("tag", null, $attrs)->up();
+          }
+          $msg->c("tag", null, [
+            'name' => "git",
+            'value' => $item['extra']['git']['commit'],
+          ])->up();
+          $msg->c("tag", null, [
+            'name' => "file",
+            'value' => $item['extra']['file'],
+          ])->up();
+          $msg->c("tag", null, [
+            'name' => "line",
+            'value' => $item['extra']['line'],
+          ])->up();
+          $msg->c("tag", null, [
+            'name' => "class",
+            'value' => $item['extra']['class'],
+          ])->up();
+          $msg->c("tag", null, [
+            'name' => "function",
+            'value' => $item['extra']['function'],
+          ])->up();
+          $msg->up();
+        }
+        $_xmppLogHandler_messageQueue = [];
+        $client->send($msg);
+      }
+    });
   }
 
   function userTime($epoch, $tzo = "+00:00", $locale = null, $html = true) {
