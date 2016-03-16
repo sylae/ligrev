@@ -38,7 +38,7 @@ class RSS {
     $curl->setUserAgent("ligrev/$lv (https://github.com/sylae/ligrev)");
     $curl->get($this->url);
     if ($curl->error) {
-      l($curl->errorCode . ': ' . $curl->errorMessage, "CURL", L_WARN);
+      \Monolog\Registry::CORE()->warning("Failed to retrieve RSS feed", ['code' => $curl->errorCode, 'msg' => $curl->errorMessage]);
       curl_close($curl->curl);
       return false;
     }

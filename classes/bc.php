@@ -47,15 +47,15 @@ class bc {
     if (is_resource($process)) {
       fwrite($pipes[0], $expr . PHP_EOL);
       fclose($pipes[0]);
-      l("STDIN:  $expr", "DICE", L_DEBUG);
+      \Monolog\Registry::MATH()->debug("Piping data to STDIN", ['data' => $expr]);
 
       $pipeout = trim(str_replace('\\' . PHP_EOL, '', stream_get_contents($pipes[1])));
 
       $stdout = (strlen($pipeout) > 80) ? substr($pipeout, 0, 77) . '...' : $pipeout;
-      l("STDOUT: $stdout", "DICE", L_DEBUG);
+      \Monolog\Registry::MATH()->debug("Received data from STDOUT", ['data' => $stdout]);
 
       $stderr = trim(str_replace('\\' . PHP_EOL, PHP_EOL, stream_get_contents($pipes[2])));
-      l("STDERR: $stderr", "DICE", L_DEBUG);
+      \Monolog\Registry::MATH()->debug("Received data from STDERR", ['data' => $stderr]);
 
       $stderr = preg_replace('/\\(standard_in\\) \\d+: /', '', $stderr);
       $pinfo = proc_get_status($process);
@@ -63,7 +63,7 @@ class bc {
       fclose($pipes[2]);
       proc_close($process);
 
-      l(sprintf("Exited with status code %s", $pinfo['exitcode']), "DICE", L_DEBUG);
+      \Monolog\Registry::MATH()->debug("Exited bc process", ['status_code' => $pinfo['exitcode']]);
 
       if ($pinfo['exitcode'] == 124) {
         $this->result = "timeout";
@@ -73,7 +73,7 @@ class bc {
         $this->result = $stdout;
       }
     } else {
-      l("Could not create dice roll process!", "DICE", L_WARN);
+      \Monolog\Registry::MATH()->warning("Could not create bc process");
       $this->result = sprintf(_("Ligrev error in bc parsing module: %s"), _("Process not created"));
     }
   }

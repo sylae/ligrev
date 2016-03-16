@@ -22,10 +22,12 @@ $loggers = [ // todo: const?
   'STREAM',
   'DB',
   'COMMAND',
+  'MESSAGE',
   'IQ',
   'CORE',
   'ROSTER',
   'PHP',
+  'MATH',
 ];
 
 foreach ($loggers as $log) {

@@ -35,8 +35,7 @@ class messageHandler {
     }
 
     if ($this->from->resource && !$this->stanza->exists('delay', NS_DELAYED_DELIVERY)) {
-      $f = (($this->origin == "chat") ? " (PM)" : "");
-      l(sprintf("%s%s: %s", $this->from->resource, $f, $this->stanza->body), $this->from->node);
+      \Monolog\Registry::MESSAGE()->info("Message received", ['body' => $this->stanza->body, 'room' => $this->from->node, 'nick' => $this->from->resource, 'isPM' => ($this->origin == "chat")]);
       $this->text = $this->stanza->body;
       $this->room = $this->from->bare;
       $this->author = $this->from->resource;

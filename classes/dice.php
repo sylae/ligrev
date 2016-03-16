@@ -76,7 +76,7 @@ class dice {
     $roll = $this->_dice(1, $die);
     if ($roll == $die) {
       // Ace
-      l("Savage dice aced", "DICE", L_DEBUG);
+      \Monolog\Registry::COMMAND()->debug("Savage dice aced");
       return $this->_rollSavageDice($die, $roll + $nest);
     } else {
       return $nest + $roll;

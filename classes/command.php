@@ -92,4 +92,12 @@ class command extends ligrevGlobals {
     }
   }
 
+  /**
+   * Return the logger object in case the command wants to log anything
+   * @return \Monolog\Logger
+   */
+  protected static function logger() {
+    return \Monolog\Registry::COMMAND();
+  }
+
 }

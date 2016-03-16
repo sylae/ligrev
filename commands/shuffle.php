@@ -50,7 +50,7 @@ class shuffle extends \Ligrev\command {
       $c++;
     }
     shuffle($decks[$this->room]);
-    l(sprintf($this->t("Reset %s"), $this->room), "CARD", L_DEBUG);
+    $this->logger()->debug("Reset deck", ['room' => $this->room]);
     $this->_send($this->getDefaultResponse(), $this->t("Deck shuffled."));
   }
 

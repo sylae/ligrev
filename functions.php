@@ -9,9 +9,6 @@
 
 namespace Ligrev {
 
-  use Monolog\Logger;
-  use Monolog\Handler\StreamHandler;
-
 // Check if Ligrev has been modified locally.
   exec("git diff --quiet HEAD", $null, $rv);
   define("V_LIGREV", trim(`git rev-parse HEAD`) . ($rv == 1 ? "-modified" : ""));
