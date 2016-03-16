@@ -75,28 +75,28 @@ $client->add_cb('on_auth_failure', function($reason) {
 
 // Where the magic happens. "Magic" "Happens". I dunno why I type this either.
 $client->add_cb('on_groupchat_message', function($stanza) {
-  Registry::STREAM()->debug("Stanza received", ['callback' => func_get_arg(0), 'stanza' => $stanza->to_string()]);
+  Registry::STREAM()->debug("Stanza received", ['callback' => 'on_groupchat_message', 'stanza' => $stanza->to_string()]);
   new messageHandler($stanza, "groupchat");
 });
 $client->add_cb('on_chat_message', function($stanza) {
-  Registry::STREAM()->debug("Stanza received", ['callback' => func_get_arg(0), 'stanza' => $stanza->to_string()]);
+  Registry::STREAM()->debug("Stanza received", ['callback' => 'on_chat_message', 'stanza' => $stanza->to_string()]);
   new messageHandler($stanza, "chat");
 });
 $client->add_cb('on_presence_stanza', function($stanza) {
-  Registry::STREAM()->debug("Stanza received", ['callback' => func_get_arg(0), 'stanza' => $stanza->to_string()]);
+  Registry::STREAM()->debug("Stanza received", ['callback' => 'on_presence_stanza', 'stanza' => $stanza->to_string()]);
   global $roster;
   $roster->ingest($stanza);
 });
 $client->add_cb('on_result_iq', function($stanza) {
-  Registry::STREAM()->debug("Stanza received", ['callback' => func_get_arg(0), 'stanza' => $stanza->to_string()]);
+  Registry::STREAM()->debug("Stanza received", ['callback' => 'on_result_iq', 'stanza' => $stanza->to_string()]);
   new iqHandler($stanza);
 });
 $client->add_cb('on_get_iq', function($stanza) {
-  Registry::STREAM()->debug("Stanza received", ['callback' => func_get_arg(0), 'stanza' => $stanza->to_string()]);
+  Registry::STREAM()->debug("Stanza received", ['callback' => 'on_get_iq', 'stanza' => $stanza->to_string()]);
   new iqHandler($stanza);
 });
 $client->add_cb('on_error_iq', function($stanza) {
-  Registry::STREAM()->debug("Stanza received", ['callback' => func_get_arg(0), 'stanza' => $stanza->to_string()]);
+  Registry::STREAM()->debug("Stanza received", ['callback' => 'on_error_iq', 'stanza' => $stanza->to_string()]);
   new iqHandler($stanza);
 });
 
