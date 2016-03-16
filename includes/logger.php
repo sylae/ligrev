@@ -13,9 +13,16 @@ use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 use Monolog\ErrorHandler;
 use Monolog\Registry;
+use Monolog\Processor\IntrospectionProcessor;
+use Monolog\Processor\GitProcessor;
+
+$l_console = new StreamHandler(STDOUT, Logger::INFO); //@todo: configure option
+$l_console->setFormatter(new \Monolog\Formatter\LineFormatter(null, null, true, true));
 
 $l_template = new Logger("template");
-$l_template->pushHandler(new StreamHandler(STDOUT, Logger::DEBUG));
+$l_template->pushHandler($l_console);
+$l_template->pushProcessor(new IntrospectionProcessor());
+$l_template->pushProcessor(new GitProcessor());
 
 $loggers = [ // todo: const?
   'JAXL',
