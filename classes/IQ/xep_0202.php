@@ -10,22 +10,22 @@
 
 namespace Ligrev\IQ;
 
-define("NS_TIME", 'urn:xmpp:time');
-
 class xep_0202 extends \Ligrev\iq {
 
+  const NS_TIME = 'urn:xmpp:time';
+
   static function canUse(\XMPPStanza $stanza, \QueryPath\DOMQuery $qp) {
-    return (\qp($qp, 'time')->attr('xmlns') == NS_TIME && $stanza->type == "get");
+    return (\qp($qp, 'time')->attr('xmlns') == self::NS_TIME && $stanza->type == "get");
   }
 
   static function disco() {
-    return [NS_TIME];
+    return [self::NS_TIME];
   }
 
   function process(\XMPPStanza $stanza) {
 
     $resp = new \XMPPIq(array('from' => $this->client->full_jid->to_string(), 'to' => $stanza->from, 'type' => 'result', 'id' => $stanza->id));
-    $resp->c('time', NS_TIME);
+    $resp->c('time', self::NS_TIME);
     $resp->c('utc', null, array(), date(DATE_ATOM))->up();
     $resp->c('tzo', null, array(), date("P"));
 

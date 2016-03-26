@@ -60,13 +60,13 @@ class xmppEntity extends ligrevGlobals {
       'type' => 'get',
       'id' => $id
     ]);
-    $resp->c('time', NS_TIME);
+    $resp->c('time', IQ\xep_0202::NS_TIME);
 
     $this->client->send($resp);
     $this->client->add_cb('on_stanza_id_' . $id, function($stanza) {
       global $roster;
       $qp = \qp('<?xml version="1.0"?>' . $stanza->to_string());
-      if (\qp($qp, 'time')->attr('xmlns') == NS_TIME && $stanza->type == "result" && array_key_exists($stanza->from, $roster->jids)) {
+      if (\qp($qp, 'time')->attr('xmlns') == IQ\xep_0202::NS_TIME && $stanza->type == "result" && array_key_exists($stanza->from, $roster->jids)) {
         $tzo = \qp($qp, 'tzo')->text();
         $roster->jids[$stanza->from]->setUserTime($tzo);
       }
