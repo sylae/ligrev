@@ -1,4 +1,29 @@
 {
+  "name": "sylae/ligrev",
+  "description": "XMPP chatbot powered by JAXL",
+  "type": "project",
+  "keywords": [
+    "xmpp",
+    "jaxl",
+    "chatbot"
+  ],
+  "homepage": "https://github.com/sylae/ligrev",
+  "license": "GPL-3.0+",
+  "authors": [
+    {
+      "name": "Sylae Jiendra Corell",
+      "email": "sylae@calref.net",
+      "homepage": "https://calref.net",
+      "role": "Developer"
+    }
+  ],
+  "support": {
+    "email": "sylae@calref.net",
+    "issues": "https://github.com/sylae/ligrev/issues",
+    "wiki": "https://github.com/sylae/ligrev/wiki",
+    "irc": "xmpp://lounge@conference.calref.net",
+    "source": "https://github.com/sylae/ligrev"
+  },
   "require": {
     "querypath/querypath": "^3.04",
     "doctrine/dbal": "2.5.2",
