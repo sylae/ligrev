@@ -9,16 +9,13 @@
 
 namespace Ligrev;
 
-// initialize all the composer shit
+// initialize all the shit
 require __DIR__ . '/../vendor/autoload.php';
 
-// first things first, lets get proper logging online
-require_once __DIR__ . '/../classes/xmppLogHandler.php';
 require_once __DIR__ . '/logger.php';
 
 // now load all the other basic stuff
 require_once __DIR__ . '/../functions.php';
-
 
 // Hey, let's load some things
 require_once __DIR__ . '/../config.default.php';
@@ -32,21 +29,6 @@ foreach (glob(__DIR__ . "/../i18n/*.po") as $file) {
   $i18n[$lang] = \Sepia\PoParser::parseFile($file)->getEntries();
 }
 
-require_once __DIR__ . '/../classes/ligrevGlobals.php';
-foreach (glob("classes/*.php") as $file) {
-  require_once $file;
-}
-
-spl_autoload_register(function ($class) {
-  $class = str_replace("Ligrev\\Command\\", "", $class);
-  if (file_exists(__DIR__ . "/../commands/$class.php")) {
-    require_once __DIR__ . "/../commands/$class.php";
-  }
-});
-
-foreach (glob(__DIR__ . "/../iq/*.php") as $file) {
-  require_once $file;
-}
 $iq_classes = [];
 foreach (get_declared_classes() as $class) {
   $c = new \ReflectionClass($class);

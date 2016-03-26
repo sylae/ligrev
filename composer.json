@@ -7,5 +7,10 @@
     "abhinavsingh/jaxl": "3.x-dev",
     "sepia/po-parser": "dev-master",
     "monolog/monolog": "^1.18"
+  },
+  "autoload": {
+    "psr-4": {
+      "Ligrev\\": "classes/"
+    }
   }
 }
