@@ -36,6 +36,11 @@ $tables['tell']->addColumn("private", "boolean");
 $tables['tell']->addColumn("message", "text");
 $tables['tell']->setPrimaryKey(["id"]);
 
+// table tell_block
+$tables['tell'] = $schema->createTable("tell_block");
+$tables['tell']->addColumn("sender", "text");
+$tables['tell']->addColumn("recipient", "text");
+
 $comparator = new \Doctrine\DBAL\Schema\Comparator();
 $schemaDiff = $comparator->compare($fromSchema, $schema);
 $sql = $schemaDiff->toSaveSql($db->getDatabasePlatform());
