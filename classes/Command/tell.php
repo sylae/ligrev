@@ -56,7 +56,7 @@ class tell extends \Ligrev\command {
 
     // check for blockages
     if ($this->_amIBlocked($recipient)) {
-      $this->help(sprintf($this->t("Error: %s"), sprintf($this->t("%s has blocked your from sending :tell messages."), $recipientHTML)));
+      $this->_send($this->getDefaultResponse(), sprintf($this->t("Error: %s"), sprintf($this->t("%s has blocked you from sending :tell messages."), $recipientHTML)));
       return;
     }
 
@@ -87,7 +87,20 @@ class tell extends \Ligrev\command {
   }
 
   private function removeBlock() {
+    global $db;
+    $textParts = $this->_split($this->text);
+    $sender = \Ligrev\return_ake(2, $textParts, null);
+    $sender = $this->_appendPrefix($sender);
+    $snd = new \Ligrev\xmppEntity(new \XMPPJid($sender));
+    $senderHTML = $snd->generateHTML();
 
+    // first make sure they aren't already blocked
+    if (!$this->_areTheyBlocked($sender)) {
+      $this->_send($this->getDefaultResponse(), sprintf($this->t("%s is not blocked."), $senderHTML));
+      return;
+    }
+    $db->delete('tell_block', ['sender' => $sender, 'recipient' => $this->fromJID->jid->bare]);
+    $this->_send($this->getDefaultResponse(), sprintf($this->t("%s has been unblocked."), $senderHTML));
   }
 
   public function help($prefix = null) {
