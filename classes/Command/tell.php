@@ -54,23 +54,36 @@ class tell extends \Ligrev\command {
     $rec = new \Ligrev\xmppEntity(new \XMPPJid($recipient));
     $recipientHTML = $rec->generateHTML();
 
+    // check for blockages
+    if ($this->_amIBlocked($recipient)) {
+      $this->help(sprintf($this->t("Error: %s"), sprintf($this->t("%s has blocked your from sending :tell messages."), $recipientHTML)));
+      return;
+    }
+
     // Let's make sure the user isn't already online.
     if ($roster->onlineByJID($recipient) && $roster->onlineByJID($recipient, null, true)->isAFK()) {
       $this->help(sprintf($this->t("Error: %s"), sprintf($this->t("%s already online. Contact user directly."), $recipientHTML)));
       return;
     }
-    $sql = $db->prepare('INSERT INTO tell (sender, recipient, sent, private, message) VALUES(?, ?, ?, ?, ?);', ['string', 'string', 'integer', 'boolean', 'string']);
-    $sql->bindValue(1, $this->fromJID->jid->bare, "string");
-    $sql->bindValue(2, $recipient, "string");
-    $sql->bindValue(3, time(), "integer");
-    $sql->bindValue(4, ($this->origin == "groupchat" ? false : true), "boolean");
-    $sql->bindValue(5, $message, "string");
-    $sql->execute();
+
+    $this->_insertTell($recipient, $recipientHTML, $message);
     $this->_send($this->getDefaultResponse(), sprintf($this->t("Message for %s processed."), $recipientHTML));
   }
 
   private function addBlock() {
+    $textParts = $this->_split($this->text);
+    $sender = \Ligrev\return_ake(2, $textParts, null);
+    $sender = $this->_appendPrefix($sender);
+    $snd = new \Ligrev\xmppEntity(new \XMPPJid($sender));
+    $senderHTML = $snd->generateHTML();
 
+    // first make sure they aren't already blocked
+    if ($this->_areTheyBlocked($sender)) {
+      $this->_send($this->getDefaultResponse(), sprintf($this->t("%s is already blocked."), $senderHTML));
+      return;
+    }
+    $this->_insertBlock($sender);
+    $this->_send($this->getDefaultResponse(), sprintf($this->t("%s has been blocked."), $senderHTML));
   }
 
   private function removeBlock() {
@@ -92,7 +105,7 @@ class tell extends \Ligrev\command {
 
   private function _appendPrefix($recipient) {
     if (!preg_match("/@+/", $recipient)) {
-      // If there's no domain, assume it's for the default
+// If there's no domain, assume it's for the default
       if ($this->config['defaultTellDomain'] === false) {
         $domain = str_replace("conference.", "", $this->from->domain);
       } else {
@@ -103,8 +116,49 @@ class tell extends \Ligrev\command {
     return $recipient;
   }
 
-  private function _isBlocked($by) {
+  private function _areTheyBlocked($sender) {
+    global $db;
+    $sql = $this->db->prepare('SELECT * FROM tell_block WHERE sender = ? AND recipient = ?', ["string", "string"]);
+    $sql->bindValue(1, str_replace("\\20", " ", $sender), "string");
+    $sql->bindValue(2, str_replace("\\20", " ", $this->fromJID->jid->bare), "string");
+    $sql->execute();
+    $tells = $sql->fetchAll();
+    foreach ($tells as $tell) {
+      return true;
+    }
+    return false;
+  }
 
+  private function _amIBlocked($recipient) {
+    global $db;
+    $sql = $this->db->prepare('SELECT * FROM tell_block WHERE recipient = ? AND sender = ?', ["string", "string"]);
+    $sql->bindValue(1, str_replace("\\20", " ", $recipient), "string");
+    $sql->bindValue(2, str_replace("\\20", " ", $this->fromJID->jid->bare), "string");
+    $sql->execute();
+    $tells = $sql->fetchAll();
+    foreach ($tells as $tell) {
+      return true;
+    }
+    return false;
+  }
+
+  private function _insertTell($recipient, $recipientHTML, $message) {
+    global $db;
+    $sql = $db->prepare('INSERT INTO tell (sender, recipient, sent, private, message) VALUES(?, ?, ?, ?, ?);', ['string', 'string', 'integer', 'boolean', 'string']);
+    $sql->bindValue(1, $this->fromJID->jid->bare, "string");
+    $sql->bindValue(2, $recipient, "string");
+    $sql->bindValue(3, time(), "integer");
+    $sql->bindValue(4, ($this->origin == "groupchat" ? false : true), "boolean");
+    $sql->bindValue(5, $message, "string");
+    $sql->execute();
+  }
+
+  private function _insertBlock($sender) {
+    global $db;
+    $sql = $db->prepare('INSERT INTO tell_block (sender, recipient) VALUES(?, ?);', ['string', 'string']);
+    $sql->bindValue(1, str_replace("\\20", " ", $sender), "string");
+    $sql->bindValue(2, str_replace("\\20", " ", $this->fromJID->jid->bare), "string");
+    $sql->execute();
   }
 
 }
