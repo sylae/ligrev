@@ -180,4 +180,15 @@ namespace Ligrev {
     return $opts[$best];
   }
 
+  /**
+   * Shorthand for array_key_exists spam
+   * @param string $key
+   * @param array $array
+   * @param mixed $not_exists
+   * @return mixed If key exists, the value of the key, otherwise $not_exists
+   */
+  function return_ake($key, $array, $not_exists = false) {
+    return array_key_exists($key, $array) ? $array[$key] : $not_exists;
+  }
+
 }
