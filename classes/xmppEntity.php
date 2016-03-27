@@ -141,6 +141,10 @@ class xmppEntity extends ligrevGlobals {
    * @param string $nick The user's nick, for private :tells
    */
   function processTells($room, $nick = null) {
+    global $_ligrevStartupInhibitTell;
+    if ($_ligrevStartupInhibitTell) {
+      return false;
+    }
     $sql = $this->db->prepare('SELECT * FROM tell WHERE recipient = ? ORDER BY sent ASC', array("string"));
     $sql->bindValue(1, str_replace("\\20", " ", $this->jid->bare), "string");
     $sql->execute();

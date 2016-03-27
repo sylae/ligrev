@@ -20,6 +20,11 @@ $client->require_xep([
 
 require_once __DIR__ . '/includes/disco_id.php';
 
+// ejabberd (possibly other xmpp servers) doesn't tell us how long a user has been logged in
+// when we login. So we inhibit processing tell messages until we get a message that isn't
+// Delayed Delivery (real-time).
+$_ligrevStartupInhibitTell = true;
+
 $client->add_cb('on_auth_success', function() {
   global $client, $config, $disco;
   Registry::JAXL()->debug("Connected to XMPP Server", ['jid' => $client->full_jid->to_string()]);

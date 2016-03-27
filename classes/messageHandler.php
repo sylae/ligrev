@@ -21,7 +21,7 @@ class messageHandler {
   protected $config;
 
   function __construct(\XMPPStanza $stanza, $origin) {
-    global $client, $roster, $config;
+    global $client, $roster, $config, $_ligrevStartupInhibitTell;
     $this->client = &$client;
     $this->roster = &$roster;
     $this->origin = $origin;
@@ -42,6 +42,7 @@ class messageHandler {
 
       $real_jid = $roster->rooms[$this->room]->nickToEntity($this->author);
       if ($real_jid instanceof xmppEntity) {
+        $_ligrevStartupInhibitTell = false; // now that we've received a non-delayed msg, we know we're realtime.
         $real_jid->active();
         $real_jid->processTells($this->room);
       }
