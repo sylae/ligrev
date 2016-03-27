@@ -13,6 +13,9 @@ class tell extends \Ligrev\command {
 
   function process() {
     global $roster, $db;
+    if (!$this->canDo("sylae/ligrev/tell")) {
+      return false;
+    }
     $textParts = $this->_split($this->text);
     $r = (array_key_exists(1, $textParts) ? $textParts[1] : null);
     $message = trim(implode(" ", array_slice($textParts, 2)));

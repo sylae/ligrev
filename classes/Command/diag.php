@@ -12,6 +12,9 @@ namespace Ligrev\Command;
 class diag extends \Ligrev\command {
 
   function process() {
+    if (!$this->canDo("sylae/ligrev/diag")) {
+      return false;
+    }
     $lv = V_LIGREV;
     $string = $this->t('Ligrev Diagnostic Information') . PHP_EOL .
       sprintf($this->t('Ligrev Version: %s'), "[$lv](https://github.com/sylae/ligrev/commit/$lv)") . PHP_EOL .

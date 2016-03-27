@@ -12,13 +12,14 @@ namespace Ligrev\Command;
 class sybeam extends \Ligrev\command {
 
   function process() {
-    if ($this->fromJID->jid->bare == "sylae@calref.net") {
-      $textParts = $this->_split($this->text);
-      $sybeams = new \Ligrev\bc((array_key_exists(1, $textParts) ? $textParts[1] : 1));
-      $num = max(1, min(100, $sybeams->result));
-      $string = str_repeat(':sybeam:', $num);
-      $this->_send($this->getDefaultResponse(), $string);
+    if (!$this->canDo("sylae/ligrev/sybeam")) {
+      return false;
     }
+    $textParts = $this->_split($this->text);
+    $sybeams = new \Ligrev\bc((array_key_exists(1, $textParts) ? $textParts[1] : 1));
+    $num = max(1, min(100, $sybeams->result));
+    $string = str_repeat(':sybeam:', $num);
+    $this->_send($this->getDefaultResponse(), $string);
   }
 
 }

@@ -16,6 +16,9 @@ class card extends \Ligrev\command {
 
   function process() {
     global $decks;
+    if (!$this->canDo("sylae/ligrev/card-draw")) {
+      return false;
+    }
     if ($this->origin == "chat") {
       $this->_send($this->getDefaultResponse(), $this->t("Cannot use cards in private context."));
       return;

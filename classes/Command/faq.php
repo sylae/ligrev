@@ -15,7 +15,7 @@ class faq extends \Ligrev\command {
     $textParts = $this->_split($this->text);
     $set = (array_key_exists(1, $textParts) ? $textParts[1] : false);
 
-    if ($set == "set" || $set == $this->t("set")) {
+    if ($this->canDo("sylae/ligrev/faq-set") && ($set == "set" || $set == $this->t("set"))) {
       $sender = $this->fromJID->getData("affiliation");
       if (!($sender == "admin" || $sender == "owner")) {
         $this->_send($this->getDefaultResponse(), sprintf($this->t("Error: %s"), $this->t("Insufficient permissions")));
@@ -49,7 +49,7 @@ class faq extends \Ligrev\command {
       $sql->execute();
       $this->_send($this->getDefaultResponse(), sprintf($this->t("FAQ with keyword %s added."), $code));
       return;
-    } else {
+    } elseif ($this->canDo("sylae/ligrev/faq")) {
       $sql = $this->db->prepare('SELECT * FROM faq WHERE room = ? AND keyword = ?', ["string", "string"]);
       $sql->bindValue(1, $this->room, "string");
       $sql->bindValue(2, $set, "string");

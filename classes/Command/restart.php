@@ -13,9 +13,7 @@ class restart extends \Ligrev\command {
 
   function process() {
     global $roster;
-    $senderAff = $this->fromJID->getData("affiliation");
-
-    if ($senderAff == "admin" || $senderAff == "owner") {
+    if ($this->canDo("sylae/ligrev/restart")) {
       foreach ($this->config['rooms'] as $room => $c) {
         $this->_send($room, "Restarting...");
       }

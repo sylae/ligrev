@@ -14,6 +14,10 @@ class shuffle extends \Ligrev\command {
   function process() {
     global $decks;
 
+    if (!$this->canDo("sylae/ligrev/card-shuffle")) {
+      return false;
+    }
+
     if ($this->origin == "chat") {
       $this->_send($this->getDefaultResponse(), $this->t("Cannot use cards in private context."));
       return;

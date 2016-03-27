@@ -92,6 +92,10 @@ class command extends ligrevGlobals {
     }
   }
 
+  public function canDo($permission) {
+    return $this->fromJID->canDo($permission, $this->room);
+  }
+
   /**
    * Return the logger object in case the command wants to log anything
    * @return \Monolog\Logger

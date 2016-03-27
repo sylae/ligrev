@@ -90,3 +90,26 @@ $config['remoteLogRecipients'] = [];
  * Note that a packet can contain multiple messages.
  */
 $config['remoteLogThrottle'] = 5;
+
+/**
+ * Default permissions array.
+ */
+$config['permissions'] = [
+  'sylae@calref.net' => [ // example of a user-only permission
+    'sylae/ligrev/sybeam' => true,
+  ],
+  'owner' => [ // example of an affiliation permission
+    'sylae/ligrev/restart' => true,
+  ],
+  'admin' => [ // example of an affiliation permission
+    'sylae/ligrev/restart' => true,
+  ],
+  'sylae/ligrev/card-draw' => true,
+  'sylae/ligrev/card-shuffle' => true,
+  'sylae/ligrev/diag' => true,
+  'sylae/ligrev/faq' => true,
+  'sylae/ligrev/faq-set' => true,
+  'sylae/ligrev/roll' => true,
+  'sylae/ligrev/slap' => true,
+  'sylae/ligrev/tell' => true,
+];

@@ -100,4 +100,26 @@ class mucRoom extends ligrevGlobals {
     }
   }
 
+  /**
+   * Check if a room permission is enabled.
+   * @global array $config
+   * @param string $permission
+   * @return boolean Whether or not the room has the permission
+   */
+  public function canDo($permission) {
+    global $config;
+
+    $value = false;
+
+    // global
+    $value = return_ake($permission, $config['permissions'], $value);
+
+    // room
+    if (array_key_exists("permissions", $config['rooms'][$this->name])) {
+      $value = return_ake($permission, $config['rooms'][$this->name]['permissions'], $value);
+    }
+
+    return $value;
+  }
+
 }

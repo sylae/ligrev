@@ -12,6 +12,9 @@ namespace Ligrev\Command;
 class roll extends \Ligrev\command {
 
   function process() {
+    if (!$this->canDo("sylae/ligrev/roll")) {
+      return false;
+    }
     $textParts = $this->_split($this->text);
     $text = str_replace($textParts[0], "", $this->text);
     $strings = explode(":", $text, 5);

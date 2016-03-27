@@ -163,4 +163,49 @@ class xmppEntity extends ligrevGlobals {
     }
   }
 
+  /**
+   * Determine if a user has permissions to do something. Optionally filter by room.
+   * @param string $permission
+   * @param string $room
+   * @return bool true if the user has permission, false otherwise
+   */
+  public function canDo($permission, $room = null) {
+    global $config;
+
+    $value = false;
+
+    // global
+    $value = return_ake($permission, $config['permissions'], $value);
+
+    // room
+    if (is_string($room) && array_key_exists("permissions", $config['rooms'][$room])) {
+      $value = return_ake($permission, $config['rooms'][$room]['permissions'], $value);
+    }
+
+    // affiliation
+    if (array_key_exists($this->getData("affiliation"), $config['permissions'])) {
+      $value = return_ake($permission, $config['permissions'][$this->getData("affiliation")], $value);
+    }
+
+    // user
+    if (array_key_exists($this->jid->bare, $config['permissions'])) {
+      $value = return_ake($permission, $config['permissions'][$this->jid->bare], $value);
+    }
+
+    if (is_string($room) && array_key_exists("permissions", $config['rooms'][$room])) {
+
+      // room-> affiliation
+      if (array_key_exists($this->getData("affiliation"), $config['rooms'][$room]['permissions'])) {
+        $value = return_ake($permission, $config['rooms'][$room]['permissions'][$this->getData("affiliation")], $value);
+      }
+
+      // room->user
+      if (array_key_exists($this->getData("affiliation"), $config['rooms'][$room]['permissions'])) {
+        $value = return_ake($permission, $config['rooms'][$room]['permissions'][$this->getData("affiliation")], $value);
+      }
+    }
+
+    return $value;
+  }
+
 }

@@ -12,6 +12,9 @@ namespace Ligrev\Command;
 class slap extends \Ligrev\command {
 
   function process() {
+    if (!$this->canDo("sylae/ligrev/slap")) {
+      return false;
+    }
     $textParts = $this->_split($this->text);
     $vic = (array_key_exists(1, $textParts) ? $textParts[1] : $this->t('Ligrev'));
     $fish = [$this->t('poach'), $this->t('salmon'), $this->t('greyling'), $this->t('coelecanth'), $this->t('trout')];
