@@ -49,6 +49,10 @@ class xmppEntity extends ligrevGlobals {
     return true;
   }
 
+  public function isAFK() {
+    return (time() - $this->lastActivity < $this->config['afkThreshold']);
+  }
+
   /**
    * Send an IQ to get a user's timezone
    */
