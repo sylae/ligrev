@@ -34,7 +34,7 @@ class tell extends \Ligrev\command {
   }
 
   private function addTell() {
-    global $roster, $db;
+    global $roster;
 
     $textParts = $this->_split($this->text);
 
@@ -87,7 +87,6 @@ class tell extends \Ligrev\command {
   }
 
   private function removeBlock() {
-    global $db;
     $textParts = $this->_split($this->text);
     $sender = \Ligrev\return_ake(2, $textParts, null);
     $sender = $this->_appendPrefix($sender);
@@ -99,7 +98,7 @@ class tell extends \Ligrev\command {
       $this->_send($this->getDefaultResponse(), sprintf($this->t("%s is not blocked."), $senderHTML));
       return;
     }
-    $db->delete('tell_block', ['sender' => $sender, 'recipient' => $this->fromJID->jid->bare]);
+    $this->db->delete('tell_block', ['sender' => $sender, 'recipient' => $this->fromJID->jid->bare]);
     $this->_send($this->getDefaultResponse(), sprintf($this->t("%s has been unblocked."), $senderHTML));
   }
 
@@ -130,7 +129,6 @@ class tell extends \Ligrev\command {
   }
 
   private function _areTheyBlocked($sender) {
-    global $db;
     $sql = $this->db->prepare('SELECT * FROM tell_block WHERE sender = ? AND recipient = ?', ["string", "string"]);
     $sql->bindValue(1, str_replace("\\20", " ", $sender), "string");
     $sql->bindValue(2, str_replace("\\20", " ", $this->fromJID->jid->bare), "string");
@@ -143,7 +141,6 @@ class tell extends \Ligrev\command {
   }
 
   private function _amIBlocked($recipient) {
-    global $db;
     $sql = $this->db->prepare('SELECT * FROM tell_block WHERE recipient = ? AND sender = ?', ["string", "string"]);
     $sql->bindValue(1, str_replace("\\20", " ", $recipient), "string");
     $sql->bindValue(2, str_replace("\\20", " ", $this->fromJID->jid->bare), "string");
@@ -155,9 +152,8 @@ class tell extends \Ligrev\command {
     return false;
   }
 
-  private function _insertTell($recipient, $recipientHTML, $message) {
-    global $db;
-    $sql = $db->prepare('INSERT INTO tell (sender, recipient, sent, private, message) VALUES(?, ?, ?, ?, ?);', ['string', 'string', 'integer', 'boolean', 'string']);
+  private function _insertTell($recipient, $message) {
+    $sql = $this->db->prepare('INSERT INTO tell (sender, recipient, sent, private, message) VALUES(?, ?, ?, ?, ?);', ['string', 'string', 'integer', 'boolean', 'string']);
     $sql->bindValue(1, $this->fromJID->jid->bare, "string");
     $sql->bindValue(2, $recipient, "string");
     $sql->bindValue(3, time(), "integer");
@@ -167,8 +163,7 @@ class tell extends \Ligrev\command {
   }
 
   private function _insertBlock($sender) {
-    global $db;
-    $sql = $db->prepare('INSERT INTO tell_block (sender, recipient) VALUES(?, ?);', ['string', 'string']);
+    $sql = $this->db->prepare('INSERT INTO tell_block (sender, recipient) VALUES(?, ?);', ['string', 'string']);
     $sql->bindValue(1, str_replace("\\20", " ", $sender), "string");
     $sql->bindValue(2, str_replace("\\20", " ", $this->fromJID->jid->bare), "string");
     $sql->execute();
