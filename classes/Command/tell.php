@@ -66,7 +66,7 @@ class tell extends \Ligrev\command {
       return;
     }
 
-    $this->_insertTell($recipient, $recipientHTML, $message);
+    $this->_insertTell($recipient, $message);
     $this->_send($this->getDefaultResponse(), sprintf($this->t("Message for %s processed."), $recipientHTML));
   }
 
