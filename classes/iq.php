@@ -9,7 +9,7 @@
 
 namespace Ligrev;
 
-abstract class iq {
+abstract class iq implements iqInterface {
 
   protected $db;
   protected $client;
@@ -24,27 +24,4 @@ abstract class iq {
     $this->process($stanza);
   }
 
-  /**
-   * This function will be called to determine if a given IQ can be used by this class.
-   * Do try and make it quick
-   *
-   * @return boolean if this function can make use of the IQ, return true, otherwise return false
-   * @param \XMPPStanza $stanza The IQ stanza sent by the server
-   * @param \QueryPath $qp The stanza, as a querypath XML object
-   */
-  abstract static public function canUse(\XMPPStanza $stanza, \QueryPath\DOMQuery $qp);
-
-  /**
-   * This function will be called to populate XEP-0030 support (disco).
-   *
-   * @link http://xmpp.org/registrar/disco-features.html
-   * @return array An array of strings, each containing a disco feature string
-   */
-  abstract static public function disco();
-
-  /**
-   * If the class can use this IQ, this will be called. Send responses, use the db, knock yourself out
-   * @param \XMPPStanza $stanza The IQ stanza sent by the server
-   */
-  abstract public function process(\XMPPStanza $stanza);
 }
