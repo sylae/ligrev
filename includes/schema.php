@@ -47,10 +47,10 @@ $sql = $schemaDiff->toSaveSql($db->getDatabasePlatform());
 $total_changes = count($sql);
 
 if ($total_changes > 0) {
-  \Monolog\Registry::DB()->info("Schema needs initialization or upgrade", ["statements_to_execute", $total_changes]);
+  \Monolog\Registry::DB()->info("Schema needs initialization or upgrade", ["statements_to_execute" => $total_changes]);
   foreach ($sql as $s) {
     $db->exec($s);
   }
 } else {
-  \Monolog\Registry::DB()->info("Schema up to date", ["statements_to_execute", $total_changes]);
+  \Monolog\Registry::DB()->info("Schema up to date", ["statements_to_execute" => $total_changes]);
 }
