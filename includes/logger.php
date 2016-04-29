@@ -17,7 +17,7 @@ use Monolog\Processor\IntrospectionProcessor;
 use Monolog\Processor\GitProcessor;
 
 $l_console = new StreamHandler(STDOUT, Logger::INFO); //@todo: configure option
-$l_console->setFormatter(new \Monolog\Formatter\LineFormatter(null, null, true, true));
+$l_console->setFormatter(new stdOutFormatter(null, null, true, true));
 
 $_xmppLogHandler_messageQueue = [];
 $l_remote = new xmppLogHandler(Logger::DEBUG); //@todo: configure option
