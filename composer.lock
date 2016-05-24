@@ -4,25 +4,28 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "d671427afc18e8b99fe639a39423a86d",
-    "content-hash": "678098069be1699bc0d79e00b7a50ed3",
+    "hash": "5a47784089f50d2d04bff373a14337e1",
+    "content-hash": "be1d4613b5f6b4ff66bf80aa8059ca85",
     "packages": [
         {
-            "name": "abhinavsingh/jaxl",
-            "version": "3.x-dev",
+            "name": "calref/jaxl",
+            "version": "v3.x-dev",
             "source": {
                 "type": "git",
-                "url": "git@github.com:abhinavsingh/JAXL.git",
-                "reference": "c2593cf957e2455dd26d65fba53fd4a6f46d6b1d"
+                "url": "https://github.com/calref/JAXL.git",
+                "reference": "b639894affd8fc6e112af7b39483d6164f125167"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/abhinavsingh/JAXL/zipball/c2593cf957e2455dd26d65fba53fd4a6f46d6b1d",
-                "reference": "c2593cf957e2455dd26d65fba53fd4a6f46d6b1d",
+                "url": "https://api.github.com/repos/calref/JAXL/zipball/b639894affd8fc6e112af7b39483d6164f125167",
+                "reference": "b639894affd8fc6e112af7b39483d6164f125167",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.2.4"
+            },
+            "provide": {
+                "abhinavsingh/jaxl": "*"
             },
             "bin": [
                 "jaxlctl"
@@ -33,7 +36,6 @@
                     "jaxl.php"
                 ]
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -56,7 +58,10 @@
                 "php",
                 "xmpp"
             ],
-            "time": "2015-05-29 01:17:22"
+            "support": {
+                "source": "https://github.com/calref/JAXL/tree/v3.x"
+            },
+            "time": "2016-05-24 21:11:05"
         },
         {
             "name": "doctrine/annotations",
@@ -128,33 +133,33 @@
         },
         {
             "name": "doctrine/cache",
-            "version": "v1.5.4",
+            "version": "v1.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/cache.git",
-                "reference": "47cdc76ceb95cc591d9c79a36dc3794975b5d136"
+                "reference": "f8af318d14bdb0eff0336795b428b547bd39ccb6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/cache/zipball/47cdc76ceb95cc591d9c79a36dc3794975b5d136",
-                "reference": "47cdc76ceb95cc591d9c79a36dc3794975b5d136",
+                "url": "https://api.github.com/repos/doctrine/cache/zipball/f8af318d14bdb0eff0336795b428b547bd39ccb6",
+                "reference": "f8af318d14bdb0eff0336795b428b547bd39ccb6",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.2"
+                "php": "~5.5|~7.0"
             },
             "conflict": {
                 "doctrine/common": ">2.2,<2.4"
             },
             "require-dev": {
-                "phpunit/phpunit": ">=3.7",
+                "phpunit/phpunit": "~4.8|~5.0",
                 "predis/predis": "~1.0",
                 "satooshi/php-coveralls": "~0.6"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.5.x-dev"
+                    "dev-master": "1.6.x-dev"
                 }
             },
             "autoload": {
@@ -194,7 +199,7 @@
                 "cache",
                 "caching"
             ],
-            "time": "2015-12-19 05:03:47"
+            "time": "2015-12-31 16:37:02"
         },
         {
             "name": "doctrine/collections",
@@ -264,16 +269,16 @@
         },
         {
             "name": "doctrine/common",
-            "version": "v2.5.2",
+            "version": "v2.5.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/common.git",
-                "reference": "311001fd9865a4d0d59efff4eac6d7dcb3f5270c"
+                "reference": "10f1f19651343f87573129ca970aef1a47a6f29e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/common/zipball/311001fd9865a4d0d59efff4eac6d7dcb3f5270c",
-                "reference": "311001fd9865a4d0d59efff4eac6d7dcb3f5270c",
+                "url": "https://api.github.com/repos/doctrine/common/zipball/10f1f19651343f87573129ca970aef1a47a6f29e",
+                "reference": "10f1f19651343f87573129ca970aef1a47a6f29e",
                 "shasum": ""
             },
             "require": {
@@ -333,7 +338,7 @@
                 "persistence",
                 "spl"
             ],
-            "time": "2015-12-04 12:49:42"
+            "time": "2015-12-25 13:10:16"
         },
         {
             "name": "doctrine/dbal",
@@ -568,16 +573,16 @@
         },
         {
             "name": "masterminds/html5",
-            "version": "2.1.2",
+            "version": "2.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Masterminds/html5-php.git",
-                "reference": "8f782e0f01a6e33a319bdc8f6de9cfd6569979a4"
+                "reference": "cb1ce51f817af9bbf400c88e8dcebcbf9a097077"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Masterminds/html5-php/zipball/8f782e0f01a6e33a319bdc8f6de9cfd6569979a4",
-                "reference": "8f782e0f01a6e33a319bdc8f6de9cfd6569979a4",
+                "url": "https://api.github.com/repos/Masterminds/html5-php/zipball/cb1ce51f817af9bbf400c88e8dcebcbf9a097077",
+                "reference": "cb1ce51f817af9bbf400c88e8dcebcbf9a097077",
                 "shasum": ""
             },
             "require": {
@@ -587,7 +592,7 @@
             "require-dev": {
                 "phpunit/phpunit": "4.*",
                 "sami/sami": "~2.0",
-                "satooshi/php-coveralls": "0.6.*"
+                "satooshi/php-coveralls": "1.0.*"
             },
             "type": "library",
             "extra": {
@@ -629,20 +634,20 @@
                 "serializer",
                 "xml"
             ],
-            "time": "2015-06-07 08:43:18"
+            "time": "2016-04-11 13:54:57"
         },
         {
             "name": "monolog/monolog",
-            "version": "1.18.0",
+            "version": "1.19.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/monolog.git",
-                "reference": "e19b764b5c855580e8ffa7e615f72c10fd2f99cc"
+                "reference": "5f56ed5212dc509c8dc8caeba2715732abb32dbf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/e19b764b5c855580e8ffa7e615f72c10fd2f99cc",
-                "reference": "e19b764b5c855580e8ffa7e615f72c10fd2f99cc",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/5f56ed5212dc509c8dc8caeba2715732abb32dbf",
+                "reference": "5f56ed5212dc509c8dc8caeba2715732abb32dbf",
                 "shasum": ""
             },
             "require": {
@@ -657,13 +662,13 @@
                 "doctrine/couchdb": "~1.0@dev",
                 "graylog2/gelf-php": "~1.0",
                 "jakub-onderka/php-parallel-lint": "0.9",
+                "php-amqplib/php-amqplib": "~2.4",
                 "php-console/php-console": "^3.1.3",
                 "phpunit/phpunit": "~4.5",
                 "phpunit/phpunit-mock-objects": "2.3.0",
                 "raven/raven": "^0.13",
                 "ruflin/elastica": ">=0.90 <3.0",
-                "swiftmailer/swiftmailer": "~5.3",
-                "videlalvaro/php-amqplib": "~2.4"
+                "swiftmailer/swiftmailer": "~5.3"
             },
             "suggest": {
                 "aws/aws-sdk-php": "Allow sending log messages to AWS services like DynamoDB",
@@ -672,11 +677,11 @@
                 "ext-mongo": "Allow sending log messages to a MongoDB server",
                 "graylog2/gelf-php": "Allow sending log messages to a GrayLog2 server",
                 "mongodb/mongodb": "Allow sending log messages to a MongoDB server via PHP Driver",
+                "php-amqplib/php-amqplib": "Allow sending log messages to an AMQP server using php-amqplib",
                 "php-console/php-console": "Allow sending log messages to Google Chrome",
                 "raven/raven": "Allow sending log messages to a Sentry server",
                 "rollbar/rollbar": "Allow sending log messages to Rollbar",
-                "ruflin/elastica": "Allow sending log messages to an Elastic Search server",
-                "videlalvaro/php-amqplib": "Allow sending log messages to an AMQP server using php-amqplib"
+                "ruflin/elastica": "Allow sending log messages to an Elastic Search server"
             },
             "type": "library",
             "extra": {
@@ -707,20 +712,20 @@
                 "logging",
                 "psr-3"
             ],
-            "time": "2016-03-01 18:00:40"
+            "time": "2016-04-12 18:29:35"
         },
         {
             "name": "php-curl-class/php-curl-class",
-            "version": "4.8.2",
+            "version": "4.11.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-curl-class/php-curl-class.git",
-                "reference": "91f937bb9e57fd1e1a550baab9f03f5a6e4203af"
+                "reference": "f85d7aebe750c1ac21b40c7d433d5a615ffdc5f1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-curl-class/php-curl-class/zipball/91f937bb9e57fd1e1a550baab9f03f5a6e4203af",
-                "reference": "91f937bb9e57fd1e1a550baab9f03f5a6e4203af",
+                "url": "https://api.github.com/repos/php-curl-class/php-curl-class/zipball/f85d7aebe750c1ac21b40c7d433d5a615ffdc5f1",
+                "reference": "f85d7aebe750c1ac21b40c7d433d5a615ffdc5f1",
                 "shasum": ""
             },
             "require": {
@@ -763,7 +768,7 @@
                 "web service",
                 "xml"
             ],
-            "time": "2015-10-31 18:25:18"
+            "time": "2016-03-09 00:50:07"
         },
         {
             "name": "psr/log",
@@ -851,12 +856,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/raulferras/PHP-po-parser.git",
-                "reference": "c7d2141af3d77b54c691dfc6f269d7ae5fd89036"
+                "reference": "52dc59b1de1fc39de8d410ad6b97d344b044eda8"
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/raulferras/PHP-po-parser/zipball/52dc59b1de1fc39de8d410ad6b97d344b044eda8",
-                "reference": "c7d2141af3d77b54c691dfc6f269d7ae5fd89036",
+                "reference": "52dc59b1de1fc39de8d410ad6b97d344b044eda8",
                 "shasum": ""
             },
             "require": {
@@ -891,14 +896,14 @@
                 "i18n",
                 "po"
             ],
-            "time": "2015-12-17 10:19:06"
+            "time": "2016-01-29 08:58:23"
         }
     ],
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "abhinavsingh/jaxl": 20,
+        "calref/jaxl": 20,
         "sepia/po-parser": 20
     },
     "prefer-stable": false,
