@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "58dd889c6e958d05466696433e95477a",
-    "content-hash": "253db09fde6cee2911c00cb60b5e57a7",
+    "hash": "06b3a4225b2dbe7c209e40b41e80c6d0",
+    "content-hash": "2ba82fb5be883758ce59cbcdc2bf10c7",
     "packages": [
         {
             "name": "calref/jaxl",
@@ -912,7 +912,8 @@
         "ext-intl": "*",
         "ext-curl": "*",
         "ext-mbstring": "*",
-        "ext-pcre": "*"
+        "ext-pcre": "*",
+        "php": ">=5.4.0"
     },
     "platform-dev": []
 }
