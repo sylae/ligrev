@@ -37,7 +37,12 @@
     "erusev/parsedown": "^1.6",
     "calref/jaxl": "3.x-dev",
     "sepia/po-parser": "dev-master",
-    "monolog/monolog": "^1.18"
+    "monolog/monolog": "^1.18",
+    "ext-intl": "*",
+    "ext-curl": "*",
+    "ext-mbstring": "*",
+    "ext-pcre": "*",
+    "php": ">=5.4.0"
   },
   "autoload": {
     "psr-4": {
