@@ -18,7 +18,7 @@ class xmppEntityTest extends PHPUnit_Framework_TestCase {
 
     $this->assertEquals('<span class="user jid-node-test jid-domain-example.com jid-resource-test" data-jid="test@example.com/test">test@example.com</span>', $x->generateHTML());
 
-    $this->assertEquals('<span class="user jid-node-test jid-domain-example.com jid-resource-test" data-jid="test@example.com/test" data-nick="nick">(nick)</span>', $x->generateHTML("nick"));
+    $this->assertEquals('<span class="user jid-node-test jid-domain-example.com jid-resource-test" data-jid="test@example.com/test" data-nick="nick">nick</span>', $x->generateHTML("nick"));
   }
 
   /*
