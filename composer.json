@@ -47,6 +47,10 @@
   "autoload": {
     "psr-4": {
       "Ligrev\\": "classes/"
-    }
+    },
+    "files": [
+      "classes/IQ/xep_0092.php",
+      "classes/IQ/xep_0202.php"
+    ]
   }
 }
