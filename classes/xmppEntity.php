@@ -111,7 +111,7 @@ class xmppEntity extends ligrevGlobals {
    */
   protected function escape_class($string) {
     return $string ? preg_replace_callback('/[\\s\0\\\\]/', function ($x) {
-        return '\\' . ord($x[0]);
+        return '\\' . dechex(ord($x[0]));
       }, $string) : '';
   }
 
