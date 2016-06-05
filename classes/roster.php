@@ -62,6 +62,12 @@ class roster extends ligrevGlobals {
     if ($room == $this->config['jaxl']['jid'] || $type == 'error') {
       return true;
     }
+    
+    // Make sure we aren't doing anything for buddies (todo: fix this better)
+    if (!array_key_exists($room, $this->config['rooms'])) {
+      return true;
+    }
+    
     // Initialize the room if it doesn't exist yet.
     if (!array_key_exists($room, $this->rooms)) {
       $this->rooms[$room] = new mucRoom($room);
