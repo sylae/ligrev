@@ -6,17 +6,11 @@ use Monolog\Registry;
 
 require_once 'includes/bootstrap.php';
 
-// Database stuff is a bit heavy, so it's thrown in an include to keep this area tidy.
-require_once 'includes/schema.php';
+// TODO: Register hook on_plugin_load
+// Also load plugins here
 
 Registry::JAXL()->debug("Initializing JAXL");
-$client = new \JAXL($config['jaxl']);
-
-$client->require_xep([
-  '0045', // MUC
-  '0203', // Delayed Delivery
-  '0199'  // XMPP Ping
-]);
+$ligrev = new Ligrev($config);
 
 require_once __DIR__ . '/includes/disco_id.php';
 
@@ -28,32 +22,6 @@ $_ligrevStartupInhibitTell = true;
 $client->add_cb('on_auth_success', function() {
   global $client, $config, $disco;
   Registry::JAXL()->debug("Connected to XMPP Server", ['jid' => $client->full_jid->to_string()]);
-
-  /**
-   * Why not use $client->set_status()? Well, a very popular XMPP messenger
-   * buggily does not send a service disco (0030) if the client it is interested
-   * in doesn't support XEP-0115. So we've basically had to rewrite JAXL's
-   * presence info here, to bodge in XEP-0115 saupport.
-   *
-   * Also, JAXL's XEP-0115 xep/ class is...lacking.
-   */
-  $S = "";
-  $S_id = [];
-  foreach ($disco['identity'] as $id) {
-    $S_id[] = "{$id[0]}/{$id[1]}/{$id[2]}/{$id[3]}<";
-  }
-  sort($S_id);
-  foreach ($S_id as $id) {
-    $S .= $id;
-  }
-  foreach ($disco['features'] as $feature) {
-    $S .= $feature . "<";
-  }
-
-  $pres = new \XMPPPres(['from' => $client->full_jid->to_string()], '', 'chat', 10);
-  $pres->id = $client->get_id();
-  $pres->c("c", NS_CAPS, ['hash' => 'sha-1', 'node' => 'https://github.com/sylae/ligrev', 'ver' => base64_encode(sha1($S, true))]);
-  $client->send($pres);
 
   foreach ($config['rooms'] as $jid => $conf) {
     $c = array_merge($config, $conf);
