@@ -139,14 +139,18 @@ namespace Ligrev {
       $h = $matches[2][0] * 3600;
       $m = $matches[3][0] * 60;
       $offset = ($sign == "-") ? -1 * $h + $m : $h + $m;
-      ;
     } else {
       $offset = 0;
     }
-    $intl_soon = new \IntlDateFormatter($locale, \IntlDateFormatter::NONE, \IntlDateFormatter::LONG, timezone_name_from_abbr("", $offset, false));
-    $intl_past = new \IntlDateFormatter($locale, \IntlDateFormatter::MEDIUM, \IntlDateFormatter::LONG, timezone_name_from_abbr("", $offset, false));
+
+    // good god what have i done with my life.
+    $str = "Etc/GMT" . sprintf("%+d", ($offset / 60 / 60) * -1);
+    $tz = new \DateTimeZone($str);
+
+    $intl_soon = new \IntlDateFormatter($locale, \IntlDateFormatter::NONE, \IntlDateFormatter::LONG, $tz);
+    $intl_past = new \IntlDateFormatter($locale, \IntlDateFormatter::MEDIUM, \IntlDateFormatter::LONG, $tz);
     $date = new \DateTime(date('c', $epoch));
-    $date->setTimezone(new \DateTimezone(timezone_name_from_abbr("", $offset, false)));
+    $date->setTimezone($tz);
     $time = ($epoch > time() - (60 * 60 * 24)) ? $intl_soon->format($date) : $intl_past->format($date);
     $xmpptime = date(DATE_ATOM, $epoch);
     if ($html) {
