@@ -62,12 +62,12 @@ class roster extends ligrevGlobals {
     if ($room == $this->config['jaxl']['jid'] || $type == 'error') {
       return true;
     }
-    
+
     // Make sure we aren't doing anything for buddies (todo: fix this better)
     if (!array_key_exists($room, $this->config['rooms'])) {
       return true;
     }
-    
+
     // Initialize the room if it doesn't exist yet.
     if (!array_key_exists($room, $this->rooms)) {
       $this->rooms[$room] = new mucRoom($room);
@@ -149,7 +149,10 @@ class roster extends ligrevGlobals {
     }
 
     // TODO: get XEP-0256 info if possible, use it to update user activity timer
-    $user->processTells($room, $nick);
+    // DELAY five seconds to let userTime populate
+    \JAXLLoop::$clock->call_fun_after(5000000, function () use ($user, $room, $nick) {
+      $user->processTells($room, $nick);
+    });
   }
 
   /**
