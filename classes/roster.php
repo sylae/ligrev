@@ -116,6 +116,7 @@ class roster extends ligrevGlobals {
       $actor = \qp($item, 'actor')->attr('nick');
       $reason = \qp($item, 'reason')->text();
       Registry::ROSTER()->info("User booted from chat", ['nick' => $nick, 'type' => $type, 'actor' => $actor, 'reason' => $reason, 'room' => $room]);
+      $this->rooms[$room]->removeMember($nick);
     } else { // Any other `unavailable` presence indicates a logout.
       Registry::ROSTER()->info("User left room", ['nick' => $nick, 'room' => $room]);
       $this->rooms[$room]->removeMember($nick);
