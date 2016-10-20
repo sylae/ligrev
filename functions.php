@@ -35,11 +35,11 @@ namespace Ligrev {
 
       foreach ($config['remoteLogRecipients'] as $recipient) {
         $msg = new \XMPPMsg(
-          array(
+                array(
           'type' => "chat",
           'to' => $recipient,
           'from' => $client->full_jid->to_string(),
-          )
+                )
         );
         foreach ($_xmppLogHandler_messageQueue as $item) {
           switch ($item['level']) {
@@ -131,7 +131,29 @@ namespace Ligrev {
   }
 
   function userTime($epoch, $tzo = "+00:00", $locale = null, $html = true) {
+    $tz = _TZOtoTimezone($tzo);
 
+    $intl_soon = new \IntlDateFormatter($locale, \IntlDateFormatter::NONE, \IntlDateFormatter::LONG, $tz);
+    $intl_past = new \IntlDateFormatter($locale, \IntlDateFormatter::MEDIUM, \IntlDateFormatter::LONG, $tz);
+    $date = new \DateTime(date('c', $epoch));
+    $date->setTimezone($tz);
+    $time = (abs($epoch - time()) < (60 * 60 * 24)) ? $intl_soon->format($date) : $intl_past->format($date);
+    $xmpptime = date(DATE_ATOM, $epoch);
+    if ($html) {
+      return "<span data-timestamp=\"$xmpptime\">$time</span>";
+    } else {
+      return $time;
+    }
+  }
+
+  function userTimeReverse($string, $tzo = "+00:00") {
+    $tz = _TZOtoTimezone($tzo);
+
+    $date = new \DateTime($string, $tz);
+    return $date->format("U");
+  }
+
+  function _TZOtoTimezone($tzo) {
     // first, parse our tzo into seconds
     preg_match_all('/([+-]?)(\\d{2}):(\\d{2})/', $tzo, $matches);
     if (array_key_exists(0, $matches[1])) {
@@ -145,19 +167,7 @@ namespace Ligrev {
 
     // good god what have i done with my life.
     $str = "Etc/GMT" . sprintf("%+d", ($offset / 60 / 60) * -1);
-    $tz = new \DateTimeZone($str);
-
-    $intl_soon = new \IntlDateFormatter($locale, \IntlDateFormatter::NONE, \IntlDateFormatter::LONG, $tz);
-    $intl_past = new \IntlDateFormatter($locale, \IntlDateFormatter::MEDIUM, \IntlDateFormatter::LONG, $tz);
-    $date = new \DateTime(date('c', $epoch));
-    $date->setTimezone($tz);
-    $time = ($epoch > time() - (60 * 60 * 24)) ? $intl_soon->format($date) : $intl_past->format($date);
-    $xmpptime = date(DATE_ATOM, $epoch);
-    if ($html) {
-      return "<span data-timestamp=\"$xmpptime\">$time</span>";
-    } else {
-      return $time;
-    }
+    return new \DateTimeZone($str);
   }
 
   function t($string, $lang = null) {

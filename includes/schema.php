@@ -26,6 +26,15 @@ $tables['rss']->addColumn("request", "integer", ["notnull" => false]);
 $tables['rss']->addColumn("latest", "integer", ["notnull" => false]);
 $tables['rss']->setPrimaryKey(["url"]);
 
+// table remind
+$tables['remind'] = $schema->createTable("remind");
+$tables['remind']->addColumn("id", "integer", ["unsigned" => true, "autoincrement" => true]);
+$tables['remind']->addColumn("recipient", "text");
+$tables['remind']->addColumn("due", "integer", ["unsigned" => true]);
+$tables['remind']->addColumn("private", "boolean");
+$tables['remind']->addColumn("message", "text");
+$tables['remind']->setPrimaryKey(["id"]);
+
 // table tell
 $tables['tell'] = $schema->createTable("tell");
 $tables['tell']->addColumn("id", "integer", ["unsigned" => true, "autoincrement" => true]);
