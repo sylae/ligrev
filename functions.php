@@ -148,9 +148,12 @@ namespace Ligrev {
 
   function userTimeReverse($string, $tzo = "+00:00") {
     $tz = _TZOtoTimezone($tzo);
-
-    $date = new \DateTime($string, $tz);
-    return $date->format("U");
+    try {
+      $date = new \DateTime($string, $tz);
+      return $date->format("U");
+    } catch (\Exception $ex) {
+      return false;
+    }
   }
 
   function _TZOtoTimezone($tzo) {

@@ -11,6 +11,13 @@ namespace Ligrev\Command;
 
 class remind extends \Ligrev\command {
 
+// this is stupid
+  const MINUTE = 60;
+  const HOUR = 3600;
+  const DAY = 86400;
+  const WEEK = 604800;
+  const YEAR = 31536000;
+
   public function process() {
     if (!$this->canDo("sylae/ligrev/remind")) {
       return false;
@@ -26,14 +33,16 @@ class remind extends \Ligrev\command {
 
     if ($r == "login") {
       $this->addReminder(null, $message);
-    } elseif ($r[0] == "@") {
-      $time = $this->timeAbsolute($r);
-      $this->addReminder($time, $message);
     } elseif ($this->isRelativeTime($r)) {
       $time = $this->timeRelative($r);
       $this->addReminder($time, $message);
     } else {
-      $this->help(sprintf($this->t("Error: %s"), $this->t("Could not parse reminder time")));
+      $time = $this->timeAbsolute($r);
+      if ($time) {
+        $this->addReminder($time, $message);
+      } else {
+        $this->help(sprintf($this->t("Error: %s"), $this->t("Could not parse reminder time")));
+      }
     }
   }
 
@@ -46,18 +55,49 @@ class remind extends \Ligrev\command {
     $this->_send($this->getDefaultResponse(), sprintf($this->t("Reminder has been processed for %s"), $timeLabel));
   }
 
-  private function timeRelative($r) {
-    // TODO
-    // /(\d+[ywdhms]?)/ig should do the trick
+  private function isRelativeTime($r) {
+    $matches = [];
+    $nmatches = 0;
+    if (preg_match_all("/((\\d+)([ywdhm]))/i", $r, $matches, PREG_SET_ORDER)) {
+      foreach ($matches as $match) {
+        $nmatches++;
+      }
+    }
+    $m = preg_replace("/((\\d+)([ywdhm]))/i", "", $r);
+    return ($nmatches > 0 && mb_strlen(trim($m)) == 0);
   }
 
-  private function isRelativeTime($r) {
-    // TODO
-    // /(\d+[ywdhms]?)/ig should do the trick
+  private function TimeRelative($r) {
+    $matches = [];
+    if (preg_match_all("/((\\d+)([ywdhm]))/i", $r, $matches, PREG_SET_ORDER)) {
+      $time = 0;
+      foreach ($matches as $m) {
+        $num = $m[2] ?? 1;
+        $typ = mb_strtolower($m[3] ?? "m");
+        switch ($typ) {
+          case "y":
+            $time += $num * self::YEAR;
+            break;
+          case "w":
+            $time += $num * self::WEEK;
+            break;
+          case "d":
+            $time += $num * self::DAY;
+            break;
+          case "h":
+            $time += $num * self::HOUR;
+            break;
+          case "m":
+            $time += $num * self::MINUTE;
+            break;
+        }
+      }
+      return $time + time();
+    }
   }
 
   private function timeAbsolute($r) {
-    $str = substr($r, 1);
+    $str = $r;
     $tzo = $this->fromJID->getData('tzo');
     if (is_string($tzo)) {
       return \Ligrev\userTimeReverse($str, $tzo);
@@ -73,7 +113,7 @@ class remind extends \Ligrev\command {
     $help_lines = [
       $this->t("Usage help for Ligrev command :remind:"),
       $this->t("`:remind \$time \$message` - To send a reminder."),
-      $this->t("`\$time can be 'login' for an alert next login, an absolute date/time prefixed with @, or a relative time such as '8h30m'"),
+      $this->t("`\$time can be 'login' for an alert next login, an absolute date/time such as `12/08/16` or `tomorrow`, or a relative time such as '8h30m'"),
     ];
     $this->_send($this->getDefaultResponse(), $prefix . implode("\n", $help_lines));
   }
