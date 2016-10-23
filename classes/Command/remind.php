@@ -1,29 +1,42 @@
 <?php
 
-/**
- * Leave a note for yourself, for Ligrev to send later
+/*
+ * Copyright (C) 2016 Keira Sylae Aro <sylae@calref.net>
  *
- * @license http://www.gnu.org/licenses/gpl-3.0.txt GNU General Public License 3
- * @author Sylae Jiendra Corell <sylae@calref.net>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 namespace Ligrev\Command;
 
+/**
+ * Leave a note for yourself, for Ligrev to send later
+ */
 class remind extends \Ligrev\command {
 
 // this is stupid
   const MINUTE = 60;
-  const HOUR = 3600;
-  const DAY = 86400;
-  const WEEK = 604800;
-  const YEAR = 31536000;
+  const HOUR   = 3600;
+  const DAY    = 86400;
+  const WEEK   = 604800;
+  const YEAR   = 31536000;
 
   public function process() {
     if (!$this->canDo("sylae/ligrev/remind")) {
       return false;
     }
     $textParts = $this->_split($this->text);
-    $r = \Ligrev\return_ake(1, $textParts, null);
+    $r         = \Ligrev\return_ake(1, $textParts, null);
 
     $message = trim(implode(" ", array_slice($textParts, 2)));
     if (strlen($message) < 1) {
@@ -41,7 +54,8 @@ class remind extends \Ligrev\command {
       if ($time) {
         $this->addReminder($time, $message);
       } else {
-        $this->help(sprintf($this->t("Error: %s"), $this->t("Could not parse reminder time")));
+        $this->help(sprintf($this->t("Error: %s"),
+            $this->t("Could not parse reminder time")));
       }
     }
   }
@@ -52,11 +66,12 @@ class remind extends \Ligrev\command {
     }
     $this->_insertReminder($this->fromJID->jid->bare, $time, $message);
     $timeLabel = $this->_getLabel($time);
-    $this->_send($this->getDefaultResponse(), sprintf($this->t("Reminder has been processed for %s"), $timeLabel));
+    $this->_send($this->getDefaultResponse(),
+      sprintf($this->t("Reminder has been processed for %s"), $timeLabel));
   }
 
   private function isRelativeTime($r) {
-    $matches = [];
+    $matches  = [];
     $nmatches = 0;
     if (preg_match_all("/((\\d+)([ywdhm]))/i", $r, $matches, PREG_SET_ORDER)) {
       foreach ($matches as $match) {
@@ -115,11 +130,13 @@ class remind extends \Ligrev\command {
       $this->t("`:remind \$time \$message` - To send a reminder."),
       $this->t("`\$time can be 'login' for an alert next login, an absolute date/time such as `12/08/16` or `tomorrow`, or a relative time such as '8h30m'"),
     ];
-    $this->_send($this->getDefaultResponse(), $prefix . implode("\n", $help_lines));
+    $this->_send($this->getDefaultResponse(),
+      $prefix . implode("\n", $help_lines));
   }
 
   private function _insertReminder($recipient, $time, $message) {
-    $sql = $this->db->prepare('INSERT INTO remind (recipient, due, private, message) VALUES(?, ?, ?, ?);', ['string', 'integer', 'boolean', 'string']);
+    $sql = $this->db->prepare('INSERT INTO remind (recipient, due, private, message) VALUES(?, ?, ?, ?);',
+      ['string', 'integer', 'boolean', 'string']);
     $sql->bindValue(1, $recipient, "string");
     $sql->bindValue(2, $time, "integer");
     $sql->bindValue(3, ($this->origin == "groupchat" ? false : true), "boolean");

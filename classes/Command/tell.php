@@ -1,14 +1,27 @@
 <?php
 
-/**
- * Leave a message for an offline user, for Ligrev to send later
+/*
+ * Copyright (C) 2016 Keira Sylae Aro <sylae@calref.net>
  *
- * @license http://www.gnu.org/licenses/gpl-3.0.txt GNU General Public License 3
- * @author Sylae Jiendra Corell <sylae@calref.net>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 namespace Ligrev\Command;
 
+/**
+ * Leave a message for an offline user, for Ligrev to send later
+ */
 class tell extends \Ligrev\command {
 
   public function process() {
@@ -16,7 +29,7 @@ class tell extends \Ligrev\command {
       return false;
     }
     $textParts = $this->_split($this->text);
-    $r = \Ligrev\return_ake(1, $textParts, null);
+    $r         = \Ligrev\return_ake(1, $textParts, null);
     switch ($r) {
       case "block":
         $this->addBlock();
@@ -50,56 +63,68 @@ class tell extends \Ligrev\command {
       return;
     }
 
-    $recipient = $this->_appendPrefix($recipient);
-    $rec = new \Ligrev\xmppEntity(new \XMPPJid($recipient));
+    $recipient     = $this->_appendPrefix($recipient);
+    $rec           = new \Ligrev\xmppEntity(new \XMPPJid($recipient));
     $recipientHTML = $rec->generateHTML();
 
     // check for blockages
     if ($this->_amIBlocked($recipient)) {
-      $this->_send($this->getDefaultResponse(), sprintf($this->t("Error: %s"), sprintf($this->t("%s has blocked you from sending :tell messages."), $recipientHTML)));
+      $this->_send($this->getDefaultResponse(),
+        sprintf($this->t("Error: %s"),
+          sprintf($this->t("%s has blocked you from sending :tell messages."),
+            $recipientHTML)));
       return;
     }
 
     // Let's make sure the user isn't already online.
-    if ($roster->onlineByJID($recipient) && $roster->onlineByJID($recipient, null, true)->isAFK()) {
-      $this->help(sprintf($this->t("Error: %s"), sprintf($this->t("%s already online. Contact user directly."), $recipientHTML)));
+    if ($roster->onlineByJID($recipient) && $roster->onlineByJID($recipient,
+        null, true)->isAFK()) {
+      $this->help(sprintf($this->t("Error: %s"),
+          sprintf($this->t("%s already online. Contact user directly."),
+            $recipientHTML)));
       return;
     }
 
     $this->_insertTell($recipient, $message);
-    $this->_send($this->getDefaultResponse(), sprintf($this->t("Message for %s processed."), $recipientHTML));
+    $this->_send($this->getDefaultResponse(),
+      sprintf($this->t("Message for %s processed."), $recipientHTML));
   }
 
   private function addBlock() {
-    $textParts = $this->_split($this->text);
-    $sender = \Ligrev\return_ake(2, $textParts, null);
-    $sender = $this->_appendPrefix($sender);
-    $snd = new \Ligrev\xmppEntity(new \XMPPJid($sender));
+    $textParts  = $this->_split($this->text);
+    $sender     = \Ligrev\return_ake(2, $textParts, null);
+    $sender     = $this->_appendPrefix($sender);
+    $snd        = new \Ligrev\xmppEntity(new \XMPPJid($sender));
     $senderHTML = $snd->generateHTML();
 
     // first make sure they aren't already blocked
     if ($this->_areTheyBlocked($sender)) {
-      $this->_send($this->getDefaultResponse(), sprintf($this->t("%s is already blocked."), $senderHTML));
+      $this->_send($this->getDefaultResponse(),
+        sprintf($this->t("%s is already blocked."), $senderHTML));
       return;
     }
     $this->_insertBlock($sender);
-    $this->_send($this->getDefaultResponse(), sprintf($this->t("%s has been blocked."), $senderHTML));
+    $this->_send($this->getDefaultResponse(),
+      sprintf($this->t("%s has been blocked."), $senderHTML));
   }
 
   private function removeBlock() {
-    $textParts = $this->_split($this->text);
-    $sender = \Ligrev\return_ake(2, $textParts, null);
-    $sender = $this->_appendPrefix($sender);
-    $snd = new \Ligrev\xmppEntity(new \XMPPJid($sender));
+    $textParts  = $this->_split($this->text);
+    $sender     = \Ligrev\return_ake(2, $textParts, null);
+    $sender     = $this->_appendPrefix($sender);
+    $snd        = new \Ligrev\xmppEntity(new \XMPPJid($sender));
     $senderHTML = $snd->generateHTML();
 
     // first make sure they aren't already blocked
     if (!$this->_areTheyBlocked($sender)) {
-      $this->_send($this->getDefaultResponse(), sprintf($this->t("%s is not blocked."), $senderHTML));
+      $this->_send($this->getDefaultResponse(),
+        sprintf($this->t("%s is not blocked."), $senderHTML));
       return;
     }
-    $this->db->delete('tell_block', ['sender' => $sender, 'recipient' => $this->fromJID->jid->bare]);
-    $this->_send($this->getDefaultResponse(), sprintf($this->t("%s has been unblocked."), $senderHTML));
+    $this->db->delete('tell_block',
+      ['sender' => $sender, 'recipient' => $this->fromJID->jid->bare]);
+    $this->_send($this->getDefaultResponse(),
+      sprintf($this->t("%s has been unblocked."), $senderHTML));
   }
 
   public function help($prefix = null) {
@@ -112,7 +137,8 @@ class tell extends \Ligrev\command {
       $this->t("`:tell block \$sender` - To block a user from sending messages to you."),
       $this->t("`:tell unblock \$sender` - To unblock a user from sending messages to you."),
     ];
-    $this->_send($this->getDefaultResponse(), $prefix . implode("\n", $help_lines));
+    $this->_send($this->getDefaultResponse(),
+      $prefix . implode("\n", $help_lines));
   }
 
   private function _appendPrefix($recipient) {
@@ -129,9 +155,11 @@ class tell extends \Ligrev\command {
   }
 
   private function _areTheyBlocked($sender) {
-    $sql = $this->db->prepare('SELECT * FROM tell_block WHERE sender = ? AND recipient = ?', ["string", "string"]);
+    $sql   = $this->db->prepare('SELECT * FROM tell_block WHERE sender = ? AND recipient = ?',
+      ["string", "string"]);
     $sql->bindValue(1, str_replace("\\20", " ", $sender), "string");
-    $sql->bindValue(2, str_replace("\\20", " ", $this->fromJID->jid->bare), "string");
+    $sql->bindValue(2, str_replace("\\20", " ", $this->fromJID->jid->bare),
+      "string");
     $sql->execute();
     $tells = $sql->fetchAll();
     foreach ($tells as $tell) {
@@ -141,9 +169,11 @@ class tell extends \Ligrev\command {
   }
 
   private function _amIBlocked($recipient) {
-    $sql = $this->db->prepare('SELECT * FROM tell_block WHERE recipient = ? AND sender = ?', ["string", "string"]);
+    $sql   = $this->db->prepare('SELECT * FROM tell_block WHERE recipient = ? AND sender = ?',
+      ["string", "string"]);
     $sql->bindValue(1, str_replace("\\20", " ", $recipient), "string");
-    $sql->bindValue(2, str_replace("\\20", " ", $this->fromJID->jid->bare), "string");
+    $sql->bindValue(2, str_replace("\\20", " ", $this->fromJID->jid->bare),
+      "string");
     $sql->execute();
     $tells = $sql->fetchAll();
     foreach ($tells as $tell) {
@@ -153,7 +183,8 @@ class tell extends \Ligrev\command {
   }
 
   private function _insertTell($recipient, $message) {
-    $sql = $this->db->prepare('INSERT INTO tell (sender, recipient, sent, private, message) VALUES(?, ?, ?, ?, ?);', ['string', 'string', 'integer', 'boolean', 'string']);
+    $sql = $this->db->prepare('INSERT INTO tell (sender, recipient, sent, private, message) VALUES(?, ?, ?, ?, ?);',
+      ['string', 'string', 'integer', 'boolean', 'string']);
     $sql->bindValue(1, $this->fromJID->jid->bare, "string");
     $sql->bindValue(2, $recipient, "string");
     $sql->bindValue(3, time(), "integer");
@@ -163,9 +194,11 @@ class tell extends \Ligrev\command {
   }
 
   private function _insertBlock($sender) {
-    $sql = $this->db->prepare('INSERT INTO tell_block (sender, recipient) VALUES(?, ?);', ['string', 'string']);
+    $sql = $this->db->prepare('INSERT INTO tell_block (sender, recipient) VALUES(?, ?);',
+      ['string', 'string']);
     $sql->bindValue(1, str_replace("\\20", " ", $sender), "string");
-    $sql->bindValue(2, str_replace("\\20", " ", $this->fromJID->jid->bare), "string");
+    $sql->bindValue(2, str_replace("\\20", " ", $this->fromJID->jid->bare),
+      "string");
     $sql->execute();
   }
 

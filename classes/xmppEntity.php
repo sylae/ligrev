@@ -1,13 +1,27 @@
 <?php
 
+/*
+ * Copyright (C) 2016 Keira Sylae Aro <sylae@calref.net>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 namespace Ligrev;
 
 /**
  * The xmppEntity class is a representation of an xmpp "resource". It provides
  * any functions that relate to a specific user
- *
- * @license http://www.gnu.org/licenses/gpl-3.0.txt GNU General Public License 3
- * @author Sylae Jiendra Corell <sylae@calref.net>
  */
 class xmppEntity extends ligrevGlobals {
 
@@ -59,10 +73,10 @@ class xmppEntity extends ligrevGlobals {
   public function getUserTime() {
     $id = $this->client->get_id();
     $resp = new \XMPPIq([
-      'from' => $this->client->full_jid->to_string(),
-      'to' => $this->jid->to_string(),
-      'type' => 'get',
-      'id' => $id
+        'from' => $this->client->full_jid->to_string(),
+        'to' => $this->jid->to_string(),
+        'type' => 'get',
+        'id' => $id
     ]);
     $resp->c('time', IQ\xep_0202::NS_TIME);
 
@@ -111,8 +125,8 @@ class xmppEntity extends ligrevGlobals {
    */
   protected function escape_class($string) {
     return $string ? preg_replace_callback('/[\\s\0\\\\]/', function ($x) {
-        return '\\' . dechex(ord($x[0]));
-      }, $string) : '';
+              return '\\' . dechex(ord($x[0]));
+            }, $string) : '';
   }
 
   /**
@@ -121,8 +135,8 @@ class xmppEntity extends ligrevGlobals {
    */
   protected function jid_classes() {
     return 'user jid-node-' . $this->escape_class(strtolower($this->jid->node))
-      . ' jid-domain-' . $this->escape_class($this->jid->domain)
-      . ' jid-resource-' . $this->escape_class($this->jid->resource);
+            . ' jid-domain-' . $this->escape_class($this->jid->domain)
+            . ' jid-resource-' . $this->escape_class($this->jid->resource);
   }
 
   /**
@@ -135,8 +149,8 @@ class xmppEntity extends ligrevGlobals {
     $display = str_replace('\\20', ' ', (is_string($nick) ? $nick : $this->jid->bare));
     $classes = $this->jid_classes();
     $html = "<span class=\"$classes\" data-jid=\"{$this->jid->to_string()}\""
-      . (is_string($nick) ? " data-nick=\"$nick\"" : '')
-      . ">{$display}</span>";
+            . (is_string($nick) ? " data-nick=\"$nick\"" : '')
+            . ">{$display}</span>";
     return $html;
   }
 

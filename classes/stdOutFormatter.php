@@ -1,16 +1,29 @@
 <?php
 
-/**
- * Since we log to STDOUT for stuff, let's make it a bit readable...
+/*
+ * Copyright (C) 2016 Keira Sylae Aro <sylae@calref.net>
  *
- * This is shoddy as fuck and should be redone properly.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * @license http://www.gnu.org/licenses/gpl-3.0.txt GNU General Public License 3
- * @author Sylae Jiendra Corell <sylae@calref.net>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 namespace Ligrev;
 
+/**
+ * Since we log to STDOUT for stuff, let's make it a bit readable...
+ *
+ * This is shoddy as fuck and should be redone properly.
+ */
 class stdOutFormatter implements \Monolog\Formatter\FormatterInterface {
 
   public function format(array $record) {

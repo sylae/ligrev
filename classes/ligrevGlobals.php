@@ -1,13 +1,27 @@
 <?php
 
+/*
+ * Copyright (C) 2016 Keira Sylae Aro <sylae@calref.net>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 namespace Ligrev;
 
 /**
  * The ligrevGlobals class is used as a template to hold common stuff
  * used by other classes. It should just be called directly, just extended.
- *
- * @license http://www.gnu.org/licenses/gpl-3.0.txt GNU General Public License 3
- * @author Sylae Jiendra Corell <sylae@calref.net>
  */
 class ligrevGlobals {
 
@@ -102,11 +116,11 @@ class ligrevGlobals {
   public static function sendMessage($to, $text, $isMarkdown = true, $origin = "groupchat") {
     global $client;
     $msg = new \XMPPMsg(
-      array(
-      'type' => (($origin == "groupchat") ? "groupchat" : "chat"),
-      'to' => (($to instanceof \XMPPJid) ? $to->to_string() : $to),
-      'from' => $client->full_jid->to_string(),
-      )
+            array(
+        'type' => (($origin == "groupchat") ? "groupchat" : "chat"),
+        'to' => (($to instanceof \XMPPJid) ? $to->to_string() : $to),
+        'from' => $client->full_jid->to_string(),
+            )
     );
     $plaintext = new rawXML(strip_tags($text));
     $msg->c('body')->cnode($plaintext)->up()->up();

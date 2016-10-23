@@ -1,9 +1,25 @@
 <?php
 
+/*
+ * Copyright (C) 2016 Keira Sylae Aro <sylae@calref.net>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 /**
  * Miscellaneous functions and consts not in a class
  *
- * @license http://www.gnu.org/licenses/gpl-3.0.txt GNU General Public License 3
  * @author Sylae Jiendra Corell <sylae@calref.net>
  */
 
@@ -17,7 +33,7 @@ namespace Ligrev {
 
   function rss_init() {
     global $config;
-    $rss = $config['rss'];
+    $rss   = $config['rss'];
     $feeds = [];
     foreach ($rss as $feed) {
       $feeds[] = new RSS($feed['url'], $feed['rooms'], $feed['ttl']);
@@ -26,7 +42,8 @@ namespace Ligrev {
 
   function remoteLog_init() {
     global $config;
-    \JAXLLoop::$clock->call_fun_periodic($config['remoteLogThrottle'] * 1000000, function () {
+    \JAXLLoop::$clock->call_fun_periodic($config['remoteLogThrottle'] * 1000000,
+      function () {
       global $_xmppLogHandler_messageQueue, $client, $config;
 
       if (count($_xmppLogHandler_messageQueue) < 1) {
@@ -35,11 +52,11 @@ namespace Ligrev {
 
       foreach ($config['remoteLogRecipients'] as $recipient) {
         $msg = new \XMPPMsg(
-                array(
+          array(
           'type' => "chat",
-          'to' => $recipient,
+          'to'   => $recipient,
           'from' => $client->full_jid->to_string(),
-                )
+          )
         );
         foreach ($_xmppLogHandler_messageQueue as $item) {
           switch ($item['level']) {
@@ -68,10 +85,11 @@ namespace Ligrev {
               $type = "Emergency";
               break;
           }
-          $msg->c('log', NS_EVENT_LOGGING, [
-            'timestamp' => $xmpptime = $item['datetime']->format(\DateTime::ATOM),
-            "type" => $type,
-            "module" => $item['channel'],
+          $msg->c('log', NS_EVENT_LOGGING,
+            [
+            'timestamp' => $xmpptime   = $item['datetime']->format(\DateTime::ATOM),
+            "type"      => $type,
+            "module"    => $item['channel'],
           ]);
           $msg->c("message", null, [], $item['message'])->up();
           foreach ($item['context'] as $tag => $value) {
@@ -93,7 +111,7 @@ namespace Ligrev {
                 break;
             }
             $attrs = [
-              'name' => $tag,
+              'name'  => $tag,
               'value' => $value,
             ];
             if (!is_null($type)) {
@@ -102,24 +120,29 @@ namespace Ligrev {
 
             $msg->c("tag", null, $attrs)->up();
           }
-          $msg->c("tag", null, [
-            'name' => "git",
+          $msg->c("tag", null,
+            [
+            'name'  => "git",
             'value' => $item['extra']['git']['commit'],
           ])->up();
-          $msg->c("tag", null, [
-            'name' => "file",
+          $msg->c("tag", null,
+            [
+            'name'  => "file",
             'value' => $item['extra']['file'],
           ])->up();
-          $msg->c("tag", null, [
-            'name' => "line",
+          $msg->c("tag", null,
+            [
+            'name'  => "line",
             'value' => $item['extra']['line'],
           ])->up();
-          $msg->c("tag", null, [
-            'name' => "class",
+          $msg->c("tag", null,
+            [
+            'name'  => "class",
             'value' => $item['extra']['class'],
           ])->up();
-          $msg->c("tag", null, [
-            'name' => "function",
+          $msg->c("tag", null,
+            [
+            'name'  => "function",
             'value' => $item['extra']['function'],
           ])->up();
           $msg->up();
@@ -133,12 +156,14 @@ namespace Ligrev {
   function userTime($epoch, $tzo = "+00:00", $locale = null, $html = true) {
     $tz = _TZOtoTimezone($tzo);
 
-    $intl_soon = new \IntlDateFormatter($locale, \IntlDateFormatter::NONE, \IntlDateFormatter::LONG, $tz);
-    $intl_past = new \IntlDateFormatter($locale, \IntlDateFormatter::MEDIUM, \IntlDateFormatter::LONG, $tz);
-    $date = new \DateTime(date('c', $epoch));
+    $intl_soon = new \IntlDateFormatter($locale, \IntlDateFormatter::NONE,
+      \IntlDateFormatter::LONG, $tz);
+    $intl_past = new \IntlDateFormatter($locale, \IntlDateFormatter::MEDIUM,
+      \IntlDateFormatter::LONG, $tz);
+    $date      = new \DateTime(date('c', $epoch));
     $date->setTimezone($tz);
-    $time = (abs($epoch - time()) < (60 * 60 * 24)) ? $intl_soon->format($date) : $intl_past->format($date);
-    $xmpptime = date(DATE_ATOM, $epoch);
+    $time      = (abs($epoch - time()) < (60 * 60 * 24)) ? $intl_soon->format($date) : $intl_past->format($date);
+    $xmpptime  = date(DATE_ATOM, $epoch);
     if ($html) {
       return "<span data-timestamp=\"$xmpptime\">$time</span>";
     } else {
@@ -160,9 +185,9 @@ namespace Ligrev {
     // first, parse our tzo into seconds
     preg_match_all('/([+-]?)(\\d{2}):(\\d{2})/', $tzo, $matches);
     if (array_key_exists(0, $matches[1])) {
-      $sign = $matches[1][0];
-      $h = $matches[2][0] * 3600;
-      $m = $matches[3][0] * 60;
+      $sign   = $matches[1][0];
+      $h      = $matches[2][0] * 3600;
+      $m      = $matches[3][0] * 60;
       $offset = ($sign == "-") ? -1 * $h + $m : $h + $m;
     } else {
       $offset = 0;
