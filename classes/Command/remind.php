@@ -133,7 +133,7 @@ class remind extends \Ligrev\command {
     $help_lines = [
       $this->t("Usage help for Ligrev command :remind:"),
       $this->t("`:remind \$time \$message` - To send a reminder."),
-      $this->t("`\$time` can be `login` for an alert next login, or a time such as `12/08/16`, `tomorrow`, `next\ Tuesday`, or `8h30m`"),
+      $this->t("`\$time` can be `login` for an alert next login, or a [time](http://php.net/manual/en/datetime.formats.php) such as `12/08/16`, `tomorrow`, `next\ Tuesday`, or `8h30m`"),
     ];
     $this->_send($this->getDefaultResponse(),
       $prefix . implode("\n", $help_lines));
