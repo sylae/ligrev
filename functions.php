@@ -47,6 +47,7 @@ namespace Ligrev {
       $people = [];
       foreach ($roster->rooms as $room) {
         foreach ($room->members as $member) {
+          // TODO: check if isAFK()
           $people[] = $member->jid->bare;
         }
       }
