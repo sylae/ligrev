@@ -64,6 +64,11 @@ class remind extends \Ligrev\command {
     if ($time == null) {
       $time = 0;
     }
+    if ($time != 0 && $time < time()) {
+      $this->help(sprintf($this->t("Error: %s"),
+          $this->t("Hindsight is 20/20, but this doesn't work like that.")));
+      return;
+    }
     $this->_insertReminder($this->fromJID->jid->bare, $time, $message);
     $timeLabel = $this->_getLabel($time);
     $this->_send($this->getDefaultResponse(),
