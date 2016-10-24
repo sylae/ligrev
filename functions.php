@@ -40,6 +40,47 @@ namespace Ligrev {
     }
   }
 
+  function remind_init() {
+    \JAXLLoop::$clock->call_fun_periodic(10000000,
+      function () {
+      global $db, $roster;
+      $people = [];
+      foreach ($roster->rooms as $room) {
+        foreach ($room->members as $member) {
+          $people[] = $member->jid->bare;
+        }
+      }
+      $p_fil   = array_unique($people);
+      $sql     = $db->executeQuery("SELECT * FROM remind WHERE recipient IN (?) AND due < UNIX_TIMESTAMP() order by due ASC",
+        [$p_fil], [\Doctrine\DBAL\Connection::PARAM_STR_ARRAY]
+      );
+      $reminds = $sql->fetchAll();
+      foreach ($reminds as $remind) {
+        $rooms = $roster->onlineRoom($remind['recipient']);
+        foreach ($rooms as $room) {
+          $rec  = $roster->onlineByJID($remind['recipient'], null, true);
+          $nick = $room->jidToNick($rec->jid, false);
+
+          $recHTML = $rec->generateHTML($nick);
+          if ($remind['due'] == 0) {
+            $time = t("next login");
+          } else {
+            $time = $rec->formatUserTime($remind['due']);
+          }
+          $message = sprintf(t("Reminder for %s at %s:"), $recHTML, $time) . PHP_EOL . $remind['message'];
+          if ($remind['private']) {
+            $jid           = new \XMPPJid($room->name);
+            $jid->resource = $nick;
+            ligrevGlobals::sendMessage($jid, $message, true, "chat");
+          } else {
+            ligrevGlobals::sendMessage($room->name, $message, true, "groupchat");
+          }
+        }
+        $db->delete('remind', ['id' => $remind['id']]);
+      }
+    });
+  }
+
   function remoteLog_init() {
     global $config;
     \JAXLLoop::$clock->call_fun_periodic($config['remoteLogThrottle'] * 1000000,

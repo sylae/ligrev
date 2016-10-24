@@ -92,6 +92,7 @@ $client->add_cb('on_auth_success',
   }
   rss_init();
   remoteLog_init();
+  remind_init();
 });
 
 $roster = new roster();

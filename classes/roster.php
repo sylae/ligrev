@@ -89,7 +89,7 @@ class roster extends ligrevGlobals {
     }
 
     // Find the status codes.
-    $item = \qp($xml)->find('item');
+    $item  = \qp($xml)->find('item');
     global $codes;
     $codes = [];
     \qp($xml, 'status')->map(function($index, $item) {
@@ -124,16 +124,20 @@ class roster extends ligrevGlobals {
       // Move the roster entry to the new nick, so the new presence
       // won't trigger a notification.
       $this->rooms[$room]->renameMember($nick, $newNick);
-      Registry::ROSTER()->info("Username change", ['nick' => $newNick, 'old_nick' => $nick, 'room' => $room]);
+      Registry::ROSTER()->info("Username change",
+        ['nick' => $newNick, 'old_nick' => $nick, 'room' => $room]);
       $this->isNickChange = true;
-    } elseif ((array_key_exists(301, $codes) && $codes[301] >= 0) || (array_key_exists(307, $codes) && $codes[307] >= 0)) { // An `unavailable` 301 is a ban; a 307 is a kick.
-      $type = (array_key_exists(301, $codes) && $codes[301] >= 0) ? 'banned' : 'kicked';
-      $actor = \qp($item, 'actor')->attr('nick');
+    } elseif ((array_key_exists(301, $codes) && $codes[301] >= 0) || (array_key_exists(307,
+        $codes) && $codes[307] >= 0)) { // An `unavailable` 301 is a ban; a 307 is a kick.
+      $type   = (array_key_exists(301, $codes) && $codes[301] >= 0) ? 'banned' : 'kicked';
+      $actor  = \qp($item, 'actor')->attr('nick');
       $reason = \qp($item, 'reason')->text();
-      Registry::ROSTER()->info("User booted from chat", ['nick' => $nick, 'type' => $type, 'actor' => $actor, 'reason' => $reason, 'room' => $room]);
+      Registry::ROSTER()->info("User booted from chat",
+        ['nick' => $nick, 'type' => $type, 'actor' => $actor, 'reason' => $reason, 'room' => $room]);
       $this->rooms[$room]->removeMember($nick);
     } else { // Any other `unavailable` presence indicates a logout.
-      Registry::ROSTER()->info("User left room", ['nick' => $nick, 'room' => $room]);
+      Registry::ROSTER()->info("User left room",
+        ['nick' => $nick, 'room' => $room]);
       $this->rooms[$room]->removeMember($nick);
     }
   }
@@ -147,7 +151,7 @@ class roster extends ligrevGlobals {
    */
   private function eventPresenceDefault($room, $nick, $item, $stanza) {
     // away, dnd, xa, chat, [default].
-    $show = \qp($stanza, 'show')->text() || 'default';
+    $show   = \qp($stanza, 'show')->text() || 'default';
     $status = \qp($stanza, 'status')->text() || '';
 
     $this->rooms[$room]->addMember($nick, new \XMPPJid($item->attr('jid')));
@@ -160,13 +164,15 @@ class roster extends ligrevGlobals {
     if ($this->isNickChange) {
       $this->isNickChange = false;
     } else {
-      Registry::ROSTER()->info("User joined room", ['nick' => $nick, 'room' => $room]);
+      Registry::ROSTER()->info("User joined room",
+        ['nick' => $nick, 'room' => $room]);
       $user->getUserTime();
     }
 
     // TODO: get XEP-0256 info if possible, use it to update user activity timer
     // DELAY five seconds to let userTime populate
-    \JAXLLoop::$clock->call_fun_after(5000000, function () use ($user, $room, $nick) {
+    \JAXLLoop::$clock->call_fun_after(5000000,
+      function () use ($user, $room, $nick) {
       $user->processTells($room, $nick);
     });
   }
@@ -189,6 +195,23 @@ class roster extends ligrevGlobals {
       }
     }
     return false;
+  }
+
+  /**
+   * Check the room(s) a user is active in
+   * @param \XMPPJid $id The JID to check for
+   * @return array array of rooms user is in
+   */
+  function onlineRoom($id) {
+    $id    = new \XMPPJid(str_replace(" ", "\\20", $id));
+    $rooms = [];
+    foreach ($this->rooms as $name => $mucRoomObj) {
+      $found = $mucRoomObj->jidToNick($id, false);
+      if ($found) {
+        $rooms[] = $mucRoomObj;
+      }
+    }
+    return $rooms;
   }
 
 }
