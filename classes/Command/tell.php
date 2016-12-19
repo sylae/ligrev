@@ -63,7 +63,10 @@ class tell extends \Ligrev\command {
       return;
     }
 
-    $recipient     = $this->_appendPrefix($recipient);
+    $recipient = $this->_appendPrefix($recipient);
+
+    $recipient = $this->_mapAliases($recipient);
+
     $rec           = new \Ligrev\xmppEntity(new \XMPPJid($recipient));
     $recipientHTML = $rec->generateHTML();
 
@@ -200,6 +203,18 @@ class tell extends \Ligrev\command {
     $sql->bindValue(2, str_replace("\\20", " ", $this->fromJID->jid->bare),
       "string");
     $sql->execute();
+  }
+
+  private function _mapAliases($from) {
+    $sql   = $this->db->prepare('SELECT * FROM user_alias WHERE fromName = ?',
+      ["string"]);
+    $sql->bindValue(1, str_replace("\\20", " ", $from), "string");
+    $sql->execute();
+    $tells = $sql->fetchAll();
+    foreach ($tells as $tell) {
+      return $tell['toName'];
+    }
+    return $from;
   }
 
 }

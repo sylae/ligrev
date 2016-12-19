@@ -116,9 +116,11 @@ $config['permissions'] = [
   ],
   'owner'                     => [// example of an affiliation permission
     'sylae/ligrev/restart' => true,
+    'sylae/ligrev/alias'   => true,
   ],
   'admin'                     => [// example of an affiliation permission
     'sylae/ligrev/restart' => true,
+    'sylae/ligrev/alias'   => true,
   ],
   'sylae/ligrev/card-draw'    => true,
   'sylae/ligrev/card-shuffle' => true,

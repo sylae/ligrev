@@ -72,6 +72,16 @@ $tables['tell'] = $schema->createTable("tell_block");
 $tables['tell']->addColumn("sender", "text");
 $tables['tell']->addColumn("recipient", "text");
 
+//table user_alias
+$tables['user_alias'] = $schema->createTable("user_alias");
+$tables['user_alias']->addColumn("id", "integer",
+  ["unsigned" => true, "autoincrement" => true]);
+$tables['user_alias']->addColumn("fromName", "text");
+$tables['user_alias']->addColumn("toName", "text");
+$tables['user_alias']->addColumn("author", "text");
+$tables['user_alias']->addColumn("submitTime", "integer", ["unsigned" => true]);
+$tables['user_alias']->setPrimaryKey(["id"]);
+
 $comparator    = new \Doctrine\DBAL\Schema\Comparator();
 $schemaDiff    = $comparator->compare($fromSchema, $schema);
 $sql           = $schemaDiff->toSaveSql($db->getDatabasePlatform());

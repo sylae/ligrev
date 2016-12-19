@@ -71,20 +71,21 @@ class xmppEntity extends ligrevGlobals {
    * Send an IQ to get a user's timezone
    */
   public function getUserTime() {
-    $id = $this->client->get_id();
+    $id   = $this->client->get_id();
     $resp = new \XMPPIq([
-        'from' => $this->client->full_jid->to_string(),
-        'to' => $this->jid->to_string(),
-        'type' => 'get',
-        'id' => $id
+      'from' => $this->client->full_jid->to_string(),
+      'to'   => $this->jid->to_string(),
+      'type' => 'get',
+      'id'   => $id
     ]);
     $resp->c('time', IQ\xep_0202::NS_TIME);
 
     $this->client->send($resp);
-    $this->client->add_cb('on_stanza_id_' . $id, function($stanza) {
+    $this->client->add_cb('on_stanza_id_' . $id,
+      function($stanza) {
       global $roster;
       $qp = \qp('<?xml version="1.0"?>' . $stanza->to_string());
-      $r = $roster->onlineByJID($stanza->from, null, true);
+      $r  = $roster->onlineByJID($stanza->from, null, true);
       if (\qp($qp, 'time')->attr('xmlns') == IQ\xep_0202::NS_TIME && $stanza->type == "result" && !is_bool($r)) {
         $tzo = \qp($qp, 'tzo')->text();
         $r->setUserTime($tzo);
@@ -124,9 +125,10 @@ class xmppEntity extends ligrevGlobals {
    * @link https://github.com/cburschka/cadence/issues/298
    */
   protected function escape_class($string) {
-    return $string ? preg_replace_callback('/[\\s\0\\\\]/', function ($x) {
-              return '\\' . dechex(ord($x[0]));
-            }, $string) : '';
+    return $string ? preg_replace_callback('/[\\s\0\\\\]/',
+        function ($x) {
+        return '\\' . dechex(ord($x[0]));
+      }, $string) : '';
   }
 
   /**
@@ -135,8 +137,8 @@ class xmppEntity extends ligrevGlobals {
    */
   protected function jid_classes() {
     return 'user jid-node-' . $this->escape_class(strtolower($this->jid->node))
-            . ' jid-domain-' . $this->escape_class($this->jid->domain)
-            . ' jid-resource-' . $this->escape_class($this->jid->resource);
+      . ' jid-domain-' . $this->escape_class($this->jid->domain)
+      . ' jid-resource-' . $this->escape_class($this->jid->resource);
   }
 
   /**
@@ -146,11 +148,12 @@ class xmppEntity extends ligrevGlobals {
    */
   public function generateHTML($nick = null) {
 
-    $display = str_replace('\\20', ' ', (is_string($nick) ? $nick : $this->jid->bare));
+    $display = str_replace('\\20', ' ',
+      (is_string($nick) ? $nick : $this->jid->bare));
     $classes = $this->jid_classes();
-    $html = "<span class=\"$classes\" data-jid=\"{$this->jid->to_string()}\""
-            . (is_string($nick) ? " data-nick=\"$nick\"" : '')
-            . ">{$display}</span>";
+    $html    = "<span class=\"$classes\" data-jid=\"{$this->jid->to_string()}\""
+      . (is_string($nick) ? " data-nick=\"$nick\"" : '')
+      . ">{$display}</span>";
     return $html;
   }
 
@@ -164,19 +167,22 @@ class xmppEntity extends ligrevGlobals {
     if ($_ligrevStartupInhibitTell) {
       return false;
     }
-    $sql = $this->db->prepare('SELECT * FROM tell WHERE recipient = ? ORDER BY sent ASC', array("string"));
+    $sql   = $this->db->prepare('SELECT * FROM tell WHERE recipient = ? ORDER BY sent ASC',
+      array("string"));
     $sql->bindValue(1, str_replace("\\20", " ", $this->jid->bare), "string");
     $sql->execute();
     $tells = $sql->fetchAll();
     foreach ($tells as $tell) {
-      $sender = new xmppEntity(new \XMPPJid($tell['sender']));
-      $senderHTML = $sender->generateHTML($this->roster->onlineByJID($sender, $room) ? $this->roster->rooms[$room]->jidToNick($sender->jid, false) : null);
+      $sender        = new xmppEntity(new \XMPPJid($tell['sender']));
+      $senderHTML    = $sender->generateHTML($this->roster->onlineByJID($sender,
+          $room) ? $this->roster->rooms[$room]->jidToNick($sender->jid, false) : null);
       $recipientHTML = $this->generateHTML(is_string($nick) ? $nick : null);
 
-      $time = $this->formatUserTime($tell['sent']);
-      $message = sprintf($this->t("Message from %s for %s at %s:"), $senderHTML, $recipientHTML, $time) . PHP_EOL . $tell['message'];
+      $time    = $this->formatUserTime($tell['sent']);
+      $message = sprintf($this->t("Message from %s for %s at %s:"), $senderHTML,
+          $recipientHTML, $time) . PHP_EOL . $tell['message'];
       if ($tell['private']) {
-        $jid = new \XMPPJid($room);
+        $jid           = new \XMPPJid($room);
         $jid->resource = $nick;
         $this->sendMessage($jid, $message, true, "chat");
       } else {
@@ -201,30 +207,41 @@ class xmppEntity extends ligrevGlobals {
     $value = return_ake($permission, $config['permissions'], $value);
 
     // room
-    if (is_string($room) && array_key_exists("permissions", $config['rooms'][$room])) {
-      $value = return_ake($permission, $config['rooms'][$room]['permissions'], $value);
+    if (is_string($room) && array_key_exists("permissions",
+        $config['rooms'][$room])) {
+      $value = return_ake($permission, $config['rooms'][$room]['permissions'],
+        $value);
     }
 
     // affiliation
     if (array_key_exists($this->getData("affiliation"), $config['permissions'])) {
-      $value = return_ake($permission, $config['permissions'][$this->getData("affiliation")], $value);
+      $value = return_ake($permission,
+        $config['permissions'][$this->getData("affiliation")], $value);
     }
 
     // user
     if (array_key_exists($this->jid->bare, $config['permissions'])) {
-      $value = return_ake($permission, $config['permissions'][$this->jid->bare], $value);
+      $value = return_ake($permission, $config['permissions'][$this->jid->bare],
+        $value);
     }
 
-    if (is_string($room) && array_key_exists("permissions", $config['rooms'][$room])) {
+    if (is_string($room) && array_key_exists("permissions",
+        $config['rooms'][$room])) {
 
       // room-> affiliation
-      if (array_key_exists($this->getData("affiliation"), $config['rooms'][$room]['permissions'])) {
-        $value = return_ake($permission, $config['rooms'][$room]['permissions'][$this->getData("affiliation")], $value);
+      if (array_key_exists($this->getData("affiliation"),
+          $config['rooms'][$room]['permissions'])) {
+        $value = return_ake($permission,
+          $config['rooms'][$room]['permissions'][$this->getData("affiliation")],
+          $value);
       }
 
       // room->user
-      if (array_key_exists($this->getData("affiliation"), $config['rooms'][$room]['permissions'])) {
-        $value = return_ake($permission, $config['rooms'][$room]['permissions'][$this->getData("affiliation")], $value);
+      if (array_key_exists($this->getData("affiliation"),
+          $config['rooms'][$room]['permissions'])) {
+        $value = return_ake($permission,
+          $config['rooms'][$room]['permissions'][$this->getData("affiliation")],
+          $value);
       }
     }
 
