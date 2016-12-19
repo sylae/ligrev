@@ -72,9 +72,9 @@ class ligrevGlobals {
 
     global $client, $db, $config, $roster;
     $this->client = &$client;
-    $this->db = &$db;
+    $this->db     = &$db;
     $this->config = &$config;
-    $r = &$roster;
+    $r            = &$roster;
     $this->roster = (isset($roster) && $roster instanceof roster) ? $r : null;
 
     $this->lang = $this->config['lang'];
@@ -115,17 +115,17 @@ class ligrevGlobals {
    */
   public static function sendMessage($to, $text, $isMarkdown = true, $origin = "groupchat") {
     global $client;
-    $msg = new \XMPPMsg(
-            array(
-        'type' => (($origin == "groupchat") ? "groupchat" : "chat"),
-        'to' => (($to instanceof \XMPPJid) ? $to->to_string() : $to),
-        'from' => $client->full_jid->to_string(),
-            )
+    $msg       = new \XMPPMsg(
+      array(
+      'type' => (($origin == "groupchat") ? "groupchat" : "chat"),
+      'to'   => (($to instanceof \XMPPJid) ? $to->to_string() : $to),
+      'from' => $client->full_jid->to_string(),
+      )
     );
     $plaintext = new rawXML(strip_tags($text));
     $msg->c('body')->cnode($plaintext)->up()->up();
     if ($isMarkdown) {
-      $md = new \Parsedown();
+      $md   = new xmppMarkdown();
       $html = trim($md->text($text));
       $msg->c('html', 'http://jabber.org/protocol/xhtml-im');
       $msg->c('body', 'http://www.w3.org/1999/xhtml');
