@@ -196,33 +196,50 @@ class xmppEntity extends ligrevGlobals {
    * Determine if a user has permissions to do something. Optionally filter by room.
    * @param string $permission
    * @param string $room
+   * @param string $returnWhy return text explaining why permission is granted
    * @return bool true if the user has permission, false otherwise
    */
-  public function canDo($permission, $room = null) {
+  public function canDo($permission, $room = null, &$returnWhy = null) {
     global $config;
 
-    $value = false;
+    $value     = false;
+    $oldValue  = false;
+    $returnWhy = "";
+
+    $userHTML = $this->generateHTML();
 
     // global
     $value = return_ake($permission, $config['permissions'], $value);
+    if ($this->_isSwitched($oldValue, $value)) {
+      $returnWhy = " globally";
+    }
 
     // room
     if (is_string($room) && array_key_exists("permissions",
         $config['rooms'][$room])) {
       $value = return_ake($permission, $config['rooms'][$room]['permissions'],
         $value);
+      if ($this->_isSwitched($oldValue, $value)) {
+        $returnWhy = " to all users in " . $room;
+      }
     }
 
     // affiliation
     if (array_key_exists($this->getData("affiliation"), $config['permissions'])) {
       $value = return_ake($permission,
         $config['permissions'][$this->getData("affiliation")], $value);
+      if ($this->_isSwitched($oldValue, $value)) {
+        $returnWhy = " to users with affiliation of " . $this->getData("affiliation");
+      }
     }
 
     // user
     if (array_key_exists($this->jid->bare, $config['permissions'])) {
       $value = return_ake($permission, $config['permissions'][$this->jid->bare],
         $value);
+      if ($this->_isSwitched($oldValue, $value)) {
+        $returnWhy = " to user " . $userHTML;
+      }
     }
 
     if (is_string($room) && array_key_exists("permissions",
@@ -234,18 +251,37 @@ class xmppEntity extends ligrevGlobals {
         $value = return_ake($permission,
           $config['rooms'][$room]['permissions'][$this->getData("affiliation")],
           $value);
+        if ($this->_isSwitched($oldValue, $value)) {
+          $returnWhy = " to users in " . $room . " with affiliation of " . $this->getData("affiliation");
+        }
       }
 
       // room->user
-      if (array_key_exists($this->getData("affiliation"),
+      if (array_key_exists($this->jid->bare,
           $config['rooms'][$room]['permissions'])) {
         $value = return_ake($permission,
-          $config['rooms'][$room]['permissions'][$this->getData("affiliation")],
-          $value);
+          $config['rooms'][$room]['permissions'][$this->jid->bare], $value);
+        if ($this->_isSwitched($oldValue, $value)) {
+          $returnWhy = " to user " . $userHTML . " when in " . $room;
+        }
       }
+    }
+    if ($value) {
+      $returnWhy = "Granted" . $returnWhy;
+    } else {
+      $returnWhy = "Denied" . $returnWhy;
     }
 
     return $value;
+  }
+
+  private function _isSwitched(&$oldValue, $value) {
+    if ($oldValue == $value) {
+      return false;
+    } else {
+      $oldValue = $value;
+      return true;
+    }
   }
 
 }

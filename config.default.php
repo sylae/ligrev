@@ -127,6 +127,7 @@ $config['permissions'] = [
   'sylae/ligrev/diag'         => true,
   'sylae/ligrev/faq'          => true,
   'sylae/ligrev/faq-set'      => true,
+  'sylae/ligrev/permissions'  => true,
   'sylae/ligrev/roll'         => true,
   'sylae/ligrev/slap'         => true,
   'sylae/ligrev/tell'         => true,

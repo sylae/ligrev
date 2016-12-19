@@ -66,15 +66,16 @@ class command extends ligrevGlobals {
 
     parent::__construct();
 
-    $this->text = $stanza->body;
-    $this->from = new \XMPPJid($stanza->from);
-    $this->room = $this->from->bare;
-    $this->nick = $this->from->resource;
-    $this->origin = $origin;
-    $this->fromJID = $roster->rooms[$this->room]->nickToEntity($this->nick);
+    $this->text       = $stanza->body;
+    $this->from       = new \XMPPJid($stanza->from);
+    $this->room       = $this->from->bare;
+    $this->nick       = $this->from->resource;
+    $this->origin     = $origin;
+    $this->fromJID    = $roster->rooms[$this->room]->nickToEntity($this->nick);
     $this->authorHTML = $this->fromJID->generateHTML($this->nick);
 
-    if ($this->origin == "groupchat" && array_key_exists($this->room, $config['rooms'])) {
+    if ($this->origin == "groupchat" && array_key_exists($this->room,
+        $config['rooms'])) {
       $this->config = array_merge($config, $config['rooms'][$this->room]);
     } else {
       $this->config = $config;
@@ -89,7 +90,7 @@ class command extends ligrevGlobals {
   public static function _split($string) {
     $regex = '/(.*?[^\\\\](\\\\\\\\)*?)\\s/';
     preg_match_all($regex, $string . ' ', $matches);
-    $m = array_map(function($s) {
+    $m     = array_map(function($s) {
       return str_replace("\\ ", " ", $s);
     }, $matches[1]);
     return $m;
@@ -105,8 +106,8 @@ class command extends ligrevGlobals {
     }
   }
 
-  public function canDo($permission) {
-    return $this->fromJID->canDo($permission, $this->room);
+  public function canDo($permission, &$returnWhy = null) {
+    return $this->fromJID->canDo($permission, $this->room, $returnWhy);
   }
 
   /**
