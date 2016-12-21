@@ -173,7 +173,10 @@ class roster extends ligrevGlobals {
     // DELAY five seconds to let userTime populate
     \JAXLLoop::$clock->call_fun_after(5000000,
       function () use ($user, $room, $nick) {
-      $user->processTells($room, $nick);
+      // make sure they haven't signed off in the last five seconds...
+      if ($this->onlineByJID($user, $room)) {
+        $user->processTells($room, $nick);
+      }
     });
   }
 
