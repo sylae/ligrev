@@ -72,7 +72,7 @@ class RSS {
                   'title' => $item->find('title')->text(),
                   'link' => $item->find('link')->text(),
                   'date' => $published,
-                  'category' => $item->find('category')->text(),
+                  'category' => $item->find('category:first')->text(),
                   'body' => $item->find('description')->text(),
       ];
     }
