@@ -108,6 +108,12 @@ $config['remoteLogRecipients'] = [];
 $config['remoteLogThrottle'] = 5;
 
 /**
+ * Array holding any credentials needed to access third-party APIs
+ * @link https://console.developers.google.com/ key 'google'
+ */
+$config['api'] = [];
+
+/**
  * Default permissions array.
  */
 $config['permissions'] = [
