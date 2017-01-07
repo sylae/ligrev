@@ -38,6 +38,7 @@
     "calref/jaxl": "3.x-dev",
     "sepia/po-parser": "dev-master",
     "monolog/monolog": "^1.18",
+    "google/apiclient": "^2.0",
     "ext-intl": "*",
     "ext-curl": "*",
     "ext-mbstring": "*",
