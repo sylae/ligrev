@@ -26,7 +26,7 @@ namespace Ligrev\Parser;
  */
 class noChanQuotes extends \Ligrev\parser {
 
-  const WARNTIME = 1;
+  const WARNTIME = 300;
 
   function __construct(\XMPPStanza $stanza, $origin) {
     parent::__construct($stanza, $origin);
