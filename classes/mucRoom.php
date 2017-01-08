@@ -130,10 +130,24 @@ class mucRoom extends ligrevGlobals {
 
     // room
     if (array_key_exists("permissions", $config['rooms'][$this->name])) {
-      $value = return_ake($permission, $config['rooms'][$this->name]['permissions'], $value);
+      $value = return_ake($permission,
+        $config['rooms'][$this->name]['permissions'], $value);
     }
 
     return $value;
+  }
+
+  function kickOccupant($nick, $reason = false) {
+    $payload = new \XMPPIq([
+      'from' => $this->client->full_jid->to_string(),
+      'to'   => $this->name,
+      'type' => 'set',
+      'id'   => $this->client->get_id(),
+    ]);
+    $payload->c('query', 'http://jabber.org/protocol/muc#admin');
+    $payload->c('item', null, ['nick' => $nick, 'role' => 'none']);
+    $payload->c('reason', null, [], $reason);
+    $this->client->send($payload);
   }
 
 }
