@@ -118,7 +118,7 @@ $config['api'] = [];
  */
 $config['permissions'] = [
   'sylae@calref.net'            => [// example of a user-only permission
-    'sylae/ligrev/sybeam' => true,
+    'sylae/ligrev/fun/sybeam' => true,
   ],
   'owner'                       => [// example of an affiliation permission
     'sylae/ligrev/restart' => true,

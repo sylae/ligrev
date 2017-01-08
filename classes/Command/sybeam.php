@@ -25,7 +25,7 @@ namespace Ligrev\Command;
 class sybeam extends \Ligrev\command {
 
   function process() {
-    if (!$this->canDo("sylae/ligrev/sybeam")) {
+    if (!$this->canDo("sylae/ligrev/fun/sybeam")) {
       return false;
     }
     $textParts = $this->_split($this->text);
