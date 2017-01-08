@@ -40,14 +40,17 @@ class youtubeHandler extends \Ligrev\parser {
 
     foreach (self::YT_MATCH as $type => $preg) {
       if (preg_match($preg, $this->text, $match)) {
-        $id = $this->_getID($match[0], $type);
-
-        //$info = $this->_getYTInfo($id);
+        $id   = $this->_getID($match[0], $type);
+        $info = $this->_getYTInfo($id);
       }
     }
-
-    //$this->_send($this->getDefaultResponse(),
-    //  "that's a youtube link. id is $id.");
+    if (is_object($info)) {
+      $title  = $info->snippet->title;
+      $author = $info->snippet->channelTitle;
+      $length = $this->_formatDuration($info->contentDetails->duration);
+      $this->_send($this->getDefaultResponse(),
+        sprintf("YouTube video: %s posted by %s (%s)", $title, $author, $length));
+    }
   }
 
   public static function trigger(\XMPPStanza $stanza, \QueryPath\DOMQuery $qp) {
@@ -61,18 +64,51 @@ class youtubeHandler extends \Ligrev\parser {
   }
 
   private function _getYTInfo($id) {
+    global $api_google;
 
+    if (!isset($api_google)) {
+      $api_google = new \Google_Client();
+      $api_google->setApplicationName("ligrev/" . V_LIGREV . " (https://github.com/sylae/ligrev)");
+      $api_google->setDeveloperKey($this->config['api']['google']);
+    }
+    $yt   = new \Google_Service_YouTube($api_google);
+    $info = $yt->videos->listVideos("snippet,contentDetails", ['id' => $id]);
+
+    foreach ($info as $item) {
+      return $item;
+    }
+    return false;
   }
 
   private function _getID($string, $matchType) {
     switch ($matchType) {
       case "reg":
         parse_str(parse_url($string, PHP_URL_QUERY), $urls);
-        return $urls["v"];
+        return substr($urls["v"], 0, 11);
       case "short":
         preg_match("/\\/([^\\/]+)$/", $string, $match);
-        return $match[1];
+        return substr($match[1], 0, 11);
     }
+  }
+
+  private function _formatDuration($pt) {
+
+    $t = new \DateInterval($pt);
+    $i = [];
+    if (strstr($pt, "D")) {
+      $i[] = "%d days";
+    }
+    if (strstr($pt, "H")) {
+      $i[] = "%h hours";
+    }
+    if (strstr($pt, "M")) {
+      $i[] = "%i minutes";
+    }
+    if (strstr($pt, "S")) {
+      $i[] = "%s seconds";
+    }
+    $fmt = implode(", ", $i);
+    return $t->format($fmt);
   }
 
 }
