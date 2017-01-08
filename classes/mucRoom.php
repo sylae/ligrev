@@ -150,4 +150,17 @@ class mucRoom extends ligrevGlobals {
     $this->client->send($payload);
   }
 
+  function banOccupant($jid, $reason = false) {
+    $payload = new \XMPPIq([
+      'from' => $this->client->full_jid->to_string(),
+      'to'   => $this->name,
+      'type' => 'set',
+      'id'   => $this->client->get_id(),
+    ]);
+    $payload->c('query', 'http://jabber.org/protocol/muc#admin');
+    $payload->c('item', null, ['jid' => $jid, 'affiliation' => 'outcast']);
+    $payload->c('reason', null, [], $reason);
+    $this->client->send($payload);
+  }
+
 }
