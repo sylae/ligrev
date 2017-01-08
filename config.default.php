@@ -138,4 +138,5 @@ $config['permissions'] = [
   'sylae/ligrev/slap'         => true,
   'sylae/ligrev/tell'         => true,
   'sylae/ligrev/remind'       => true,
+  'sylae/ligrev/youtube'      => true,
 ];
