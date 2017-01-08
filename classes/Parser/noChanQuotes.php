@@ -46,16 +46,6 @@ class noChanQuotes extends \Ligrev\parser {
             "This isnt 4chan");
         });
       }
-      if ($warns >= 4) {
-        \JAXLLoop::$clock->call_fun_after(2500000,
-          function () {
-          $this->roster->rooms[$this->room]->banOccupant($this->fromJID,
-            "This isnt 4chan");
-
-          $this->_send($this->getDefaultResponse(),
-            ":tell sylae I banned {$this->fromJID}");
-        });
-      }
     }
   }
 
