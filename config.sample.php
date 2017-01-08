@@ -25,7 +25,7 @@
  * For more details, see the wiki's documentation.
  *
  * @link https://github.com/sylae/ligrev/wiki
- * @author Sylae Jiendra Corell <sylae@calref.net>
+ * @author Keira Sylae Aro <sylae@calref.net>
  */
 $config['db'] = 'mysqli://user:password@localhost/database';
 
