@@ -40,6 +40,11 @@ foreach (glob(__DIR__ . "/../i18n/*.po") as $file) {
   $i18n[$lang] = \Sepia\PoParser::parseFile($file)->getEntries();
 }
 
+$parser = [];
+foreach (glob(__DIR__ . "/../classes/Parser/*.php") as $file) {
+  require_once($file);
+}
+
 $iq_classes = [];
 foreach (get_declared_classes() as $class) {
   $c = new \ReflectionClass($class);

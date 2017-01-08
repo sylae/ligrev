@@ -39,18 +39,21 @@ class messageHandler {
     $this->roster = &$roster;
     $this->origin = $origin;
     $this->stanza = $stanza;
-    $this->from = new \XMPPJid($stanza->from);
+    $this->from   = new \XMPPJid($stanza->from);
 
-    if ($origin == "groupchat" && array_key_exists($this->from->bare, $config['rooms'])) {
+    if ($origin == "groupchat" && array_key_exists($this->from->bare,
+        $config['rooms'])) {
       $this->config = array_merge($config, $config['rooms'][$this->from->bare]);
     } else {
       $this->config = $config;
     }
 
-    if ($this->from->resource && !$this->stanza->exists('delay', NS_DELAYED_DELIVERY)) {
-      \Monolog\Registry::MESSAGE()->info("Message received", ['body' => $this->stanza->body, 'room' => $this->from->node, 'nick' => $this->from->resource, 'isPM' => ($this->origin == "chat")]);
-      $this->text = $this->stanza->body;
-      $this->room = $this->from->bare;
+    if ($this->from->resource && !$this->stanza->exists('delay',
+        NS_DELAYED_DELIVERY)) {
+      \Monolog\Registry::MESSAGE()->info("Message received",
+        ['body' => $this->stanza->body, 'room' => $this->from->node, 'nick' => $this->from->resource, 'isPM' => ($this->origin == "chat")]);
+      $this->text   = $this->stanza->body;
+      $this->room   = $this->from->bare;
       $this->author = $this->from->resource;
 
       $real_jid = $roster->rooms[$this->room]->nickToEntity($this->author);
@@ -61,10 +64,24 @@ class messageHandler {
       }
 
       $preg = "/^[\/:!](\w+)(\s|$)/";
-      if (!in_array($this->author[0], [':', '!', '/']) && preg_match($preg, $this->text, $match) && class_exists("Ligrev\\Command\\" . $match[1])) {
-        $class = "Ligrev\\Command\\" . $match[1];
+      if (!in_array($this->author[0], [':', '!', '/']) && preg_match($preg,
+          $this->text, $match) && class_exists("Ligrev\\Command\\" . $match[1])) {
+        $class   = "Ligrev\\Command\\" . $match[1];
         $command = new $class($stanza, $this->origin);
         $command->process();
+      }
+
+      $qp = \qp('<?xml version="1.0"?>' . $this->stanza->to_string());
+      foreach (get_declared_classes() as $class) {
+        $c = new \ReflectionClass($class);
+        if ($c->getNameSpaceName() == "Ligrev\Parser") {
+          $p_n = $c->name;
+          if ($p_n::trigger($this->stanza, $qp)) {
+            \Monolog\Registry::MESSAGE()->info("Fired parser",
+              ['parser' => $p_n]);
+            $p = new $p_n($this->stanza, $this->origin);
+          }
+        }
       }
     }
   }
