@@ -61,18 +61,20 @@ class noChanQuotes extends \Ligrev\parser {
    * Adds one to the user warnings counter, tossing old ones as needed.
    */
   private function timeoutRefresh() {
-    $warns = $this->fromJID->getData("noChanWarns");
-    if (is_bool($warns)) {
-      $warns = [];
+    $warn = $this->roster->rooms[$this->room]->getData("noChanWarns");
+    if (is_bool($warn)) {
+      $warn = [];
     }
+    $warns  = $warn[(string) $this->fromJID] ?? [];
     $w_time = time() - (self::WARNTIME + (pow(10, count($warns))));
-    foreach ($warns as $warn) {
-      if ($warn < $w_time) {
+    foreach ($warns as $w) {
+      if ($w < $w_time) {
         array_shift($warns);
       }
     }
-    $warns[] = time();
-    $this->fromJID->setData("noChanWarns", $warns);
+    $warns[]                       = time();
+    $warn[(string) $this->fromJID] = $warns;
+    $this->roster->rooms[$this->room]->setData("noChanWarns", $warn);
 
     return count($warns);
   }
