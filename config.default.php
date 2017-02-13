@@ -120,6 +120,9 @@ $config['permissions'] = [
   'sylae@calref.net'            => [// example of a user-only permission
     'sylae/ligrev/fun/sybeam' => true,
   ],
+  'dbot@calref.net'            => [// example of a user-only permission
+    'sylae/ligrev/fun/filth' => true,
+  ],
   'owner'                       => [// example of an affiliation permission
     'sylae/ligrev/restart' => true,
     'sylae/ligrev/alias'   => true,
@@ -140,4 +143,5 @@ $config['permissions'] = [
   'sylae/ligrev/remind'         => true,
   'sylae/ligrev/youtube'        => true,
   'sylae/ligrev/fun/chanquotes' => true,
+  'sylae/ligrev/fun/greeting' => true,
 ];
