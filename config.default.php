@@ -144,5 +144,6 @@ $config['permissions'] = [
   'sylae/ligrev/youtube'        => true,
   'sylae/ligrev/fun/chanquotes' => true,
   'sylae/ligrev/fun/greeting'   => true,
+  'sylae/ligrev/fun/rwby'       => true,
   'sylae/ligrev/fun/pyrrha'     => true,
 ];
