@@ -28,6 +28,7 @@ class filthHandler extends \Ligrev\parser {
 
   const URL_MATCH  = "/https*:\\/\\/[^\\s]*\\.[^\\s]*\\/?/i";
   const NSFW_MATCH = "/nsfw|porn|tits|titties|penis|pussy|vagina|pron/i";
+  const DBOT_MATCH = "/dbot/i";
 
   function __construct(\XMPPStanza $stanza, $origin) {
     static $filthTimer;
@@ -47,7 +48,7 @@ class filthHandler extends \Ligrev\parser {
   public static function trigger(\XMPPStanza $stanza, \QueryPath\DOMQuery $qp) {
     $body = $stanza->body;
     if (preg_match(self::URL_MATCH, $body, $match) && preg_match(self::NSFW_MATCH,
-        $body, $match)) {
+        $body, $match) && !preg_match(self::DBOT_MATCH, $body, $match)) {
       return true;
     }
     return false;
