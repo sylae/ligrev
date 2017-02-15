@@ -79,7 +79,9 @@ class messageHandler {
           if ($p_n::trigger($this->stanza, $qp)) {
             \Monolog\Registry::MESSAGE()->info("Fired parser",
               ['parser' => $p_n]);
-            $p = new $p_n($this->stanza, $this->origin);
+            if ($this->author != $config['botname']) {
+              $p = new $p_n($this->stanza, $this->origin);
+            }
           }
         }
       }
