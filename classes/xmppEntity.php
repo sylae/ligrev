@@ -68,7 +68,8 @@ class xmppEntity extends ligrevGlobals {
   }
 
   /**
-   * Send an IQ to get a user's timezone
+   * Get a user's timezone info
+   * @return \GuzzleHttp\Promise\Promise Promise that resolves once this is done, or five seconds elapse
    */
   public function getUserTime() {
     $id   = $this->client->get_id();
@@ -80,17 +81,24 @@ class xmppEntity extends ligrevGlobals {
     ]);
     $resp->c('time', IQ\xep_0202::NS_TIME);
 
+    $promise = new \GuzzleHttp\Promise\Promise();
+    $this->timeoutPromise($promise, 5, true);
+
     $this->client->send($resp);
     $this->client->add_cb('on_stanza_id_' . $id,
-      function($stanza) {
+      function($stanza) use ($promise) {
       global $roster;
+
       $qp = \qp('<?xml version="1.0"?>' . $stanza->to_string());
       $r  = $roster->onlineByJID($stanza->from, null, true);
       if (\qp($qp, 'time')->attr('xmlns') == IQ\xep_0202::NS_TIME && $stanza->type == "result" && !is_bool($r)) {
         $tzo = \qp($qp, 'tzo')->text();
         $r->setUserTime($tzo);
       }
+      $promise->resolve(null);
     });
+
+    return $promise;
   }
 
   /**

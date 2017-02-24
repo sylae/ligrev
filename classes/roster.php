@@ -166,18 +166,14 @@ class roster extends ligrevGlobals {
     } else {
       Registry::ROSTER()->info("User joined room",
         ['nick' => $nick, 'room' => $room]);
-      $user->getUserTime();
+      $user->getUserTime()->then(function () use ($user, $room, $nick) {
+        if ($this->onlineByJID($user, $room)) {
+          $user->processTells($room, $nick);
+        }
+      });
     }
 
     // TODO: get XEP-0256 info if possible, use it to update user activity timer
-    // DELAY five seconds to let userTime populate
-    \JAXLLoop::$clock->call_fun_after(5000000,
-      function () use ($user, $room, $nick) {
-      // make sure they haven't signed off in the last five seconds...
-      if ($this->onlineByJID($user, $room)) {
-        $user->processTells($room, $nick);
-      }
-    });
   }
 
   /**

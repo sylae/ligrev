@@ -144,4 +144,23 @@ class ligrevGlobals {
     return t($string, $this->lang);
   }
 
+  /**
+   *
+   * @param \GuzzleHttp\Promise\Promise $promise a promise
+   * @param int $time seconds to wait before timing out
+   * @param bool $quitWithResolve if true, will resolve instead of reject
+   */
+  public function timeoutPromise(\GuzzleHttp\Promise\Promise $promise, int $time, bool $quitWithResolve = false) {
+    \JAXLLoop::$clock->call_fun_after($time * 1000000,
+      function () use ($promise, $quitWithResolve) {
+      if ($promise->getState() == "pending") {
+        if ($quitWithResolve) {
+          $promise->resolve("Promise timed out");
+        } else {
+          $promise->reject("Promise timed out");
+        }
+      }
+    });
+  }
+
 }

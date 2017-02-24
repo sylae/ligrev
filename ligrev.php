@@ -48,6 +48,13 @@ $client->add_cb('on_auth_success',
   Registry::JAXL()->debug("Connected to XMPP Server",
     ['jid' => $client->full_jid->to_string()]);
 
+  // Attach the Promises handler to the JAXL event loop, now that we are connected and ready to use it...
+  \JAXLLoop::$clock->call_fun_periodic(1,
+    function() {
+    $queue = \GuzzleHttp\Promise\queue();
+    $queue->run();
+  });
+
   /**
    * Why not use $client->set_status()? Well, a very popular XMPP messenger
    * buggily does not send a service disco (0030) if the client it is interested
