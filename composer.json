@@ -43,7 +43,7 @@
     "ext-curl": "*",
     "ext-mbstring": "*",
     "ext-pcre": "*",
-    "php": ">=5.4.0",
+    "php": ">=7.0.0",
     "guzzlehttp/promises": "^1.2"
   },
   "autoload": {
