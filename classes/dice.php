@@ -54,7 +54,7 @@ class dice {
       if ($savage) {
         $die[] = $this->_rollSavageDice($d);
       } else {
-        $die[] = $this->_dice(1, $d);
+        $die[] = random_int(1, $d);
       }
     }
     if ($method == "array") {
@@ -63,17 +63,6 @@ class dice {
       $result = array_sum($die);
     }
     $this->result = $result;
-  }
-
-  /**
-   * get a random dice roll.
-   * @todo figure out why the openssl code sucks.
-   * @param int $min Smallest allowed value
-   * @param int $max Largest allowed value
-   * @return int Result of die roll
-   */
-  private function _dice($min, $max) {
-    return rand($min, $max);
   }
 
   /**
@@ -86,7 +75,7 @@ class dice {
     if ($die == 1) {
       return 1;
     }
-    $roll = $this->_dice(1, $die);
+    $roll = random_int(1, $die);
     if ($roll == $die) {
       // Ace
       \Monolog\Registry::COMMAND()->debug("Savage dice aced");
