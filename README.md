@@ -8,6 +8,6 @@ Ligrev provides several useful features for XMPP MUC chats, such as a dice rolle
 Requirements
 ------------
 
-* PHP 5
+* PHP 7
 * GNU bc
 * Some sort of SQL database (MySQL, PostgreSQL, SQLite, or any of those hipster databases, as long as it's supported by Doctrine/DBAL)
