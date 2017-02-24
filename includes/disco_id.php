@@ -34,6 +34,7 @@ $disco['f'][] = NS_MUC . "#user";
 $disco['f'][] = 'http://jabber.org/protocol/xhtml-im';
 $disco['f'][] = NS_COMPRESSION_FEATURE;
 $disco['f'][] = NS_XMPP_PING;
+$disco['f'][] = NS_EVENT_LOGGING;
 
 foreach ($iq_classes as $iq) {
   $new = $iq::disco();
