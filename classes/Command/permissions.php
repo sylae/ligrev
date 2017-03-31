@@ -42,7 +42,8 @@ class permissions extends \Ligrev\command {
       }
     }
 
-    $this->_send($this->getDefaultResponse(), implode(PHP_EOL, $p));
+    $this->_send($this->getDefaultResponse(),
+      str_replace("sylae/ligrev", "dintiradan/dbot", implode(PHP_EOL, $p)));
   }
 
   private function _getAllPerms(array $config) {

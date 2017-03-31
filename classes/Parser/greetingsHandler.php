@@ -26,16 +26,17 @@ namespace Ligrev\Parser;
  */
 class greetingsHandler extends \Ligrev\parser {
 
-  const LIGREV_MATCH  = "/^(?:hello|hallo|dia\\sduit|marhabon|marhabonbon|hi|hey|hey\\sthere|greetings|salutations|yo|good\\s(morning|evening)),?\\s?(?:ligrev|liggy|penny)/i";
+  const LIGREV_MATCH = "/^(?:hello|hallo|dia\\sduit|marhabon|marhabonbon|hi|hey|hey\\sthere|greetings|salutations|yo|good\\s(morning|evening)),?\\s?(?:dbot|penny)/i";
 
   function __construct(\XMPPStanza $stanza, $origin) {
-    
+
     parent::__construct($stanza, $origin);
 
     if (!$this->canDo("sylae/ligrev/fun/greeting")) { // is allowed to be welcomed
       return false;
     }
-    $this->_send($this->getDefaultResponse(), "[Salutations!](https://syl.ae/l_img/sal.jpg)");
+    $this->_send($this->getDefaultResponse(),
+      "[Salutations!](https://syl.ae/l_img/sal.jpg)");
   }
 
   public static function trigger(\XMPPStanza $stanza, \QueryPath\DOMQuery $qp) {

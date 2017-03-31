@@ -26,11 +26,11 @@ namespace Ligrev\Parser;
  */
 class talkingShitHandler extends \Ligrev\parser {
 
-  const LIGREV_MATCH  = "/ligrev\\s(?:(?:is|has|has\\sa|has\\san))\\s(?:(?:|pretty|quite|rather)\\s)*(?:bug|buggy|broken|issue|issues|bugs|trash|bad|terrible|awful|shit|garbage|feces)/i";
+  const LIGREV_MATCH = "/dbot\\s(?:(?:is|has|has\\sa|has\\san))\\s(?:(?:|pretty|quite|rather)\\s)*(?:bug|buggy|broken|issue|issues|bugs|trash|bad|terrible|awful|shit|garbage|feces)/i";
 
   function __construct(\XMPPStanza $stanza, $origin) {
     static $talkingShitTimer;
-    
+
     parent::__construct($stanza, $origin);
 
     if ($this->canDo("sylae/ligrev/fun/talkShit")) { // is allowed to be mean to me
@@ -40,7 +40,8 @@ class talkingShitHandler extends \Ligrev\parser {
       return false;
     }
     $talkingShitTimer = time();
-    $this->_send($this->getDefaultResponse(), "https://gfycat.com/GiganticHopefulCanary");
+    $this->_send($this->getDefaultResponse(),
+      "https://gfycat.com/GiganticHopefulCanary");
   }
 
   public static function trigger(\XMPPStanza $stanza, \QueryPath\DOMQuery $qp) {

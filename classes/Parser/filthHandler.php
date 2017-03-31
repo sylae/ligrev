@@ -28,11 +28,11 @@ class filthHandler extends \Ligrev\parser {
 
   const URL_MATCH  = "/https*:\\/\\/[^\\s]*\\.[^\\s]*\\/?/i";
   const NSFW_MATCH = "/nsfw|porn|tits|titties|penis|pussy|vagina|pron/i";
-  const DBOT_MATCH = "/dbot/i";
+  const DBOT_MATCH = "/Ligrev/i";
 
   function __construct(\XMPPStanza $stanza, $origin) {
     static $filthTimer;
-    
+
     parent::__construct($stanza, $origin);
 
     if ($this->canDo("sylae/ligrev/fun/filth")) { // is allowed to post filth

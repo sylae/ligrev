@@ -89,7 +89,7 @@ class noChanQuotes extends \Ligrev\parser {
       $w[] = 'You\'d better hope Asimov didn\'t leave a loophole, %s';
       $w[] = 'If I wanted annoying 4chan quotes I\'d go there and post pictures of my robot genetalia.';
       $w[] = '$roster->rooms["' . $this->room . '"]->nickToEntity("%s")->friends--;';
-      $w[] = 'If I were dbot I\'d adjust the score of %s by -1, bringing it to 1 less than their current score.';
+      $w[] = 'If I were Ligrev I\'d adjust the score of %s by -1, bringing it to 1 less than their current score.';
     }
     if ($warnNo >= 3) {
       $w[] = 'Witness me.';

@@ -93,7 +93,7 @@ $client->add_cb('on_auth_success',
     if ($c['announceOnStart']) {
       $lv = V_LIGREV;
       ligrevGlobals::sendMessage($room->bare,
-        sprintf(_("Ligrev version %s now online."),
+        sprintf(_("dbot version %s now online."),
           "[$lv](https://github.com/sylae/ligrev/commit/$lv)"));
     }
   }
