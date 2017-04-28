@@ -123,33 +123,29 @@ $config['api'] = [];
  * Default permissions array.
  */
 $config['permissions'] = [
-  'sylae@calref.net'            => [// example of a user-only permission
+  'sylae@calref.net'          => [// example of a user-only permission
     'sylae/ligrev/fun/sybeam' => true,
   ],
-  'dbot@calref.net'             => [// example of a user-only permission
-    'sylae/ligrev/fun/filth' => true,
-  ],
-  'owner'                       => [// example of an affiliation permission
+  'owner'                     => [// example of an affiliation permission
     'sylae/ligrev/restart' => true,
     'sylae/ligrev/alias'   => true,
   ],
-  'admin'                       => [// example of an affiliation permission
+  'admin'                     => [// example of an affiliation permission
     'sylae/ligrev/restart' => true,
     'sylae/ligrev/alias'   => true,
   ],
-  'sylae/ligrev/card-draw'      => true,
-  'sylae/ligrev/card-shuffle'   => true,
-  'sylae/ligrev/diag'           => true,
-  'sylae/ligrev/faq'            => true,
-  'sylae/ligrev/faq-set'        => true,
-  'sylae/ligrev/permissions'    => true,
-  'sylae/ligrev/roll'           => true,
-  'sylae/ligrev/slap'           => true,
-  'sylae/ligrev/tell'           => true,
-  'sylae/ligrev/remind'         => true,
-  'sylae/ligrev/youtube'        => true,
-  'sylae/ligrev/fun/chanquotes' => true,
-  'sylae/ligrev/fun/greeting'   => true,
-  'sylae/ligrev/fun/rwby'       => true,
-  'sylae/ligrev/fun/pyrrha'     => true,
+  'sylae/ligrev/card-draw'    => true,
+  'sylae/ligrev/card-shuffle' => true,
+  'sylae/ligrev/diag'         => true,
+  'sylae/ligrev/faq'          => true,
+  'sylae/ligrev/faq-set'      => true,
+  'sylae/ligrev/permissions'  => true,
+  'sylae/ligrev/roll'         => true,
+  'sylae/ligrev/slap'         => true,
+  'sylae/ligrev/tell'         => true,
+  'sylae/ligrev/remind'       => true,
+  'sylae/ligrev/youtube'      => true,
+  'sylae/ligrev/fun/greeting' => true,
+  'sylae/ligrev/fun/rwby'     => true,
+  'sylae/ligrev/fun/pyrrha'   => true,
 ];
