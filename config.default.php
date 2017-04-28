@@ -95,6 +95,12 @@ $config['discloseOSwithXEP0092'] = true;
 $config['afkThreshold'] = 1800;
 
 /**
+ * Wrap usernames in a span with classes to support Cadence.
+ * @var boolean
+ */
+$config['cadenceClasses'] = true;
+
+/**
  * List of JIDs to send log messages to
  * @var array
  */
@@ -120,7 +126,7 @@ $config['permissions'] = [
   'sylae@calref.net'            => [// example of a user-only permission
     'sylae/ligrev/fun/sybeam' => true,
   ],
-  'dbot@calref.net'            => [// example of a user-only permission
+  'dbot@calref.net'             => [// example of a user-only permission
     'sylae/ligrev/fun/filth' => true,
   ],
   'owner'                       => [// example of an affiliation permission

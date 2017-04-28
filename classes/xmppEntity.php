@@ -155,13 +155,16 @@ class xmppEntity extends ligrevGlobals {
    * @return string The wrapped string
    */
   public function generateHTML($nick = null) {
-
     $display = str_replace('\\20', ' ',
       (is_string($nick) ? $nick : $this->jid->bare));
-    $classes = $this->jid_classes();
-    $html    = "<span class=\"$classes\" data-jid=\"{$this->jid->to_string()}\""
-      . (is_string($nick) ? " data-nick=\"$nick\"" : '')
-      . ">{$display}</span>";
+    if ($this->config['cadenceClasses']) {
+      $classes = $this->jid_classes();
+      $html    = "<span class=\"$classes\" data-jid=\"{$this->jid->to_string()}\""
+        . (is_string($nick) ? " data-nick=\"$nick\"" : '')
+        . ">{$display}</span>";
+    } else {
+      return $display;
+    }
     return $html;
   }
 
