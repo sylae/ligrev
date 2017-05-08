@@ -83,6 +83,12 @@ $config['announceOnStart'] = true;
 $config['defaultTellDomain'] = false;
 
 /**
+ * if true, save delivered :tells instead of deleting them.
+ * @var boolean
+ * */
+$config['archiveTells'] = true;
+
+/**
  * Whether or not to disclose the system OS via XEP-0092.
  * @var boolean
  */

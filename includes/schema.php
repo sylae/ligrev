@@ -64,6 +64,7 @@ $tables['tell']->addColumn("sender", "text");
 $tables['tell']->addColumn("recipient", "text");
 $tables['tell']->addColumn("sent", "integer", ["unsigned" => true]);
 $tables['tell']->addColumn("private", "boolean");
+$tables['tell']->addColumn("isDelivered", "boolean");
 $tables['tell']->addColumn("message", "text");
 $tables['tell']->setPrimaryKey(["id"]);
 

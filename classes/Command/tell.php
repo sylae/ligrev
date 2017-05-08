@@ -186,13 +186,14 @@ class tell extends \Ligrev\command {
   }
 
   private function _insertTell($recipient, $message) {
-    $sql = $this->db->prepare('INSERT INTO tell (sender, recipient, sent, private, message) VALUES(?, ?, ?, ?, ?);',
+    $sql = $this->db->prepare('INSERT INTO tell (sender, recipient, sent, private, message, isDelivered) VALUES(?, ?, ?, ?, ?, ?);',
       ['string', 'string', 'integer', 'boolean', 'string']);
     $sql->bindValue(1, $this->fromJID->jid->bare, "string");
     $sql->bindValue(2, $recipient, "string");
     $sql->bindValue(3, time(), "integer");
     $sql->bindValue(4, ($this->origin == "groupchat" ? false : true), "boolean");
     $sql->bindValue(5, $message, "string");
+    $sql->bindValue(6, false, "boolean");
     $sql->execute();
   }
 
