@@ -91,10 +91,12 @@ $client->add_cb('on_auth_success',
     $client->xeps['0045']->join_room($room);
     Registry::JAXL()->info("Joined room", ['room' => $room->to_string()]);
     if ($c['announceOnStart']) {
-      $lv = V_LIGREV;
+      // $lv = V_LIGREV;
+      // ligrevGlobals::sendMessage($room->bare,
+      //   sprintf(_("Ligrev version %s now online."),
+      //     "[$lv](https://github.com/sylae/ligrev/commit/$lv)"));
       ligrevGlobals::sendMessage($room->bare,
-        sprintf(_("Ligrev version %s now online."),
-          "[$lv](https://github.com/sylae/ligrev/commit/$lv)"));
+        "Did I just crash? https://calref.net/index.php?topic=1456.msg26296#msg26296");
     }
   }
   rss_init();
