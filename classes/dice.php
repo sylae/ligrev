@@ -124,8 +124,8 @@ class dice {
       return 'print "' . $d->result . '"';
     }, $sa
     );
-    //$bc = new \Ligrev\bc($sa);
-    //$sa = $bc->result;
+    $bc = new \Ligrev\bc($sa);
+    $sa = $bc->result;
 
     return $sa;
   }
