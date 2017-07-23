@@ -85,4 +85,49 @@ class dice {
     }
   }
 
+  public static function parseString(string $string): string {
+
+    $dice     = "/(\d*)d(\d+)/";
+    $savdice  = "/(\d*)d(\d+)e/";
+    $dlist    = "/(\d*)a(\d+)/";
+    $savdlist = "/(\d*)a(\d+)e/";
+
+    $sa = preg_replace_callback($savdice,
+      function ($m) {
+      $m[2] = (($m[2] == 0) ? 1 : $m[2]);
+      $m[1] = (($m[1] == 0) ? 1 : $m[1]);
+      $d    = new \Ligrev\dice($m[1], $m[2], "sum", true);
+      return "(" . $d->result . ")";
+    }, $string
+    );
+    $sa = preg_replace_callback($dice,
+      function ($m) {
+      $m[2] = (($m[2] == 0) ? 1 : $m[2]);
+      $m[1] = (($m[1] == 0) ? 1 : $m[1]);
+      $d    = new \Ligrev\dice($m[1], $m[2], "sum", false);
+      return "(" . $d->result . ")";
+    }, $sa
+    );
+    $sa = preg_replace_callback($savdlist,
+      function ($m) {
+      $m[2] = (($m[2] == 0) ? 1 : $m[2]);
+      $m[1] = (($m[1] == 0) ? 1 : $m[1]);
+      $d    = new \Ligrev\dice($m[1], $m[2], "array", true);
+      return 'print "' . $d->result . '"';
+    }, $sa
+    );
+    $sa = preg_replace_callback($dlist,
+      function ($m) {
+      $m[2] = (($m[2] == 0) ? 1 : $m[2]);
+      $m[1] = (($m[1] == 0) ? 1 : $m[1]);
+      $d    = new \Ligrev\dice($m[1], $m[2], "array", false);
+      return 'print "' . $d->result . '"';
+    }, $sa
+    );
+    //$bc = new \Ligrev\bc($sa);
+    //$sa = $bc->result;
+
+    return $sa;
+  }
+
 }
