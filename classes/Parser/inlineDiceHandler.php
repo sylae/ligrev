@@ -40,7 +40,9 @@ class inlineDiceHandler extends \Ligrev\parser {
       return "{" . \Ligrev\dice::parseString($m[1]) . "}";
     }, $this->text
     );
-    $this->_send($this->getDefaultResponse(), $sa);
+    $snd = sprintf($this->t("Results for %s:" . PHP_EOL . "%s"),
+      $this->authorHTML, implode(", ", $sa));
+    $this->_send($this->getDefaultResponse(), $snd);
   }
 
   public static function trigger(\XMPPStanza $stanza, \QueryPath\DOMQuery $qp) {
