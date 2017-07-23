@@ -41,7 +41,7 @@ class inlineDiceHandler extends \Ligrev\parser {
     }, $this->text
     );
     $snd = sprintf($this->t("Results for %s:" . PHP_EOL . "%s"),
-      $this->authorHTML, implode(", ", $sa));
+      $this->authorHTML, $sa);
     $this->_send($this->getDefaultResponse(), $snd);
   }
 
