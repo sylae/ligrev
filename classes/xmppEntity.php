@@ -144,9 +144,8 @@ class xmppEntity extends ligrevGlobals {
    * @return string A string of CSS classes
    */
   protected function jid_classes() {
-    return 'user jid-node-' . $this->escape_class(strtolower($this->jid->node))
-      . ' jid-domain-' . $this->escape_class($this->jid->domain)
-      . ' jid-resource-' . $this->escape_class($this->jid->resource);
+    return "user jid-user-" . $this->escape_class(strtolower($this->jid->node))
+      . "\\@" . $this->escape_class($this->jid->domain);
   }
 
   /**
